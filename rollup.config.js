@@ -1,12 +1,15 @@
 import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
+import builtins from 'rollup-plugin-node-builtins';
 import commonjs from '@rollup/plugin-commonjs';
+import postcss from 'rollup-plugin-postcss';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import alias from '@rollup/plugin-alias';
+import replace from '@rollup/plugin-replace';
 import autoPreprocess from 'svelte-preprocess'
 import svg from 'rollup-plugin-svg-import';
-//const smelte = require("smelte/rollup-plugin-smelte");
+import dotenv from 'dotenv';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -19,13 +22,19 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		builtins(),
+		replace({
+			_env: JSON.stringify(dotenv.config().parsed),
+		}),
 		svg({ stringify: true }),
 		alias({
 			 entries: [
 			 	{ find: '@routes', replacement: __dirname + '/src/routes' },
+			 	{ find: '@archetypes', replacement: __dirname + '/src/archetypes' },
 			 	{ find: '@components', replacement: __dirname + '/src/components' },
 			 	{ find: '@layouts', replacement: __dirname + '/src/layouts' },
 			 	{ find: '@icons', replacement: __dirname + '/src/icons' },
+			 	{ find: '@util', replacement: __dirname + '/src/util' },
 			 ]
 		}),
 		svelte({
@@ -49,7 +58,43 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		commonjs(),
+		commonjs({
+			include: /node_modules/,
+			namedExports: {
+				'prop-types': [
+					'array',
+					'bool',
+					'func',
+					'number',
+					'object',
+					'string',
+					'symbol',
+					'any',
+					'arrayOf',
+					'element',
+					'elementType',
+					'instanceOf',
+					'node',
+					'objectOf',
+					'oneOf',
+					'oneOfType',
+					'shape',
+					'exact',
+				],
+			},
+		}),
+		// postcss({
+		// 	extract: true,
+		// 	minimize: true,
+		// 	use: [
+		// 		['sass', {
+		// 			includePaths: [
+		// 				'./src/theme',
+		// 				'./node_modules'
+		// 			]
+		// 		}]
+		// 	]
+		// }),
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
 		!production && serve(),

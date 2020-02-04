@@ -2,4 +2,4 @@
 	//import { Centered } from '@layouts/_index.svelte'
 </script>
 
-<h1>Dashboard Index</h1>
+<span>[dashboard]</span>

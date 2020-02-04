@@ -1,9 +1,15 @@
 <script>
+	import ApolloClient from "apollo-boost";
+	import { configure } from '@util/graphql' 
 	import Router from 'svelte-spa-router'
 	import Home from '@routes/Home.svelte'
 	import Dashboard from '@routes/Dashboard/_index.svelte'
 	import Components from '@routes/Components.svelte'
 	import Four04 from '@routes/Four04.svelte'
+
+	configure({
+		uri: _env.GRAPHQL_URL || "http://localhost:4000/graphql",
+	})
 
 	const routes = {
 		'/': Home,
@@ -21,16 +27,32 @@
 <style>
 	
 	:root {
+		/* greyscale colors */
 		--color-dark: #191919;
 		--color-dark-grey: #31393D;
 		--color-mid-grey: #879296;
 		--color-grey: #b2b6b7;
 		--color-light-grey: #e1e8ea;
 		--color-light: #f8f8f8;
+		
+		/* colours */
 		--color-highlight: #40a8de;
-		--color-mid-blue: #728ea8
+		--color-mid-blue: #728ea8;
 		--color-light-blue: #8bc2d4;
-
+		--color-green: #52c41a;
+		--color-orange: #fa8c16;
+		--color-red: #f5222d;
+		--color-blue: #40a8de;
+		--color-yellow: #fadb14;
+		
+		/* status colors */
+		--color-status-success: var(--color-green);
+		--color-status-warning: var(--color-yellow);
+		--color-status-error: var(--color-red);
+		--color-status-notification: var(--color-highlight);
+		--color-status-neutral: var(--color-grey);
+		
+		/* font sizes */
 		--font-size-xxlarge: 3.1rem;
 		--font-size-xlarge: 2.2rem;
 		--font-size-large: 1.5rem;
@@ -54,16 +76,21 @@
 	}
 
 	:global(h1) {
-		font-size: var(--font-size-xlarge);
-		font-weight: 700;
-		margin-bottom: 0.5em;
 		font-family: 'Merriweather', serif;
+		font-size: var(--font-size-xlarge);
+		font-weight: 100;
+		margin-bottom: 0.5em;
 	}
 
 	:global(h2){
+		font-family: 'Merriweather', serif;
 		font-weight: 100;
 		margin-bottom: 1em;
-		font-family: 'Merriweather', serif;
+	}
+
+	:global(hr){
+		border-top: none;
+		border-bottom-color: rgba(0,0,0,0.1);
 	}
 </style>
 

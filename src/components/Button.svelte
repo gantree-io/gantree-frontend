@@ -1,9 +1,9 @@
 <script>
-	export let small;
-	export let large;
-	export let primary;
-	export let secondary;
-	export let disabled;
+	export let small = null
+	export let large = null
+	export let primary = null
+	export let secondary = null
+	export let disabled = null
 </script>
 
 <style lang="scss">
@@ -16,6 +16,14 @@
 		background: var(--color-light-grey);
 		color: var(--color-dark);
 		transition: filter 0.2s;
+		display: flex;
+		align-items: center;
+
+		:global(>*){
+			display: block;
+			margin: 0 0.5em;
+			&:first-child{ margin-left: 0 }
+		}
 
 		&:hover{
 			filter: contrast(108%);

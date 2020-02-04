@@ -2,7 +2,7 @@
 	import Router from 'svelte-spa-router'
 	import Dashboard from '@layouts/Dashboard.svelte'
 	import Home from '@routes/Dashboard/Home.svelte'
-	import Nodes from '@routes/Dashboard/Nodes.svelte'
+	import Networks from '@routes/Dashboard/Networks.svelte'
 	import Config from '@routes/Dashboard/Config.svelte'
 	import Keys from '@routes/Dashboard/Keys.svelte'
 	import Team from '@routes/Dashboard/Team.svelte'
@@ -11,7 +11,7 @@
 
 	const routes = {
 		'/': Home,
-		'/nodes': Nodes,
+		'/networks': Networks,
 		'/config': Config,
 		'/keys': Keys,
 		'/team': Team,
@@ -21,38 +21,38 @@
 
 	const tabs = [
 		{
-			text: 'Home',
-			icon: 'home',
+			name: 'Dashboard',
+			icon: 'tachometer',
 			href: '#/dashboard'
 		},
 		{
-			text: 'Nodes',
-			icon: 'sitemap',
-			href: '#/dashboard/nodes'
+			name: 'Networks',
+			icon: 'network',
+			href: '#/dashboard/networks'
 		},
 		{
-			text: 'Config',
-			icon: 'home',
+			name: 'Configs',
+			icon: 'cogs',
 			href: '#/dashboard/config'
 		},
 		{
-			text: 'Keys',
-			icon: 'home',
+			name: 'Keys',
+			icon: 'key',
 			href: '#/dashboard/keys'
 		},
 		{
-			text: 'Team',
-			icon: 'home',
+			name: 'Team',
+			icon: 'users',
 			href: '#/dashboard/team'
 		},
 		{
-			text: 'Billing',
-			icon: 'home',
+			name: 'Billing',
+			icon: 'invoice',
 			href: '#/dashboard/billing'
 		},
 		{
-			text: 'Docs',
-			icon: 'home',
+			name: 'Docs',
+			icon: 'bookOpen',
 			href: '#/dashboard/docs'
 		}
 	]

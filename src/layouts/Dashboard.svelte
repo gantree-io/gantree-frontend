@@ -1,11 +1,22 @@
 <script>
+	import { afterUpdate } from 'svelte';
 	import { location } from 'svelte-spa-router'
+	import _ from 'lodash'
 
 	import Header from '@components/Header.svelte'
 	import Icon from "@components/Icon.svelte";
 	import Link from "@components/Link.svelte";
+	import Breadcrumbs from '@components/Breadcrumbs.svelte'
+	import RandomQuote from '@components/RandomQuote.svelte'
 	
 	export let tabs = []
+	let active = {}
+	let breadcrumbs = [] 
+	
+	afterUpdate(() => {
+		active = _.find(tabs, {href: `#${$location}`})
+		breadcrumbs = active.href.split('/').slice(0, -1)
+	});
 </script>
 
 <style lang="scss">
@@ -28,7 +39,7 @@
 			background: rgba(255,255,255,0.1);
 		}
 
-		.account{
+		.bottom{
 			position: absolute;
 			bottom: 0;
 			left: 0;
@@ -86,11 +97,32 @@
 
 		>header,
 		.inner{
-			padding: 1.4em;
+			padding: 1.6em;
 		}
 
 		>header{
-			background: rgba(0,0,0,0.1);
+			background: var(--color-light-grey);
+			position: relative;
+
+			h1{
+				display: flex;
+				align-items: center;
+				margin: 0;
+				font-size: var(--font-size-large);
+				font-weight: 100;
+				padding: 0.3em 0 0;
+				line-height: 1em;
+
+				:global(.icon){
+					margin-right: 0.2em;
+				}
+			}
+
+			.extra{
+				position: absolute;
+				bottom: 1.4em;
+				right: 1.4em;
+			}
 		}
 
 	}
@@ -101,12 +133,30 @@
 		<span class="logo">[logo]</span>
 		{#each tabs as tab}
 			<hr/>
-			<Link to={tab.href}><Icon type={tab.icon}/>{tab.text} <Icon type='chevronRight'/></Link>
+			<Link to={tab.href}>
+				<Icon type={tab.icon}/>
+				{tab.name} 
+				<Icon type='chevronRight'/>
+			</Link>
 		{/each}
-		<span class="account"><Icon type='clock'/> [account]</span>
+		<span class="bottom">
+			<RandomQuote/>
+
+			<span class="account">
+				<Icon type='userCircle'/> 
+				[account name]
+			</span>
+		</span>
+		
 	</nav>
 	<section class='content'>
-		<header>{$location}</header>
+		<header>
+			<Breadcrumbs items={breadcrumbs}/>
+			<h1><Icon type={active.icon}/>{active.name}</h1>
+			<span class="extra">
+				[key metrics]
+			</span>
+		</header>
 		<div class="inner">
 			<slot></slot>
 		</div>
