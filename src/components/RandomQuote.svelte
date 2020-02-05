@@ -11,15 +11,12 @@
 	// 		.then(({message}) => resolve(message))
 	// })
 
-	let quote = 'Private jets cost a lot of money.'
+	let quote = `I love the poorly educated.`
 </script>
 
 <style lang="scss">
 	.quote{
-		padding: 1.2em;
 		display: block;
-		opacity: 0.5;
-		font-size: var(--font-size-xsmall);
 	}
 
 	q{
@@ -30,7 +27,8 @@
 		display: block;
 		font-size: 0.9em;
 		padding: 0.5em;
-		opacity: 0.98;
+		opacity: 0.7;
+		line-height: 1em;
 	}
 
 	:global(.icon.trump){

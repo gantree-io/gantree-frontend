@@ -2,7 +2,7 @@
 	import Router from 'svelte-spa-router'
 	import Dashboard from '@layouts/Dashboard.svelte'
 	import Home from '@routes/Dashboard/Home.svelte'
-	import Networks from '@routes/Dashboard/Networks.svelte'
+	import Networks, { actions as networkActions }  from '@routes/Dashboard/Networks.svelte'
 	import Config from '@routes/Dashboard/Config.svelte'
 	import Keys from '@routes/Dashboard/Keys.svelte'
 	import Team from '@routes/Dashboard/Team.svelte'
@@ -22,37 +22,38 @@
 	const tabs = [
 		{
 			name: 'Dashboard',
-			icon: 'tachometer',
+			icon: 'dashboard',
 			href: '#/dashboard'
 		},
 		{
 			name: 'Networks',
-			icon: 'network',
-			href: '#/dashboard/networks'
+			icon: 'storage',
+			href: '#/dashboard/networks',
+			actions: networkActions
 		},
 		{
 			name: 'Configs',
-			icon: 'cogs',
+			icon: 'settings',
 			href: '#/dashboard/config'
 		},
 		{
 			name: 'Keys',
-			icon: 'key',
+			icon: 'vpn_key',
 			href: '#/dashboard/keys'
 		},
 		{
 			name: 'Team',
-			icon: 'users',
+			icon: 'people',
 			href: '#/dashboard/team'
 		},
 		{
 			name: 'Billing',
-			icon: 'invoice',
+			icon: 'receipt',
 			href: '#/dashboard/billing'
 		},
 		{
 			name: 'Docs',
-			icon: 'bookOpen',
+			icon: 'menu_book',
 			href: '#/dashboard/docs'
 		}
 	]

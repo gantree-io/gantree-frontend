@@ -2,6 +2,8 @@
 	import ApolloClient from "apollo-boost";
 	import { configure } from '@util/graphql' 
 	import Router from 'svelte-spa-router'
+	import Panel from '@components/Panel.svelte'
+
 	import Home from '@routes/Home.svelte'
 	import Dashboard from '@routes/Dashboard/_index.svelte'
 	import Components from '@routes/Components.svelte'
@@ -21,11 +23,13 @@
 </script>
 
 <svelte:head>
-  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,700|Open+Sans:300,400&display=swap" rel="stylesheet">
+	<!-- <link href="https://fonts.googleapis.com/css?family=Merriweather:300,700|Open+Sans:300,400&display=swap" rel="stylesheet"> -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
 </svelte:head>
 
-<style>
-	
+<style lang="scss">
 	:root {
 		/* greyscale colors */
 		--color-dark: #191919;
@@ -62,36 +66,10 @@
 		--font-size-xxsmall: 11px;
 	}
 
-	:global(*) {
-		box-sizing: border-box
-	}
-
-	:global(html,body) {
-		padding: 0;
-		margin: 0;
-		font-family: 'Open Sans', serif;
-		font-weight: 100;
-		color: var(--color-dark);
-		scroll-behavior: smooth;
-	}
-
-	:global(h1) {
-		font-family: 'Merriweather', serif;
-		font-size: var(--font-size-xlarge);
-		font-weight: 100;
-		margin-bottom: 0.5em;
-	}
-
-	:global(h2){
-		font-family: 'Merriweather', serif;
-		font-weight: 100;
-		margin-bottom: 1em;
-	}
-
-	:global(hr){
-		border-top: none;
-		border-bottom-color: rgba(0,0,0,0.1);
+	:global(body){
+		background: var(--color-light);
 	}
 </style>
 
 <Router {routes}/>
+<Panel/>

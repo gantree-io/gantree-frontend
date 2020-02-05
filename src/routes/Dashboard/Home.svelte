@@ -1,5 +1,7 @@
 <script>
-	//import { Centered } from '@layouts/_index.svelte'
+	import Button, {Label} from '@smui/button';
 </script>
 
-<span>[dashboard]</span>
+<Button variant='outlined'>
+  <Label>Do Something</Label>
+</Button>

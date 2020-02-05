@@ -11,7 +11,27 @@ import autoPreprocess from 'svelte-preprocess'
 import svg from 'rollup-plugin-svg-import';
 import dotenv from 'dotenv';
 
+//TODO: get https://sveltematerialui.com/demo/ working
+
 const production = !process.env.ROLLUP_WATCH;
+
+const postcssOptions = () => ({
+  extensions: [".scss", ".sass"],
+  extract: false,
+  minimize: true,
+  plugins: [require("autoprefixer")],
+  use: [
+    [
+      "sass",
+      {
+        includePaths: [
+          "./src/theme",
+          "./node_modules",
+        ]
+      }
+    ]
+  ]
+});
 
 export default {
 	input: 'src/main.js',
@@ -23,12 +43,16 @@ export default {
 	},
 	plugins: [
 		builtins(),
+		
 		replace({
 			_env: JSON.stringify(dotenv.config().parsed),
 		}),
+		
 		svg({ stringify: true }),
+		
 		alias({
 			 entries: [
+			 	{ find: '@app', replacement: __dirname + '/src' },
 			 	{ find: '@routes', replacement: __dirname + '/src/routes' },
 			 	{ find: '@archetypes', replacement: __dirname + '/src/archetypes' },
 			 	{ find: '@components', replacement: __dirname + '/src/components' },
@@ -37,10 +61,11 @@ export default {
 			 	{ find: '@util', replacement: __dirname + '/src/util' },
 			 ]
 		}),
+		
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
-			preprocess: autoPreprocess(),
+			preprocess: autoPreprocess({ postcss: true }),
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			css: css => {
@@ -83,18 +108,9 @@ export default {
 				],
 			},
 		}),
-		// postcss({
-		// 	extract: true,
-		// 	minimize: true,
-		// 	use: [
-		// 		['sass', {
-		// 			includePaths: [
-		// 				'./src/theme',
-		// 				'./node_modules'
-		// 			]
-		// 		}]
-		// 	]
-		// }),
+		
+		postcss(postcssOptions()),
+
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
 		!production && serve(),

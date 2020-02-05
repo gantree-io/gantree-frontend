@@ -1,164 +1,162 @@
 <script>
-	import { afterUpdate } from 'svelte';
-	import { location } from 'svelte-spa-router'
-	import _ from 'lodash'
+ 	import { afterUpdate } from 'svelte';
+ 	import { location } from 'svelte-spa-router'
+ 	import _ from 'lodash'
 
-	import Header from '@components/Header.svelte'
-	import Icon from "@components/Icon.svelte";
-	import Link from "@components/Link.svelte";
-	import Breadcrumbs from '@components/Breadcrumbs.svelte'
-	import RandomQuote from '@components/RandomQuote.svelte'
-	
-	export let tabs = []
-	let active = {}
-	let breadcrumbs = [] 
-	
-	afterUpdate(() => {
-		active = _.find(tabs, {href: `#${$location}`})
-		breadcrumbs = active.href.split('/').slice(0, -1)
-	});
+ 	import Drawer, {AppContent, Content, Header, Title, Subtitle} from '@smui/drawer';
+ 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
+ 	import { Icon } from '@smui/common';
+ 	import Button from '@smui/button';
+ 
+ 	import Breadcrumbs from '@components/Breadcrumbs.svelte'
+ 	import RandomQuote from '@components/RandomQuote.svelte'
+ 	
+ 	export let tabs = []
+ 	let active = {}
+ 	let breadcrumbs = [] 
+ 	
+ 	afterUpdate(() => {
+ 		active = _.find(tabs, {href: `#${$location}`})
+ 		breadcrumbs = active.href.split('/').slice(0, -1)
+
+ 		console.log(active)
+ 	});
 </script>
 
 <style lang="scss">
 	main{
 		min-height: 100vh;
 		display: flex;
-	}
-
-	nav{
-		width: 15vw;
-		background: var(--color-dark);
-		color: var(--color-light);
 		position: relative;
-
-		.logo,
-		.account{
-			display: block;
-			padding: 1.4em 1.4em;
-			color: var(--color-light);
-			background: rgba(255,255,255,0.1);
-		}
-
-		.bottom{
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			width: 100%;
-		}
-
-		:global(.link){
-			display: block;
+		display: flex;
+		width: 100%;
+		overflow: hidden;
+		z-index: 0;
+		justify-content: stretch;
+	
+		> :global(.mdc-drawer) {
+			min-height: 100vh;
 			position: relative;
-			padding: 1.2em 1.4em;
-			color: var(--color-light);
-			font-size: var(--font-size-small);
-			font-weight: 100;
-			background: rgba(255,255,255,0);
-			transition: background 0.15s ease-in-out;
-			text-decoration: none;
-			display: flex;
-			align-items: center;
-			line-height: 1em;
-			
-			&:hover{
-				background: rgba(255,255,255,0.1);
+			filter: invert(90%);
 
-				:global(.icon.chevron-right){
+			> :global(.mdc-drawer__content > .mdc-list){
+				&.bottom{
+					position: absolute;
+					bottom: 0;
+					width: 100%;
+				}
+
+				> :global(.quote) {
+					padding: 2em;
+					opacity: 0.5;
+					font-size: var(--font-size-xsmall);
+				}
+			}
+
+			:global(.mdc-list-item) {
+				margin: 0;
+				padding: 0 1.2em;
+				border-radius: 0;
+
+				> :global(.material-icons.chevron) {
+					position: absolute;
+					right: 0.6em;
+					top: 50%;
+					transform: translateY(-50%);
+					opacity: 0.7;
+					transition: right 0.15s ease-in-out;
+					margin: 0;
+				}
+
+				&:hover > :global(.material-icons.chevron) {
 					right: 0.4em;
 				}
 			}
-
-			:global(.icon:not(.chevron-right)){
-				margin-right: 0.5em;
-			}
-
-			:global(.icon.chevron-right){
-				position: absolute;
-				right: 0.6em;
-				top: 50%;
-				transform: translateY(-50%);
-				width: 0.7em;
-				height: 0.7em;
-				opacity: 0.7;
-				transition: right 0.15s ease-in-out;
-			}
 		}
 
-		hr{
-			border-top: none;
-			border-bottom-color: var(--color-dark-grey);
-			margin: 0;
+		> :global(.mdc-drawer-app-content ) {
+			width: 100%;
 		}
 	}
 
-	.content{
-		width: 85vw;
-		
+	.dashboard-header,
+	.dashboard-inner{
+		padding: 1.6em;
+	}
 
-		>header,
-		.inner{
-			padding: 1.6em;
-		}
+	.dashboard-header{
+		background: var(--color-dark-grey);
+		color: var(--color-light);
+		position: relative;
 
-		>header{
-			background: var(--color-light-grey);
-			position: relative;
+		h1{
+			display: flex;
+			align-items: center;
+			margin: 0;
+			padding: 0.3em 0 0;
+			line-height: 1em;
 
-			h1{
-				display: flex;
-				align-items: center;
-				margin: 0;
-				font-size: var(--font-size-large);
-				font-weight: 100;
-				padding: 0.3em 0 0;
-				line-height: 1em;
-
-				:global(.icon){
-					margin-right: 0.2em;
-				}
-			}
-
-			.extra{
-				position: absolute;
-				bottom: 1.4em;
-				right: 1.4em;
+			> :global(.material-icons) {
+				margin-right: 0.2em;
+				font-size: inherit;
 			}
 		}
 
+		.extra{
+			position: absolute;
+			bottom: 1.4em;
+			right: 1.4em;
+		}
 	}
 </style>
 
 <main>
-	<nav>
-		<span class="logo">[logo]</span>
-		{#each tabs as tab}
-			<hr/>
-			<Link to={tab.href}>
-				<Icon type={tab.icon}/>
-				{tab.name} 
-				<Icon type='chevronRight'/>
-			</Link>
-		{/each}
-		<span class="bottom">
-			<RandomQuote/>
+	<Drawer>
+		<Header>
+			<Title>Gantree</Title>
+			<Subtitle>Make AU Better Again</Subtitle>
+		</Header>
+		<Content>
+			<List>
+				<Separator nav />
+				{#each tabs as tab}
+					<Item href={tab.href||'#'}>
+						<Graphic class="material-icons">{tab.icon}</Graphic>
+						<Text>{tab.name}</Text>
+						<Graphic class="material-icons chevron">chevron_right</Graphic>
+					</Item>
+				{/each}
+			</List>
+			<List class='bottom'>
+				<RandomQuote/>
+				<Separator nav />
+				<Item href={'#'}>
+					<Graphic class="material-icons">person</Graphic>
+					<Text>Account</Text>
+				</Item>
+			</List>
+		</Content>
+	</Drawer>
 
-			<span class="account">
-				<Icon type='userCircle'/> 
-				[account name]
-			</span>
-		</span>
-		
-	</nav>
-	<section class='content'>
-		<header>
+	<AppContent>
+		<header class="dashboard-header">
 			<Breadcrumbs items={breadcrumbs}/>
-			<h1><Icon type={active.icon}/>{active.name}</h1>
+			<h1 class="mdc-typography--headline4">
+				<Icon class="material-icons">{active.icon}</Icon> 
+				{active.name}
+			</h1>
+
 			<span class="extra">
-				[key metrics]
+				{#each active.actions||[] as action}
+					<Button variant='text' dense>
+						<Icon class="material-icons">{action.icon}</Icon> 
+						{action.text}
+					</Button>
+				{/each}
 			</span>
 		</header>
-		<div class="inner">
+		<div class="dashboard-inner">
 			<slot></slot>
 		</div>
-	</section>
+	</AppContent>
 </main>

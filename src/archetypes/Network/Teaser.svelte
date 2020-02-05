@@ -1,15 +1,15 @@
 <script>
 	import _ from 'lodash'
-	//import Button, {Label} from '@smui/button';
+	import Paper, { Title } from '@smui/paper';
 	import Badge from '@components/Badge.svelte'
-	import Icon from '@components/Icon.svelte'
+	import { Icon } from '@smui/common';
+	import { panel } from '@app/store.js';
+
+	import Networks from '@routes/Dashboard/Networks.svelte'
 
 	export let _id = null
 	export let name = null
 	export let nodes = []
-	export let handleClick = () => {
-		console.log(_id)
-	}
 
 	const countStatus = status => _.filter(nodes, node => node.status === status).length
 
@@ -19,44 +19,54 @@
 </script>
 
 <style lang="scss">
-	.network-teaser{
-		background: var(--color-light-grey);
-		padding: 1.5em 2em;
+	:global(.network-teaser.smui-paper){
+		background-color: var(--color-dark-grey);
+		color: var(--color-light);
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		cursor: pointer;
-	
-		h1{
-			font-size: var(--font-size-medium);
+		transition: all 0.2s ease-in-out;
+
+		* :global(.smui-paper__title){
 			margin: 0;
+			display: flex;
+			align-items: center;
 		}
 
-		:global(.badge){
+		* :global(.badge){
 			display: inline-flex;
-			margin: 0.3em;
-			font-size: 11px;
-			
-			:global(>.label){
+			margin-left: 1em;
+
+			:global(.value){
+				color: var(--color-dark)
+			}
+
+			:global(.label){
 				text-transform: uppercase;
-				
-				color: var(--color-mid-grey)
+				color: var(--color-grey)
 			}
 		}
 
+		.controls{
+			display: flex;
+			align-items: center;
+		}
+
 		&:hover{
-			filter: contrast(108%);
+			background-color: var(--color-dark);
+			box-shadow: none
 		}
 	}
 </style>
 
-<article class='network-teaser' on:click={handleClick}>
+<Paper class='network-teaser' on:click={() => panel.open(Networks, {value: 123, label: 'testing'})} elevation="4" title={`${name} | ID: ${_id} | Created: 08 Sep 2019 | Current Block: 29,914 | 3 Seconds Ago`}>
 	<div>
-		<h1><Icon type='network'/> {name}</h1>
+		<Title><Icon class="material-icons">storage</Icon>&nbsp;{name}</Title>
 	</div>
-	<div>
-		{#if onlineCount}<Badge value={onlineCount} label='Online' success/>{/if}
-		{#if pendingCount}<Badge value={pendingCount} label='Pending' warning/>{/if}
-		{#if offlineCount}<Badge value={offlineCount} label='Offline' error/>{/if}
+	<div class='controls'>
+		<Badge value={onlineCount} label='Online' success disabled={!onlineCount}/>
+		<Badge value={pendingCount} label='Pending' warning disabled={!pendingCount}/>
+		<Badge value={offlineCount} label='Offline' error disabled={!offlineCount}/>
 	</div>
-</article>
+</Paper>

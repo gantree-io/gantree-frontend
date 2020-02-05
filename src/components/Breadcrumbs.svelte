@@ -3,6 +3,8 @@
 	import Link from "@components/Link.svelte";
 	import Icon from "@components/Icon.svelte";
 
+	
+
 	export let items;
 	
 	let breadcrumbs = []
@@ -31,6 +33,19 @@
 	:global(.link){
 		display: block;
 		line-height: 1em;
+		color: var(--color-light);
+		opacity: 0.6;
+		font-weight: 300;
+
+		&:visited{
+			color: var(--color-light);
+		}
+
+		&:hover{
+			color: var(--color-highlight);
+			opacity: 1;
+		}
+
 		:global(svg){
 			display: block
 		}
@@ -45,8 +60,6 @@
 			//display: none
 		}
 	}
-
-
 </style>
 
 <span class='breadcrumbs'>

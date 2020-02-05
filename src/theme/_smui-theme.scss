@@ -1,15 +1,31 @@
 //
 // MDC Theme
 //
+@import "@material/typography/mdc-typography";
+@import "@material/theme/color-palette";
 
-// @import "@material/theme/color-palette";
+// Svelte Colors!
+$mdc-theme-primary: #40b3ff;
+$mdc-theme-secondary: #676778;
+$mdc-theme-background: #fff;
+//$mdc-theme-surface: #000;
+$mdc-theme-error: $material-color-red-900;
 
-// // Svelte Colors!
-// $mdc-theme-primary: #ff3e00;
-// $mdc-theme-secondary: #676778;
-// // Other Svelte color: #40b3ff
+//https://material.io/develop/web/components/shape/
+$mdc-shape-small-component-radius: 0;
+$mdc-shape-medium-component-radius: 0;
+$mdc-shape-large-component-radius: 0;
 
-// $mdc-theme-background: #fff;
-// $mdc-theme-surface: #fff;
+// // drawer
+// $mdc-drawer-surface-fill-color: var(--color-dark);
+// $mdc-drawer-title-ink-color: #f8f8f8;
+// $mdc-drawer-subtitle-ink-color: #f8f8f8;
+// $mdc-drawer-item-icon-ink-color: #f8f8f8;
+// $mdc-drawer-item-text-ink-color: #f8f8f8;
+// $mdc-drawer-item-activated-icon-ink-color: #f8f8f8;
+// $mdc-drawer-item-activated-text-ink-color: #f8f8f8;
 
-// $mdc-theme-error: $material-color-red-900;
+// // list
+// $mdc-list-item-primary-text-ink-color: #FF0000;
+// $mdc-list-item-secondary-text-ink-color: #FF0000;
+// $mdc-theme-text-primary-on-background: #FF0000;

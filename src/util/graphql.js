@@ -1,11 +1,13 @@
 //https://www.apollographql.com/docs/react/v3.0-beta/api/core/ApolloClient/
-import ApolloClient from 'apollo-boost';
+import ApolloClient, { gql as ApolloGQL } from 'apollo-boost';
 
 let client = null
 
 const getClient = () => {
 	console.log(client)
 }
+
+export const gql = ApolloGQL
 
 export const configure = ({uri}) => {
 	client = new ApolloClient({
