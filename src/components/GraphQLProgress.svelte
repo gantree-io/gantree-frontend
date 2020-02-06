@@ -18,7 +18,7 @@
 			if(elapsed >= duration) {
 				clearInterval(timer)
 				progress = 1
-				bugger = 0
+				buffer = 0
 			}else{
 				elapsed += interval
 				progress = progress + ((1 - progress) * 0.15)

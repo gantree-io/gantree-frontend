@@ -63,7 +63,7 @@
 		height: 1em;
 		
 		:global(path){
-			fill: currentColor;
+			//fill: currentColor;
 		}
 	}
 </style>

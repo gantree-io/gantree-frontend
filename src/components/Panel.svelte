@@ -1,12 +1,18 @@
 <script>
 	import { Icon } from '@smui/common';
+	import Button from '@smui/button';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
+	import Menu from '@smui/menu';
+	import { Anchor } from '@smui/menu-surface';
+	import List, {Item, Text, Graphic} from '@smui/list';
 	import { panel } from '@app/store.js';
 
 	let open = false
 	let component = null
 	let props = {}
 	let header = []
+	let menu;
+	let menuAnchor;
 
 	const handleKeyDown = e => e.keyCode === 27 ? panel.close() : null
 
@@ -73,6 +79,8 @@
 			>header{
 				border-bottom: 1px solid var(--color-light-grey);
 				position: relative;
+				display: flex;
+				align-items: center;
 
 				h1,p{
 					margin: 0;
@@ -81,7 +89,17 @@
 
 				p{
 					font-weight: 100;
-					opacity: 0.8
+					opacity: 0.8;
+					margin: 0 0.5em;
+				}
+
+				.menu{
+					:global(.mdc-icon-button){
+						opacity: 0.4;
+						&:hover{
+							opacity: 1;
+						}
+					}
 				}
 
 				:global(.close){
@@ -114,16 +132,25 @@
 	<div class='inner'>
 		<header class="dashboard-header">
 			{#if header.title}<h1 class="mdc-typography--headline5">{header.title}</h1>{:else}---{/if}
-			{#if header.subtitle}<p class="mdc-typography--overline">&nbsp;// {header.subtitle}</p>{:else}---{/if}
+			{#if header.subtitle}<p class="mdc-typography--body2">// {header.subtitle}</p>{:else}---{/if}
 
-			<!-- <span class="extra">
-				{#each active.actions||[] as action}
-					<Button variant='text' dense>
-						<Icon class="material-icons">{action.icon}</Icon> 
-						{action.text}
-					</Button>
-				{/each}
-			</span> -->
+			{#if header.actions}
+				<div class='menu' use:Anchor bind:this={menuAnchor}>
+					<IconButton on:click={() => menu.setOpen(true)}>
+						<IconButtonIcon class="material-icons">menu</IconButtonIcon>
+					</IconButton>
+					<Menu bind:this={menu} anchor={false} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
+						<List dense>
+							{#each header.actions||[] as action}
+								<Item on:SMUI:action={() => clickedDense = 'Edit'}>
+									<Graphic class="material-icons">{action.icon}</Graphic>
+									<Text>{action.text}</Text>
+								</Item>
+							{/each}
+						</List>
+					</Menu>
+				</div>
+			{/if}
 
 			<IconButton 
 				on:click={panel.close} 

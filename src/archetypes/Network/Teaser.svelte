@@ -5,7 +5,7 @@
 	import { Icon } from '@smui/common';
 	import { panel } from '@app/store.js';
 
-	import NodeIndex from '@archetypes/Node/Index.svelte'
+	import NodeIndex, { actions } from '@archetypes/Node/Index.svelte'
 
 	export let _id = null
 	export let name = null
@@ -25,7 +25,7 @@
 			{
 				title: `${name}`,
 				subtitle: `Nodes`,
-				actions: []
+				actions: actions
 			}
 		)
 	}
@@ -74,7 +74,7 @@
 	}
 </style>
 
-<Paper class='network-teaser' on:click={handleClick} elevation="4" title={`${name} | ID: ${_id} | Created: 08 Sep 2019 | Current Block: 29,914 | 3 Seconds Ago`}>
+<Paper class='network-teaser' on:click={handleClick} elevation="4">
 	<div>
 		<Title><Icon class="material-icons">storage</Icon>&nbsp;{name}</Title>
 	</div>
