@@ -2,7 +2,7 @@
 	import Router from 'svelte-spa-router'
 	import Dashboard from '@layouts/Dashboard.svelte'
 	import Home from '@routes/Dashboard/Home.svelte'
-	import Networks, { actions as networkActions }  from '@routes/Dashboard/Networks.svelte'
+	import NetworkIndex, { actions as networkActions }  from '@archetypes/Network/Index.svelte'
 	import Config from '@routes/Dashboard/Config.svelte'
 	import Keys from '@routes/Dashboard/Keys.svelte'
 	import Team from '@routes/Dashboard/Team.svelte'
@@ -11,7 +11,7 @@
 
 	const routes = {
 		'/': Home,
-		'/networks': Networks,
+		'/networks': NetworkIndex,
 		'/config': Config,
 		'/keys': Keys,
 		'/team': Team,

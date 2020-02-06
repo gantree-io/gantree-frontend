@@ -5,7 +5,7 @@
 	import { Icon } from '@smui/common';
 	import { panel } from '@app/store.js';
 
-	import Networks from '@routes/Dashboard/Networks.svelte'
+	import NodeIndex from '@archetypes/Node/Index.svelte'
 
 	export let _id = null
 	export let name = null
@@ -16,6 +16,19 @@
 	const onlineCount = countStatus('ONLINE')
 	const pendingCount = countStatus('PENDING')
 	const offlineCount = countStatus('OFFLINE')
+
+	const handleClick = () => {
+		panel.open(NodeIndex, 
+			{
+				networkId: _id
+			}, 
+			{
+				title: `${name}`,
+				subtitle: `Nodes`,
+				actions: []
+			}
+		)
+	}
 </script>
 
 <style lang="scss">
@@ -27,6 +40,7 @@
 		align-items: center;
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
+		margin-bottom: 0.6em;
 
 		* :global(.smui-paper__title){
 			margin: 0;
@@ -60,7 +74,7 @@
 	}
 </style>
 
-<Paper class='network-teaser' on:click={() => panel.open(Networks, {value: 123, label: 'testing'})} elevation="4" title={`${name} | ID: ${_id} | Created: 08 Sep 2019 | Current Block: 29,914 | 3 Seconds Ago`}>
+<Paper class='network-teaser' on:click={handleClick} elevation="4" title={`${name} | ID: ${_id} | Created: 08 Sep 2019 | Current Block: 29,914 | 3 Seconds Ago`}>
 	<div>
 		<Title><Icon class="material-icons">storage</Icon>&nbsp;{name}</Title>
 	</div>

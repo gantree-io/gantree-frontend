@@ -1,12 +1,14 @@
 <script>
 	import { Icon } from '@smui/common';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
-	//import Button, { Icon as ButtonIcon, Label } from '@smui/button';
 	import { panel } from '@app/store.js';
 
 	let open = false
 	let component = null
 	let props = {}
+	let header = []
+
+	const handleKeyDown = e => e.keyCode === 27 ? panel.close() : null
 
 	panel.subscribe(data => {
 		//todo | handle new panel open
@@ -15,14 +17,16 @@
 		// 3. if not, close panel, insert new data and re-open,
 		// 4. if same, do nothing
 
-		if(data.component){
-			component = data.component
-			props = data.props
-			open = true
+		component = data.component
+		props = data.props
+		header = data.header
+
+		open = !!data.component ? true : false
+
+		if (open) {
+			document.addEventListener("keydown", handleKeyDown);
 		}else{
-			component = null
-			props = data.props
-			open = false
+			document.removeEventListener("keydown", handleKeyDown);
 		}
 	});
 </script>
@@ -35,38 +39,70 @@
 		overflow: hidden;
 		width: 0;
 		height: 100vh;
-		transition: background 0.4s;
-		background: rgba(0,0,0,0);
 
-		>article{
+		>.overlay{
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100%;
+			transition: background 0.4s;
+			background: rgba(0,0,0,0);
+			cursor: e-resize;
+		}
+
+		>.inner{
 			position: fixed;
 			top: 0;
 			right: 0;
 			background: var(--color-light);
 			overflow: hidden;
 			width: 0;
-			//min-width: 0;
 			height: 100vh;
-			padding: 5vh 0;
+			padding:0;
 			opacity: 0.5;
 			transition: all 0.35s ease-out;
 			box-shadow: 0 0 2em rgba(0,0,0,0.8);
 
-			:global(.close){
-				position: absolute;
-				top: 0.2em;
-				right: 0.2em;
+
+			>header,
+			>article{
+				padding: 1.5em 2em;
+			}
+
+			>header{
+				border-bottom: 1px solid var(--color-light-grey);
+				position: relative;
+
+				h1,p{
+					margin: 0;
+					display: inline-block;
+				}
+
+				p{
+					font-weight: 100;
+					opacity: 0.8
+				}
+
+				:global(.close){
+					position: absolute;
+					top: 50%;
+					right: 1em;
+					transform: translateY(-50%)
+				}
+
 			}
 		}
 
 		&[data-open='true']{
-			background: rgba(0,0,0,0.8);
 			width: 100vw;
 
-			>article{
-				width: 70vw;
-				//min-width: 30vw;
-				padding: 5vh 4vw;
+			>.overlay{
+				background: rgba(0,0,0,0.8);
+			}
+
+			>.inner{
+				width: 85vw;
 				opacity: 1;
 			}
 		}
@@ -74,13 +110,31 @@
 </style>
 
 <section class='panel' data-open={open}>
-	<article>
-		{#if component}<svelte:component this={component} {...props}/>{/if}
-		<IconButton 
-			on:click={panel.close} 
-			class='close'
-			>
-			<IconButtonIcon class="material-icons">close</IconButtonIcon>
-		</IconButton>
-	</article>
+	<div class="overlay" on:click={panel.close}/>
+	<div class='inner'>
+		<header class="dashboard-header">
+			{#if header.title}<h1 class="mdc-typography--headline5">{header.title}</h1>{:else}---{/if}
+			{#if header.subtitle}<p class="mdc-typography--overline">&nbsp;// {header.subtitle}</p>{:else}---{/if}
+
+			<!-- <span class="extra">
+				{#each active.actions||[] as action}
+					<Button variant='text' dense>
+						<Icon class="material-icons">{action.icon}</Icon> 
+						{action.text}
+					</Button>
+				{/each}
+			</span> -->
+
+			<IconButton 
+				on:click={panel.close} 
+				class='close'
+				>
+				<IconButtonIcon class="material-icons">close</IconButtonIcon>
+			</IconButton>
+		</header>
+		
+		<article>
+			{#if component}<svelte:component this={component} {...props}/>{/if}
+		</article>
+	</div>
 </section>

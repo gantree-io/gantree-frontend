@@ -1,15 +1,27 @@
 import { writable } from 'svelte/store';
 
 const Panel = () => {
-	const { subscribe, set, update } = writable({
+
+	const initialProps = {
 		component: null,
-		props: {}
-	});
+		props: {},
+		header: {
+			title: null,
+			subtitle: null,
+			actions: []
+		}
+	}
+	
+	const { subscribe, set, update } = writable(initialProps);
 
 	return {
 		subscribe,
-		open: (component, props) => update(() => ({component: component, props: props||{}})),
-		close: () => update((val) => ({component: null, props: {}})),
+		open: (component, props, header) => update(() => ({
+			component: component, 
+			props: props||{}, 
+			header: header||[]
+		})),
+		close: () => update((val) => initialProps),
 	};
 }
 

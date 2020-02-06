@@ -1,11 +1,9 @@
 //https://www.apollographql.com/docs/react/v3.0-beta/api/core/ApolloClient/
+// TODO: pending request mddleware.
+
 import ApolloClient, { gql as ApolloGQL } from 'apollo-boost';
 
 let client = null
-
-const getClient = () => {
-	console.log(client)
-}
 
 export const gql = ApolloGQL
 

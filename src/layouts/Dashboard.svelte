@@ -18,8 +18,6 @@
  	afterUpdate(() => {
  		active = _.find(tabs, {href: `#${$location}`})
  		breadcrumbs = active.href.split('/').slice(0, -1)
-
- 		console.log(active)
  	});
 </script>
 
@@ -114,7 +112,7 @@
 	<Drawer>
 		<Header>
 			<Title>Gantree</Title>
-			<Subtitle>Make AU Better Again</Subtitle>
+			<Subtitle>We've got some oil for that</Subtitle>
 		</Header>
 		<Content>
 			<List>
