@@ -46,6 +46,7 @@
 		width: 0;
 		height: 100vh;
 
+
 		>.overlay{
 			position: absolute;
 			top: 0;
@@ -69,7 +70,7 @@
 			opacity: 0.5;
 			transition: all 0.35s ease-out;
 			box-shadow: 0 0 2em rgba(0,0,0,0.8);
-
+			overflow: scroll;
 
 			>header,
 			>article{
@@ -142,7 +143,7 @@
 					<Menu bind:this={menu} anchor={false} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
 						<List dense>
 							{#each header.actions||[] as action}
-								<Item on:SMUI:action={() => clickedDense = 'Edit'}>
+								<Item on:click={() => console.log(`TODO: Handle Action > ${action.text}`)}>
 									<Graphic class="material-icons">{action.icon}</Graphic>
 									<Text>{action.text}</Text>
 								</Item>

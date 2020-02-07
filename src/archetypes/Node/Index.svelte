@@ -3,13 +3,35 @@
 	import { query, gql } from '@util/graphql' 
 	import NodeTeaser from '@archetypes/Node/Teaser.svelte'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
+	import FilterList from '@components/FilterList.svelte'
 	import Button, { Label } from '@smui/button';
 	import { Icon } from '@smui/common';
-	import Chip, {Set, Checkmark, Text} from '@smui/chips';
+	import Chip, { Set, Checkmark, Text } from '@smui/chips';
 
+	// TESTING
 	export let networkId = '111';
 
-	let filterOptions = [{k: 'VALIDATOR', v: 'Vaildators'}, {k: 'FULL', v: 'Full Nodes'}, {k: 'TELEMETRY', v: 'Telemetry'}];
+	let filterOptions = [
+		{
+			key: 'VALIDATOR', 
+			value: 'Vaildators',
+			showCount: true,
+			icon: 'find_in_page'
+
+		}, 
+		{
+			key: 'FULL', 
+			value: 'Full Nodes',
+			showCount: true,
+			icon: 'dns'
+		}, 
+		{
+			key: 'TELEMETRY', 
+			value: 'Telemetry',
+			showCount: true,
+			icon: 'settings_input_antenna'
+		}
+	];
 	let filter = filterOptions.slice();
 
   	const NODELIST = gql`
@@ -73,62 +95,19 @@
 				font-weight: 100;
 			}
 		}
-
-		:global(.mdc-chip){
-			opacity: 1;
-			border: 1px solid var(--color-highlight);
-			background: transparent;
-			color: var(--color-highlight);
-			filter: saturate(15%) brightness(140%);
-			
-			&.mdc-chip--selected{
-				filter: saturate(100%);
-			}
-
-			&:before{
-				background: var(--color-highlight);
-			}
-
-			> :global(.material-icons){
-				font-size: 1.2em;
-				margin: 0 0.2em 0 0;
-			}
-		}
-
-		
 	}
 </style>
 
 {#await fetchNodes()}
 	<GraphQLProgress/>
 {:then nodes}
-	
 	<header>
 		<span class="left">
-			<Set 
-				chips={filterOptions} 
-				let:chip 
-				key={chip => chip.k} 
-				filter 
-				bind:selected={filter}
-				>
-				{#if _.filter(nodes, {type: chip.k}).length}
-					<Chip>
-						<Icon class={`material-icons`}>
-							{
-								chip.k === 'VALIDATOR' 
-									? 'find_in_page' 
-									: (chip.k === 'FULL'
-										? 'dns'
-										: 'settings_input_antenna'
-									)
-							}
-						</Icon>
-						<Text>{chip.v} ({_.filter(nodes, {type: chip.k}).length})</Text>
-					</Chip>
-				{/if}
-		    </Set>
-			
+			<FilterList 
+				options={filterOptions}
+				count={item => _.filter(nodes||[], {type: item.key}).length}
+				on:change={({detail}) => filter = detail}
+			/>
 		</span>
 		<span class="right">
 			<span class="mdc-typography--caption config">Config: ecommerce-genesis-config</span>
@@ -139,7 +118,7 @@
 		</span>
 	</header>
 	{#each nodes as node}
-		{#if _.some(filter, ['k', node.type])}
+		{#if _.some(filter, ['key', node.type])}
 			<NodeTeaser {...node}/>
 		{/if}
 	{:else}
