@@ -1,38 +1,30 @@
 <script>
 	import _ from 'lodash'
 	import Paper, { Title } from '@smui/paper';
-	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
 	import { panel } from '@app/store.js';
 
-	import NodeIndex, { actions } from '@archetypes/Node/Index.svelte'
+	import ConfigDetail, { actions } from '@archetypes/Config/Detail.svelte'
 
 	export let _id = null
 	export let name = null
-	export let nodes = []
-
-	const countStatus = status => _.filter(nodes, node => node.status === status).length
-
-	const onlineCount = countStatus('ONLINE')
-	const pendingCount = countStatus('PENDING')
-	const offlineCount = countStatus('OFFLINE')
 
 	const handleClick = () => {
-		panel.open(NodeIndex, 
-			{
-				networkId: _id
-			}, 
-			{
-				title: `${name}`,
-				subtitle: `Nodes`,
-				actions: actions
-			}
-		)
+		 panel.open(ConfigDetail, 
+		 	{
+		 		configId: _id
+		 	}, 
+		 	{
+		 		title: `${name}`,
+		 		subtitle: `chainspec.json`,
+		 		actions: actions
+		 	}
+		 )
 	}
 </script>
 
 <style lang="scss">
-	:global(.network-teaser.smui-paper){
+	:global(.config-teaser.smui-paper){
 		background-color: var(--color-dark-grey);
 		color: var(--color-light);
 		display: flex;
@@ -74,13 +66,11 @@
 	}
 </style>
 
-<Paper class='network-teaser' on:click={handleClick} elevation="4">
+<Paper class='config-teaser' on:click={handleClick} elevation="4">
 	<div>
-		<Title><Icon class="material-icons">blur_on</Icon>&nbsp;{name}</Title>
+		<Title><Icon class="material-icons">code</Icon>&nbsp;{name}</Title>
 	</div>
 	<div class='controls'>
-		<Badge value={onlineCount} label='Online' success disabled={!onlineCount}/>
-		<Badge value={pendingCount} label='Pending' warning disabled={!pendingCount}/>
-		<Badge value={offlineCount} label='Offline' error disabled={!offlineCount}/>
+		[controls]
 	</div>
 </Paper>

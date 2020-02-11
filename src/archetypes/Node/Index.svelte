@@ -8,6 +8,9 @@
 	import { Icon } from '@smui/common';
 	import Chip, { Set, Checkmark, Text } from '@smui/chips';
 
+	import ConfigDetail, { actions as ConfigDetailActions } from '@archetypes/Config/Detail.svelte'
+	import { panel } from '@app/store.js';
+
 	// TESTING
 	export let networkId = '111';
 
@@ -34,9 +37,13 @@
 	];
 	let filter = filterOptions.slice();
 
-  	const NODELIST = gql`
- 		query nodeList($networkId: String!) {
- 			nodeList(networkId: $networkId) {
+  	const NETWORK = gql`
+ 		query network($_id: String!) {
+ 			network(_id: $_id) {
+ 				config{
+ 					_id
+ 					name
+ 				}
  				nodes{
  					_id
  					name
@@ -49,7 +56,20 @@
  		}
  	`;
 
- 	let fetchNodes = query(NODELIST, {variables: {networkId: networkId}})
+ 	let fetchNodes = query(NETWORK, {variables: {_id: networkId}})
+
+ 	const handleOpenConfig = ({_id, name}) => {
+		 panel.open(ConfigDetail, 
+		 	{
+		 		configId: _id
+		 	}, 
+		 	{
+		 		title: name,
+		 		subtitle: `chainspec.json`,
+		 		actions: ConfigDetailActions
+		 	}
+		 )
+	}
 </script>
 
 <script context="module">
@@ -100,24 +120,24 @@
 
 {#await fetchNodes()}
 	<GraphQLProgress/>
-{:then nodes}
+{:then network}
 	<header>
 		<span class="left">
 			<FilterList 
 				options={filterOptions}
-				count={item => _.filter(nodes||[], {type: item.key}).length}
+				count={item => _.filter(network.nodes||[], {type: item.key}).length}
 				on:change={({detail}) => filter = detail}
 			/>
 		</span>
 		<span class="right">
-			<span class="mdc-typography--caption config">Config: ecommerce-genesis-config</span>
+			<span class="mdc-typography--caption config" on:click={() => handleOpenConfig(network.config)}>Config: ecommerce-genesis-config</span>
 			<Button variant='text' dense>
 				<Icon class="material-icons">add</Icon> 
 				<Label>Add Nodes</Label>
 			</Button>
 		</span>
 	</header>
-	{#each nodes as node}
+	{#each network.nodes as node}
 		{#if _.some(filter, ['key', node.type])}
 			<NodeTeaser {...node}/>
 		{/if}

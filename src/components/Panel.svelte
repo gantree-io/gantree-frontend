@@ -1,6 +1,4 @@
 <script>
-	import { Icon } from '@smui/common';
-	import Button from '@smui/button';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
 	import Menu from '@smui/menu';
 	import { Anchor } from '@smui/menu-surface';
@@ -13,26 +11,49 @@
 	let header = []
 	let menu;
 	let menuAnchor;
+	const transitionSpeed = 0.4
 
-	const handleKeyDown = e => e.keyCode === 27 ? panel.close() : null
-
-	panel.subscribe(data => {
-		//todo | handle new panel open
-		// 1. hash data as ID
-		// 2. check new data if is same hash
-		// 3. if not, close panel, insert new data and re-open,
-		// 4. if same, do nothing
-
+	// handle panel close
+	const handleClose = (cb => {
+		document.removeEventListener("keydown", handleKeyDown);
+		open = false
+		setTimeout(() => {
+			component = null
+			props = {}
+			header = []
+			typeof cb === "function" && cb()
+		}, transitionSpeed * 1000)
+	})
+	
+	// handle panel open
+	const handleOpen = (data => {
 		component = data.component
 		props = data.props
 		header = data.header
+		open = true
+		document.addEventListener("keydown", handleKeyDown);
+	})
+	
+	// watch for ESC key press & close
+	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 
-		open = !!data.component ? true : false
+	// subscribe to incoming requests
+	panel.subscribe(data => {
+		if(component !== data.component){
+			// already open
+			if(open){
+				// new component? close and reopen
+				if(!!data.component){
+					handleClose(() => handleOpen(data))
+				}
+				// close
+				else{
+					handleClose()
+				}
+			}else{
+				handleOpen(data)
+			}
 
-		if (open) {
-			document.addEventListener("keydown", handleKeyDown);
-		}else{
-			document.removeEventListener("keydown", handleKeyDown);
 		}
 	});
 </script>
@@ -45,7 +66,6 @@
 		overflow: hidden;
 		width: 0;
 		height: 100vh;
-
 
 		>.overlay{
 			position: absolute;
@@ -118,6 +138,7 @@
 
 			>.overlay{
 				background: rgba(0,0,0,0.8);
+				backdrop-filter: blur(0.1em);
 			}
 
 			>.inner{
@@ -129,8 +150,8 @@
 </style>
 
 <section class='panel' data-open={open}>
-	<div class="overlay" on:click={panel.close}/>
-	<div class='inner'>
+	<div class="overlay" on:click={handleClose} style={`transition: background ${transitionSpeed}s ease-in-out`}/>
+	<div class='inner' style={`transition: all ${transitionSpeed*0.75}s ease-out`}>
 		<header class="dashboard-header">
 			{#if header.title}<h1 class="mdc-typography--headline5">{header.title}</h1>{:else}---{/if}
 			{#if header.subtitle}<p class="mdc-typography--body2">// {header.subtitle}</p>{:else}---{/if}
@@ -154,7 +175,7 @@
 			{/if}
 
 			<IconButton 
-				on:click={panel.close} 
+				on:click={handleClose} 
 				class='close'
 				>
 				<IconButtonIcon class="material-icons">close</IconButtonIcon>

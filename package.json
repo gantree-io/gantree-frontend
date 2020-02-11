@@ -23,6 +23,7 @@
     "fs": "^0.0.1-security",
     "graphql": "^14.6.0",
     "lodash": "^4.17.15",
+    "md5": "^2.2.1",
     "node-sass": "^4.13.1",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-postcss": "^2.0.6",

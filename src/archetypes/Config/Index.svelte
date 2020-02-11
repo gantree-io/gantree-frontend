@@ -1,29 +1,26 @@
 <script>
 	import { query, gql } from '@util/graphql' 
-	import NetworkTeaser from '@archetypes/Network/Teaser.svelte'
+	import ConfigTeaser from '@archetypes/Config/Teaser.svelte'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import Button, {Label} from '@smui/button';
 	import { Icon } from '@smui/common';
 	
-  	const NETWORKLIST = gql`
- 		query networks {
-			networks{
+  	const CONFIGS = gql`
+ 		query configs {
+			configs{
 				_id
 				name
-				nodes{
-					status
-				}
 			}
  		}
  	`;
 
- 	let fetchNetworks = query(NETWORKLIST)
+ 	let fetchcConfigs = query(CONFIGS)
 </script>
 
 <script context="module">
  	export const actions = [
  		{
-			text: 'Add New',
+			text: 'Add Config',
 			icon: 'add'
  		}
  	]
@@ -37,13 +34,14 @@
 	}
 </style>
 
-{#await fetchNetworks()}
+
+{#await fetchcConfigs()}
 	<GraphQLProgress/>
-{:then networks}
-	{#each networks as network}
-		<NetworkTeaser {...network}/>
+{:then configs}
+	{#each configs as config}
+		<ConfigTeaser {...config}/>
 	{:else}
-		TODO: no networks. Add above
+		TODO: no configs. Add above
 	{/each}
 {:catch e}
 	TODO: error... {e.message}
