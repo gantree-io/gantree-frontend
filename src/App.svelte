@@ -3,9 +3,10 @@
 	import { configure } from '@util/graphql' 
 	import Router from 'svelte-spa-router'
 	import Panel from '@components/Panel.svelte'
+	import Drawer from '@components/Drawer.svelte'
 
 	import Home from '@routes/Home.svelte'
-	import Dashboard from '@routes/Dashboard/_index.svelte'
+	import Dashboard from '@routes/Dashboard.svelte'
 	import Components from '@routes/Components.svelte'
 	import Four04 from '@routes/Four04.svelte'
 
@@ -73,3 +74,4 @@
 
 <Router {routes}/>
 <Panel/>
+<Drawer/>

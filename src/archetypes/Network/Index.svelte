@@ -1,11 +1,9 @@
 <script>
-	import { query, gql } from '@util/graphql' 
 	import NetworkTeaser from '@archetypes/Network/Teaser.svelte'
-	import GraphQLProgress from '@components/GraphQLProgress.svelte'
-	import Button, {Label} from '@smui/button';
-	import { Icon } from '@smui/common';
+	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
+	import PanelLayout from '@layouts/Panel.svelte'
 	
-  	const NETWORKLIST = gql`
+	const query = `
  		query networks {
 			networks{
 				_id
@@ -15,36 +13,24 @@
 				}
 			}
  		}
- 	`;
-
- 	let fetchNetworks = query(NETWORKLIST)
+ 	`
 </script>
 
-<script context="module">
- 	export const actions = [
- 		{
-			text: 'Add New',
-			icon: 'add'
- 		}
- 	]
-</script>
-
-<style lang="scss">
-	> .mdc-linear-progress{
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-</style>
-
-{#await fetchNetworks()}
-	<GraphQLProgress/>
-{:then networks}
-	{#each networks as network}
-		<NetworkTeaser {...network}/>
-	{:else}
-		TODO: no networks. Add above
-	{/each}
-{:catch e}
-	TODO: error... {e.message}
-{/await}
+<PanelLayout 
+	header={{
+		title: 'Neworks',
+		icon: 'blur_on',
+		actions: [
+	 		{
+				text: 'Add New',
+				icon: 'add'
+	 		}
+	 	]
+	}}
+	showBreadcrumbs
+	>
+	<GraphQueryWrapper
+		query={query}
+		component={NetworkTeaser}
+	/>
+</PanelLayout>

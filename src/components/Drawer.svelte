@@ -3,7 +3,7 @@
 	import Menu from '@smui/menu';
 	import { Anchor } from '@smui/menu-surface';
 	import List, {Item, Text, Graphic} from '@smui/list';
-	import { panel } from '@app/store.js';
+	import { drawer } from '@app/store.js';
 
 	let open = false
 	let component = null
@@ -13,7 +13,7 @@
 	let menuAnchor;
 	const transitionSpeed = 0.4
 
-	// handle panel close
+	// handle drawer close
 	const handleClose = (cb => {
 		document.removeEventListener("keydown", handleKeyDown);
 		open = false
@@ -25,7 +25,7 @@
 		}, transitionSpeed * 1000)
 	})
 	
-	// handle panel open
+	// handle drawer open
 	const handleOpen = (data => {
 		component = data.component
 		props = data.props
@@ -38,7 +38,7 @@
 	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 
 	// subscribe to incoming requests
-	panel.subscribe(data => {
+	drawer.subscribe(data => {
 		if(component !== data.component){
 			// already open
 			if(open){
@@ -59,7 +59,7 @@
 </script>
 
 <style lang="scss">
-	.panel{
+	.drawer{
 		position: fixed;
 		top: 0;
 		right: 0;
@@ -176,47 +176,9 @@
 	}
 </style>
 
-<section class='panel' data-open={open}>
+<section class='drawer' data-open={open}>
 	<div class="overlay" on:click={handleClose} style={`transition: background ${transitionSpeed}s ease-in-out`}/>
 	<div class='inner' style={`transition: all ${transitionSpeed*0.75}s ease-out`}>
-		<header class="dashboard-header">
-			<span class="left">
-				{#if header.title}<h1 class="mdc-typography--headline5">{header.title}</h1>{:else}---{/if}
-				{#if header.subtitle}<p class="mdc-typography--body2">// {header.subtitle}</p>{:else}---{/if}
-			</span>	
-
-			<span class="right">
-				{#if header.actions}
-					<div class='menu' use:Anchor bind:this={menuAnchor}>
-						<IconButton on:click={() => menu.setOpen(true)}>
-							<IconButtonIcon class="material-icons">menu</IconButtonIcon>
-						</IconButton>
-						<Menu bind:this={menu} anchor={false} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
-							<List dense>
-								{#each header.actions||[] as action}
-									<Item on:click={() => action.callback()}>
-										<Graphic class="material-icons">{action.icon}</Graphic>
-										<Text>{action.text}</Text>
-									</Item>
-								{/each}
-							</List>
-						</Menu>
-					</div>
-				{/if}
-
-				<span class="close">
-					<IconButton 
-						on:click={handleClose} 
-						>
-						<IconButtonIcon class="material-icons">close</IconButtonIcon>
-					</IconButton>
-				</span>
-
-			</span>
-		</header>
-		
-		<article>
-			{#if component}<svelte:component this={component} {...props}/>{/if}
-		</article>
+		<svelte:component this={component} {...props}/>
 	</div>
 </section>

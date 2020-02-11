@@ -1,11 +1,13 @@
 <script>
-	import { query, gql } from '@util/graphql' 
+	import { onMount, onDestroy } from 'svelte';
+	import PubSub from 'pubsub-js'
 	import ConfigTeaser from '@archetypes/Config/Teaser.svelte'
-	import GraphQLProgress from '@components/GraphQLProgress.svelte'
-	import Button, {Label} from '@smui/button';
-	import { Icon } from '@smui/common';
-	
-  	const CONFIGS = gql`
+	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
+	import PanelLayout from '@layouts/Panel.svelte'
+	import { drawer } from '@app/store.js';
+	import ConfigAdd from './Add.svelte'
+
+  	const query = `
  		query configs {
 			configs{
 				_id
@@ -14,35 +16,47 @@
  		}
  	`;
 
- 	let fetchcConfigs = query(CONFIGS)
+ 	onMount(() => {
+ 		PubSub.subscribe('CONFIG.DELETE', () => triggerRefetch());
+ 		PubSub.subscribe('CONFIG.ADD', () => triggerRefetch());
+ 	})
+
+ 	onDestroy(() => {
+ 		PubSub.unsubscribe('CONFIG.DELETE');
+ 		PubSub.unsubscribe('CONFIG.ADD');
+ 	})
+
+ 	let triggerRefetch;
 </script>
 
-<script context="module">
- 	export const actions = [
- 		{
-			text: 'Add Config',
-			icon: 'add'
- 		}
- 	]
-</script>
-
-<style lang="scss">
-	> .mdc-linear-progress{
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-</style>
-
-
-{#await fetchcConfigs()}
-	<GraphQLProgress/>
-{:then configs}
-	{#each configs as config}
-		<ConfigTeaser {...config}/>
-	{:else}
-		TODO: no configs. Add above
-	{/each}
-{:catch e}
-	TODO: error... {e.message}
-{/await}
+<PanelLayout 
+	header={{
+		title: 'Config',
+		actions: [
+	 		{
+				text: 'Add Config',
+				icon: 'add',
+				callback: () => {
+					drawer.open(ConfigAdd, 
+						{
+							onSuccess: () => drawer.close()
+						}, 
+						{
+							title: `Add Config`,
+							subtitle: `chainspec.json`,
+						}
+					)
+				}
+	 		}
+		]
+	}}
+	showBreadcrumbs
+	>
+	<GraphQueryWrapper
+		query={query}
+		component={ConfigTeaser}
+		afterInit={({refetch}) => {
+			triggerRefetch = refetch
+		}}
+	/>
+</PanelLayout>

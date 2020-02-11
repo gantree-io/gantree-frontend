@@ -2,24 +2,19 @@
 	import _ from 'lodash'
 	import Paper, { Title } from '@smui/paper';
 	import { Icon } from '@smui/common';
-	import { panel } from '@app/store.js';
+	import { drawer } from '@app/store.js';
 
-	import ConfigDetail, { actions } from '@archetypes/Config/Detail.svelte'
+	import ConfigDetail from '@archetypes/Config/Detail.svelte'
 
 	export let _id = null
 	export let name = null
 
 	const handleClick = () => {
-		 panel.open(ConfigDetail, 
-		 	{
-		 		configId: _id
-		 	}, 
-		 	{
-		 		title: `${name}`,
-		 		subtitle: `chainspec.json`,
-		 		actions: actions
-		 	}
-		 )
+		drawer.open(ConfigDetail, 
+			{
+				configId: _id
+			}
+		)
 	}
 </script>
 

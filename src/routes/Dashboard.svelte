@@ -1,5 +1,19 @@
 <script>
- 	import { afterUpdate } from 'svelte';
+	import Router from 'svelte-spa-router'
+	import Dashboard from '@layouts/Dashboard.svelte'
+	import Home from '@routes/DashboardOld/Home.svelte'
+	import NetworkIndex from '@archetypes/Network/Index.svelte'
+	import Config from '@archetypes/Config/Index.svelte'
+	import Keys from '@routes/DashboardOld/Keys.svelte'
+	import Team from '@routes/DashboardOld/Team.svelte'
+	import Billing from '@routes/DashboardOld/Billing.svelte'
+	import Docs from '@routes/DashboardOld/Docs.svelte'
+
+	import ConfigAdd from '@archetypes/Config/Add.svelte'
+
+
+
+	import { afterUpdate } from 'svelte';
  	import { location } from 'svelte-spa-router'
  	import _ from 'lodash'
 
@@ -8,17 +22,72 @@
  	import { Icon } from '@smui/common';
  	import Button from '@smui/button';
  
- 	import Breadcrumbs from '@components/Breadcrumbs.svelte'
  	import RandomQuote from '@components/RandomQuote.svelte'
  	
- 	export let tabs = []
  	let active = {}
- 	let breadcrumbs = [] 
+ 	//let breadcrumbs = [] 
  	
  	afterUpdate(() => {
  		active = _.find(tabs, {href: `#${$location}`})
- 		breadcrumbs = active.href.split('/').slice(0, -1)
+ 		//breadcrumbs = active.href.split('/').slice(0, -1)
  	});
+
+
+
+
+	const routes = {
+		'/': Home,
+		'/networks': NetworkIndex,
+		'/config': Config,
+		'/configadd': ConfigAdd,
+		'/keys': Keys,
+		'/team': Team,
+		'/billing': Billing,
+		'/docs': Docs,
+	}
+
+	const tabs = [
+		{
+			name: 'Dashboard',
+			icon: 'dashboard',
+			href: '#/dashboard'
+		},
+		{
+			name: 'Networks',
+			icon: 'blur_on',
+			href: '#/dashboard/networks'
+		},
+		{
+			name: 'Configs',
+			icon: 'settings',
+			href: '#/dashboard/config',
+		},
+		{
+			name: ' - Add Config',
+			icon: 'settings',
+			href: '#/dashboard/configadd',
+		},
+		{
+			name: 'Keys',
+			icon: 'vpn_key',
+			href: '#/dashboard/keys'
+		},
+		{
+			name: 'Team',
+			icon: 'people',
+			href: '#/dashboard/team'
+		},
+		{
+			name: 'Billing',
+			icon: 'receipt',
+			href: '#/dashboard/billing'
+		},
+		{
+			name: 'Docs',
+			icon: 'menu_book',
+			href: '#/dashboard/docs'
+		}
+	]
 </script>
 
 <style lang="scss">
@@ -137,24 +206,6 @@
 	</Drawer>
 
 	<AppContent>
-		<header class="dashboard-header">
-			<Breadcrumbs items={breadcrumbs}/>
-			<h1 class="mdc-typography--headline4">
-				<Icon class="material-icons">{active.icon}</Icon> 
-				{active.name}
-			</h1>
-
-			<span class="extra">
-				{#each active.actions||[] as action}
-					<Button variant='text' dense on:click={action.callback}>
-						<Icon class="material-icons">{action.icon}</Icon> 
-						{action.text}
-					</Button>
-				{/each}
-			</span>
-		</header>
-		<div class="dashboard-inner">
-			<slot></slot>
-		</div>
+		<Router {routes} prefix='/dashboard' />
 	</AppContent>
 </main>

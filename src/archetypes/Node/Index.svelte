@@ -1,18 +1,44 @@
+<script context="module">
+	import ConfigDetail from '@archetypes/Config/Detail.svelte'
+	import { panel } from '@app/store.js';
+ 	let config;
+ 	
+ 	export const actions = [
+ 		{
+			text: 'View Config',
+			icon: 'code',
+			callback: () => {
+				 panel.open(ConfigDetail, 
+				 	{
+				 		configId: config._id
+				 	}, 
+				 	{
+				 		title: config.name,
+				 		subtitle: `chainspec.json`,
+				 		//actions: ConfigDetailActions
+				 	}
+				 )
+
+				console.log(configId)
+			}
+ 		},
+ 		{
+			text: 'Delete Network',
+			icon: 'delete'
+ 		}
+ 	]
+</script>
+
 <script>
 	import _ from 'lodash'
-	import { query, gql } from '@util/graphql' 
+	import { awaitQuery } from '@util/graphql' 
 	import NodeTeaser from '@archetypes/Node/Teaser.svelte'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import FilterList from '@components/FilterList.svelte'
 	import Button, { Label } from '@smui/button';
 	import { Icon } from '@smui/common';
-	import Chip, { Set, Checkmark, Text } from '@smui/chips';
 
-	import ConfigDetail, { actions as ConfigDetailActions } from '@archetypes/Config/Detail.svelte'
-	import { panel } from '@app/store.js';
-
-	// TESTING
-	export let networkId = '111';
+	export let networkId;
 
 	let filterOptions = [
 		{
@@ -28,16 +54,16 @@
 			showCount: true,
 			icon: 'dns'
 		}, 
-		{
-			key: 'TELEMETRY', 
-			value: 'Telemetry',
-			showCount: true,
-			icon: 'settings_input_antenna'
-		}
+		// {
+		// 	key: 'TELEMETRY', 
+		// 	value: 'Telemetry',
+		// 	showCount: true,
+		// 	icon: 'settings_input_antenna'
+		// }
 	];
 	let filter = filterOptions.slice();
 
-  	const NETWORK = gql`
+  	const query = `
  		query network($_id: String!) {
  			network(_id: $_id) {
  				config{
@@ -56,29 +82,7 @@
  		}
  	`;
 
- 	let fetchNodes = query(NETWORK, {variables: {_id: networkId}})
-
- 	const handleOpenConfig = ({_id, name}) => {
-		 panel.open(ConfigDetail, 
-		 	{
-		 		configId: _id
-		 	}, 
-		 	{
-		 		title: name,
-		 		subtitle: `chainspec.json`,
-		 		actions: ConfigDetailActions
-		 	}
-		 )
-	}
-</script>
-
-<script context="module">
- 	export const actions = [
- 		{
-			text: 'Delete Network',
-			icon: 'delete'
- 		}
- 	]
+ 	let fetchNodes = awaitQuery(query, {variables: {_id: networkId}})
 </script>
 
 <style lang="scss">
@@ -121,6 +125,7 @@
 {#await fetchNodes()}
 	<GraphQLProgress/>
 {:then network}
+	{config = network.config}
 	<header>
 		<span class="left">
 			<FilterList 
@@ -130,7 +135,6 @@
 			/>
 		</span>
 		<span class="right">
-			<span class="mdc-typography--caption config" on:click={() => handleOpenConfig(network.config)}>Config: ecommerce-genesis-config</span>
 			<Button variant='text' dense>
 				<Icon class="material-icons">add</Icon> 
 				<Label>Add Nodes</Label>

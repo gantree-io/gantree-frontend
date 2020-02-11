@@ -1,25 +1,21 @@
 <script>
-	import { beforeUpdate } from 'svelte';
+	import { afterUpdate } from 'svelte';
+	import { location } from 'svelte-spa-router'
 	import Link from "@components/Link.svelte";
 	import Icon from "@components/Icon.svelte";
-
-	
-
-	export let items;
 	
 	let breadcrumbs = []
-	
-	beforeUpdate(() => {
-		let concatPath = ''
-		breadcrumbs = items.map(item => {
-			concatPath += `/${item}`
+
+	 afterUpdate(() => {
+		let concatPath = '#'
+		breadcrumbs = $location.split('/').slice(0, -1).map(item => {
+			concatPath += `${item}/`
 			return {
-				title: item,
+				title: item === '' ? '#' : item,
 				url: concatPath
 			}
 		})
-	});
-
+	 });
 </script>
 
 <style lang="scss">
@@ -33,12 +29,12 @@
 	:global(.link){
 		display: block;
 		line-height: 1em;
-		color: var(--color-light);
+		color: inherit;
 		opacity: 0.6;
 		font-weight: 300;
 
 		&:visited{
-			color: var(--color-light);
+			color: inherit;
 		}
 
 		&:hover{
@@ -54,7 +50,8 @@
 	.divider{
 		padding: 0 0.3em;
 		display: inline-block;
-		opacity: 0.3;
+		color: inherit;
+		opacity: 0.2;
 
 		&:last-of-type{
 			//display: none
