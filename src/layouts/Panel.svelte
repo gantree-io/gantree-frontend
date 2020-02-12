@@ -19,6 +19,8 @@
 </script>
 
 <style lang="scss">
+
+
 	.layout-panel{
 		background: var(--color-light);
 		overflow: hidden;
@@ -54,7 +56,17 @@
 					}
 
 					h1{
-						font-weight: 100
+						font-weight: 100;
+						:global(.placeholder){
+							line-height: inherit;
+							font-size: inherit;
+							vertical-align: bottom;
+							opacity: 0.2;
+							animation-name: spin;
+							animation-duration: 4000ms;
+							animation-iteration-count: infinite;
+							animation-timing-function: linear;
+						}
 					}
 
 					p{
@@ -99,12 +111,16 @@
 				{#if showBreadcrumbs}<Breadcrumbs/>{/if}
 				{#if header.title || header.subtitle}
 					<div class="title">
-						{#if header.title}
-							<h1 class="mdc-typography--headline4">
-								{#if header.icon}<Icon class="material-icons">{header.icon}</Icon> {/if}
+						<h1 class="mdc-typography--headline4">
+							{#if header.icon}
+								<Icon class="material-icons">{header.icon}</Icon>
+							{/if}
+							{#if header.title}
 								{header.title}
-							</h1>
-						{/if}
+							{:else}
+								<Icon class="material-icons placeholder">autorenew</Icon>
+							{/if}
+						</h1>
 						{#if header.subtitle}
 							<p class="mdc-typography--body2">
 								// {header.subtitle}

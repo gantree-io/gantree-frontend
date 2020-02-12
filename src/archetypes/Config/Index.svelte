@@ -4,7 +4,7 @@
 	import ConfigTeaser from '@archetypes/Config/Teaser.svelte'
 	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import { drawer } from '@app/store.js';
+	import { modal } from '@app/store.js';
 	import ConfigAdd from './Add.svelte'
 
   	const query = `
@@ -27,6 +27,13 @@
  	})
 
  	let triggerRefetch;
+
+ 	// TESTING
+ 	modal.open(ConfigAdd, 
+ 		{
+ 			onSuccess: () => modal.close()
+ 		}
+ 	)
 </script>
 
 <PanelLayout 
@@ -37,9 +44,9 @@
 				text: 'Add Config',
 				icon: 'add',
 				callback: () => {
-					drawer.open(ConfigAdd, 
+					modal.open(ConfigAdd, 
 						{
-							onSuccess: () => drawer.close()
+							onSuccess: () => modal.close()
 						}, 
 						{
 							title: `Add Config`,

@@ -4,10 +4,11 @@
 	import { Anchor } from '@smui/menu-surface';
 	import List, {Item, Text, Graphic} from '@smui/list';
 	import { Icon } from '@smui/common';
-	import { drawer } from '@app/store.js';
+	import { modal } from '@app/store.js';
 
 
 	let open = false
+	let status = 'CLOSED'
 	let component = null
 	let props = {}
 	let header = []
@@ -15,24 +16,27 @@
 	let menuAnchor;
 	const transitionSpeed = 0.4
 
-	// handle drawer close
+	// handle modal close
 	const handleClose = (cb => {
 		document.removeEventListener("keydown", handleKeyDown);
 		open = false
+		status = 'CLOSING'
 		setTimeout(() => {
 			component = null
 			props = {}
 			header = []
 			typeof cb === "function" && cb()
+			status = 'CLOSED'
 		}, transitionSpeed * 1000)
 	})
 	
-	// handle drawer open
+	// handle modal open
 	const handleOpen = (data => {
 		component = data.component
 		props = data.props
 		header = data.header
 		open = true
+		status = 'OPEN'
 		document.addEventListener("keydown", handleKeyDown);
 	})
 	
@@ -40,7 +44,7 @@
 	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 
 	// subscribe to incoming requests
-	drawer.subscribe(data => {
+	modal.subscribe(data => {
 		if(component !== data.component){
 			// already open
 			if(open){
@@ -61,35 +65,39 @@
 </script>
 
 <style lang="scss">
-	.drawer{
+	.modal{
 		position: fixed;
 		top: 0;
-		right: 0;
-		width: 0;
+		left: 0;
+		width: 100vw;
 		height: 100vh;
+		pointer-events: all;
 
 		>.overlay{
 			position: absolute;
 			top: 0;
-			right: 0;
-			width: 100%;
-			height: 100%;
+			left: 0;
+			background: rgba(0,0,0,0.8);
+			width: 100vw;
+			height: 100vh;
 			transition: background 0.4s;
-			background: rgba(0,0,0,0);
-			cursor: e-resize;
-			z-index: 1
+			z-index: 1;
+			backdrop-filter: blur(0.1em);
 		}
 
 		>.inner{
 			position: absolute;
-			top: 0;
-			right: 0;
+			top: 40vh;
+			left: 50vw;
+			transform: translate(-50%, -50%);
 			background: var(--color-light);
-			width: 0;
-			height: 100vh;
-			padding:0;
-			opacity: 0.5;
-			transition: all 0.35s ease-out;
+			width: 90vw;
+			height: auto;
+			max-width: 40rem;
+			max-height: 30rem;
+			padding: 0;
+			opacity: 1;
+			transition: all 0.15s ease-out;
 			display:flex;
 			flex-direction: column;
 			z-index: 2;
@@ -143,47 +151,44 @@
 
 			:global(.close){
 				position: absolute;
-				top: 0.8rem;
-				right: calc(100% - 2em);
+				bottom: calc(100% - 0.2em);
+				left: calc(100% - 0.2em);
 				color: var(--color-grey);
-				font-size: 1.5em;
-				padding: 0.4em 0.2em 0.3em 0.4em;
-				background: var(--color-light);
-				border-radius: 0.1em 0em 0em 0.1em;
-				cursor: e-resize;
-				z-index: -1;
+				font-size: 2em;
+				padding: 0.2em;
+				cursor: alias;
+				z-index: 1;
 				transition: transform 0.1s;
-
-				&:hover{
-					transform: translateX(0.1em)
-				}
 			}
 
 		}
+		&[data-status="CLOSING"],
+		&[data-status="CLOSED"]{
+			pointer-events: none;
 
-		&[data-open='true']{
 			>.overlay{
-				background: rgba(0,0,0,0.8);
-				backdrop-filter: blur(0.1em);
-				width: 100vw;
+				background: rgba(0,0,0,0);
+				width: 0;
+				height: 0;
 			}
 
 			>.inner{
-				width: 85vw;
-				opacity: 1;
-
-				:global(.close){
-					right: 100%;
-				}
+				opacity: 0;
+				top: calc(40vh - 2em);;
 			}
+		}
+
+		&[data-status="CLOSED"]{
+			width: 0;
+			height: 0;
 		}
 	}
 </style>
 
-<section class='drawer' data-open={open}>
-	<div class="overlay" on:click={handleClose} style={`transition: background ${transitionSpeed}s ease-in-out`}/>
+<section class='modal' data-open={open} data-status={status}>
+	<div class="overlay" style={`transition: background ${transitionSpeed}s ease-in-out`}/>
 	<div class='inner' style={`transition: all ${transitionSpeed*0.75}s ease-out`}>
-		<Icon class="material-icons close" on:click={handleClose}>keyboard_tab</Icon>
+		<Icon class="material-icons close" on:click={handleClose}>close</Icon>
 		<svelte:component this={component} {...props}/>
 	</div>
 </section>

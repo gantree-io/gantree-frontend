@@ -4,6 +4,7 @@
 	import Router from 'svelte-spa-router'
 	import Panel from '@components/Panel.svelte'
 	import Drawer from '@components/Drawer.svelte'
+	import Modal from '@components/Modal.svelte'
 
 	import Home from '@routes/Home.svelte'
 	import Dashboard from '@routes/Dashboard.svelte'
@@ -65,13 +66,27 @@
 		--font-size-small: 0.9rem;
 		--font-size-xsmall: 12px;
 		--font-size-xxsmall: 11px;
+
+
+	}
+
+	:global(::placeholder){
+		color: var(--color-light-grey);
+		font-weight: 100;
+		font-size: 0.8em;
 	}
 
 	:global(body){
 		background: var(--color-light);
+	}
+
+	@keyframes -global-spin {
+		from {transform:rotate(0deg);}
+		to {transform:rotate(360deg);}
 	}
 </style>
 
 <Router {routes}/>
 <Panel/>
 <Drawer/>
+<Modal/>

@@ -1,72 +1,68 @@
 <script>
 	import { form } from 'svelte-forms';
-	import { mutation } from '@util/graphql' 
+	import { mutation } from '@util/graphql'
+	import PanelLayout from '@layouts/Panel.svelte'
+	import Form, { Field, validate } from '@components/Form'
+
+	
 
 	export let onSuccess = () => {}
-	let name = "";
-	let chainspec = "";
 
-  	const mutationQuery = `
- 		mutation addConfig($name: String!, $chainspec: String!) {
-			addConfig(name: $name, chainspec: $chainspec){
-				_id
-				name
-				chainspec
-			}
- 		}
- 	`;
+  // 	const mutationQuery = `
+ 	// 	mutation addConfig($name: String!, $chainspec: String!) {
+		// 	addConfig(name: $name, chainspec: $chainspec){
+		// 		_id
+		// 		name
+		// 		chainspec
+		// 	}
+ 	// 	}
+ 	// `;
 
-	const myForm = form(() => ({
-		name: {
-			value: name,
-			validators: ["required"]
-		},
-		chainspec: {
-			value: chainspec,
-			validators: ["required"]
-		}
-	}));
 
-	const handleSubmit = async aa => {
-		if($myForm.valid && $myForm.dirty){
-			let result = await mutation(
-				mutationQuery, 
-				{
-					variables: {
-						name: name, 
-						chainspec: JSON.stringify(chainspec[0]) 
-					}
-				}
-			)
-			
-			onSuccess(result)
-			PubSub.publish('CONFIG.ADD');
-		}else{
-			console.log('invalid form')
-		}
+	const handleSubmit = async fields => {
+		console.log(1111, fields)
+		
 	}
 </script>
 
 <style lang="scss">
-	form{
-		display: flex;
-		flex-direction: column;
-		> :global(*){
-			margin-bottom: 1em;
-			display: block;
-		}
-	}
+	
 </style>
 
 
-<h2 class="mdc-typography--headline4">Add Genesis Config</h2>
-<p class="mdc-typography--body1">Paraplant requires a genesis block file in order to create nodes on a particular network. This file should be .json fomat. You can find out how to generate one of these files here. </p>
-<form on:submit={handleSubmit}>
-	
-	<input type="text" bind:value={name} class:valid={$myForm.name.valid}/>
-	{#if $myForm.name.errors.includes('required') }<p>The name is required</p>{/if}
+<PanelLayout 
+	header={{
+		title: 'Add Genesis Config',
+	}}
+	>
+	<p class="mdc-typography--body1">Paraplant requires a genesis block file in order to create nodes on a particular network. This file should be .json fomat. You can <a href='#' target="_blank" nofollow noreferrer>find out how to generate one of these files here</a>. </p>
+	<Form 
+		onSubmit={handleSubmit}
+		>
+		
+		<Field
+			title='Config Name'
+			validation={{
+				'Name is required': validate.required,
+			}}
+			input={{
+				id: 'name',
+				type: 'text',
+				placeholder: "Network name",
+			}}
+		/>
 
-	<input type="file" bind:files={chainspec} class:valid={$myForm.chainspec.valid} accept="application/json"/>
-	
-	<button disabled={!$myForm.valid}>Login</button>
-</form>
+		<Field
+			title='Select File'
+			validation={{
+				'Chainspec is required': validate.required,
+			}}
+			input={{
+				id: 'chainspec',
+				type: 'file',
+			}}
+		/>
+		
+		<button>Submit</button>
+	</Form>
+</PanelLayout>
