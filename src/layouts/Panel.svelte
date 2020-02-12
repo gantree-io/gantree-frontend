@@ -28,7 +28,8 @@
 		height: auto;
 		display: block;
 		padding:0;
-		overflow: scroll;
+		display: flex;
+		flex-direction: column;
 
 		>.header{
 			border-bottom: 1px solid var(--color-light-grey);
@@ -100,6 +101,7 @@
 
 		>.body{
 			padding: 1.5em 2em;
+			overflow: scroll;
 		}
 	}
 </style>

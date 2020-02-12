@@ -77,7 +77,7 @@
 			position: absolute;
 			top: 0;
 			left: 0;
-			background: rgba(0,0,0,0.8);
+			background: rgba(0,0,0,0.85);
 			width: 100vw;
 			height: 100vh;
 			transition: background 0.4s;

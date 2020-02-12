@@ -67,18 +67,17 @@
 		--font-size-xsmall: 12px;
 		--font-size-xxsmall: 11px;
 
+		:global(.mdc-typography--body1){
+			font-weight: 300;
+		}
 
-	}
-
-	:global(::placeholder){
-		color: var(--color-light-grey);
-		font-weight: 100;
-		font-size: 0.8em;
 	}
 
 	:global(body){
 		background: var(--color-light);
+		font-weight: 100;
 	}
+
 
 	@keyframes -global-spin {
 		from {transform:rotate(0deg);}
