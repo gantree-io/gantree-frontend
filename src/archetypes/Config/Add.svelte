@@ -2,13 +2,13 @@
 	import { form } from 'svelte-forms';
 	import { mutation } from '@util/graphql'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import Form, { Field, Submit, validate } from '@components/Form'
+	import Form, { Field, validate } from '@components/Form'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
 
    	const mutationQuery = `
- 	 	mutation addConfig($name: String!, $chainspec: String!) {
+ 	 	mutation addConfig($name: String!, $chainspec: JSON!) {
 		 	addConfig(name: $name, chainspec: $chainspec){
 		 		_id
 		 		name
@@ -25,7 +25,7 @@
 				{
 					variables: {
 						name: fields.name, 
-						chainspec: JSON.stringify(fields.chainspec) 
+						chainspec: fields.chainspec 
 					}
 				}
 			)
@@ -43,7 +43,6 @@
 		margin-top: 0
 	}
 </style>
-
 
 <PanelLayout 
 	header={{
@@ -77,7 +76,7 @@
 			}}
 			input={{
 				id: 'chainspec',
-				type: 'file',
+				type: 'json',
 				accept: "application/json, application/JSON"
 			}}
 		/>

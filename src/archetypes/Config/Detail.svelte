@@ -28,7 +28,6 @@
 <style lang="scss">
 </style>
 
-
 <PanelLayout 
 	header={{
 		title: title,

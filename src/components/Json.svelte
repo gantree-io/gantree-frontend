@@ -5,7 +5,7 @@
 
 	const parse = json => {
 		json = typeof json === 'string'
-			? JSON.stringify(JSON.parse(json), null, 2)
+			? json
 			: JSON.stringify(json, null, 2)
 
 		return !highlight 
@@ -43,6 +43,7 @@
 		pre{
 			margin: 0;
 			font-weight: 100;
+			white-space: pre-wrap;
 		}
 		
 		/* light theme */
@@ -59,7 +60,6 @@
 </style>
 
 <code data-dark-theme={!!darktheme}>
-
 	<pre>
 		{@html parse(data)}
 	</pre>

@@ -102,6 +102,7 @@
 		>.body{
 			padding: 1.5em 2em;
 			overflow: scroll;
+			height: 100vh;
 		}
 	}
 </style>
@@ -145,7 +146,7 @@
 							>
 							<List dense>
 								{#each header.actions||[] as action}
-									<Item on:click={() => action.callback()}>
+									<Item on:click={() => {action.callback && action.callback()}}>
 										<Graphic class="material-icons">{action.icon}</Graphic>
 										<Text>{action.text}</Text>
 									</Item>

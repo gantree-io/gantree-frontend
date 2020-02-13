@@ -3,21 +3,25 @@
 </script>
 
 <script>
-	import { setContext, onDestroy } from 'svelte';
+	import { onMount, setContext, onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { form } from 'svelte-forms';
-	import Submit from './Submit.svelte'
-	import Cancel from './Cancel.svelte'
+	import ButtonGroup from './buttons/ButtonGroup.svelte';
 	
-	export let submitButtonText = 'Submit'
-	export let cancelButtonText;
+	export let buttons = {}
 	export let onSubmit = () => {}
 	export let onCancel = () => {}
+	
+
 	const initialValues = {};
 	const fields = {};
 	const validation = {};
-	const errors = {};
+	let errors = {};
 	let touched = false;
+	let steps = {
+		ids: [],
+		current: 0
+	}
 
 	const validateField = id => {
 		delete errors[id]
@@ -69,7 +73,26 @@
 				errors: errors[id]
 			}
 		},
-		fieldError: id => errors[id]
+		fieldError: id => errors[id],
+		registerStep: id => {
+			let index = steps.ids.push(id)
+			return steps.current
+		},
+		stepForward: () => {
+			steps.current = steps.current >= steps.ids.length - 1
+				? steps.current
+				: steps.current + 1
+			
+			PubSub.publish('FORM.STEP', steps.ids[steps.current]);
+		},
+		stepBack: () => {
+			steps.current = steps.current <= 0
+				? 0
+				: steps.current - 1
+			
+			PubSub.publish('FORM.STEP', steps.ids[steps.current]);
+		},
+		currentStep: steps.current
 	});
 
 	const handleSubmit = () => {
@@ -85,6 +108,12 @@
 			touched: touched
 		})
 	}
+
+	onMount(() => {
+		if(steps.ids.length){
+			PubSub.publish('FORM.STEP', steps.ids[steps.current]);
+		}
+	})
 </script>
 
 <style lang="scss">
@@ -108,6 +137,7 @@
 			align-items: center;
 			justify-content: flex-end;
 
+			:global(.form-button),
 			:global(.form-button-submit),
 			:global(.form-button-cancel){
 				display: inline-block;
@@ -152,10 +182,8 @@
 <form  
 	on:submit={handleSubmit}
 	data-has-errors={Object.keys(errors).length > 0}
+	autocomplete="off"
 	>
 	<slot></slot>
-	<div class="controls">
-		{#if cancelButtonText}<Cancel text={cancelButtonText}/>{/if}
-		<Submit text={submitButtonText}/>
-	</div>
+	<ButtonGroup {...buttons}/>
 </form>

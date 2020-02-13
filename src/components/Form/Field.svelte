@@ -2,7 +2,7 @@
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import PubSub from 'pubsub-js'
 	import { FIELDS } from './Wrapper.svelte';
-	import { Text, File } from './fields';
+	import { Text, File, Json } from './fields';
 	
 	export let title;
 	export let validation = {};
@@ -76,6 +76,8 @@
 	<span class="title">{title}</span>
 	{#if input.type === 'text'}
 		<Text {...input} bind:value={value}/>
+	{:else if input.type === 'json'}
+		<Json {...input} bind:value={value}/>
 	{:else if input.type === 'file'}
 		<File {...input} bind:file={value}/>
 	{/if}

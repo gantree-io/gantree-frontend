@@ -4,7 +4,7 @@
 	import ConfigTeaser from '@archetypes/Config/Teaser.svelte'
 	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import { modal } from '@app/store.js';
+	import { modal } from '@app/store.js'
 	import ConfigAdd from './Add.svelte'
 
   	const query = `
@@ -27,13 +27,6 @@
  	})
 
  	let triggerRefetch;
-
- 	// TESTING
- 	modal.open(ConfigAdd, 
- 		{
- 			onSuccess: () => modal.close()
- 		}
- 	)
 </script>
 
 <PanelLayout 
@@ -47,10 +40,6 @@
 					modal.open(ConfigAdd, 
 						{
 							onSuccess: () => modal.close()
-						}, 
-						{
-							title: `Add Config`,
-							subtitle: `chainspec.json`,
 						}
 					)
 				}
