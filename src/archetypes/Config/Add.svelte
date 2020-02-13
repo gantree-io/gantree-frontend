@@ -65,7 +65,7 @@
 			input={{
 				id: 'name',
 				type: 'text',
-				placeholder: " // Network name",
+				placeholder: " // Production Config",
 			}}
 		/>
 

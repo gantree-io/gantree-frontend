@@ -11,6 +11,7 @@
 	export let buttons = {}
 	export let onSubmit = () => {}
 	export let onCancel = () => {}
+	export let onStep = () => {}
 	
 
 	const initialValues = {};
@@ -19,8 +20,19 @@
 	let errors = {};
 	let touched = false;
 	let steps = {
+		names: [],
 		ids: [],
 		current: 0
+	}
+	let loading = true
+
+	const updateStep = () => {
+		onStep({
+			title: steps.names[steps.current + 1],
+			index: steps.current + 1
+		})
+
+		PubSub.publish('FORM.STEP', steps.ids[steps.current]);
 	}
 
 	const validateField = id => {
@@ -74,23 +86,24 @@
 			}
 		},
 		fieldError: id => errors[id],
-		registerStep: id => {
+		registerStep: (id, name) => {
 			let index = steps.ids.push(id)
+			steps.names[index] = name
 			return steps.current
 		},
 		stepForward: () => {
 			steps.current = steps.current >= steps.ids.length - 1
 				? steps.current
 				: steps.current + 1
-			
-			PubSub.publish('FORM.STEP', steps.ids[steps.current]);
+
+			updateStep()
 		},
 		stepBack: () => {
 			steps.current = steps.current <= 0
 				? 0
 				: steps.current - 1
 			
-			PubSub.publish('FORM.STEP', steps.ids[steps.current]);
+			updateStep()
 		},
 		currentStep: steps.current
 	});
@@ -105,13 +118,15 @@
 			fields,
 			errors,
 			hasErrors: Object.keys(errors).length > 0,
-			touched: touched
+			touched: touched,
+			setLoading: val => loading = !!val
 		})
 	}
 
 	onMount(() => {
+		loading = false
 		if(steps.ids.length){
-			PubSub.publish('FORM.STEP', steps.ids[steps.current]);
+			updateStep()
 		}
 	})
 </script>
@@ -176,6 +191,11 @@
 				}
 			}
 		}
+
+		&[data-loading='true']{
+			opacity: 0.5;
+			pointer-events: none;
+		}
 	}
 </style>
 
@@ -183,6 +203,8 @@
 	on:submit={handleSubmit}
 	data-has-errors={Object.keys(errors).length > 0}
 	autocomplete="off"
+	novalidate
+	data-loading={loading}
 	>
 	<slot></slot>
 	<ButtonGroup {...buttons}/>

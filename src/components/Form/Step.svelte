@@ -14,7 +14,7 @@
 	
 	const { registerStep, stepForward, stepBack } = getContext(FIELDS);
 
-	registerStep(id)
+	registerStep(id, title)
 
 	onMount(() => {
 		PubSub.subscribe('FORM.STEP', (msg, step) => {
@@ -29,14 +29,16 @@
 
 <style lang="scss">
 	.form-step{
+		display: block;
 		&[data-visible='false']{
-			display: none
+			height: 0;
+			overflow: hidden;
+			display: none;
 		}
 	}
 </style>
 
 <div class='form-step' data-visible={visible}>
-	<span class="title">{title}</span>
 	<slot></slot>
 	<ButtonGroup 
 		{...buttons}

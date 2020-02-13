@@ -7,6 +7,6 @@
 	}
 </script>
 
-<button class='form-button --cancel' type='reset' on:click={handleClick}>
+<button class='mdc-button form-button --cancel' type='reset' on:click={handleClick}>
 	<slot></slot>
 </button>

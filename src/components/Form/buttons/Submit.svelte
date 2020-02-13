@@ -7,6 +7,25 @@
 	}
 </script>
 
-<button class='form-button --submit' type='submit' on:click={handleClick}>
+<style lang="scss">
+	button.form-button-submit{
+		background: var(--color-highlight);
+		color: var(--color-light);
+	}
+</style>
+
+<button class='mdc-button mdc-button--unelevated form-button form-button-submit' type='submit' on:click={handleClick}>
 	<slot></slot>
 </button>
+
+
+
+
+
+
+
+
+
+
+
+

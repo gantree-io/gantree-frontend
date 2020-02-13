@@ -8,6 +8,7 @@
 	export let onCancel = () => {}
 
 	let step = 1;
+	let subtitle = 1;
 
    	const mutationQuery = `
  	 	mutation addConfig($name: String!, $chainspec: JSON!) {
@@ -20,9 +21,16 @@
  	 `;
 
 
-	const handleSubmit = async ({fields, hasErrors}) => {
+	const handleSubmit = async ({fields, hasErrors, errors, setLoading}) => {
+		console.log(fields, hasErrors, errors)
+		
+		setLoading(true)
+		setTimeout(() => {
+			setLoading(false)
+		}, 2000)
+				
 		if(!hasErrors){
-			console.log(fields)
+			
 			// let result = await mutation(
 			// 	mutationQuery, 
 			// 	{
@@ -50,72 +58,107 @@
 <PanelLayout 
 	header={{
 		title: 'Deploy Network',
-		subtitle: 'sasas'
+		subtitle: subtitle
 	}}
 	>
 	
 	<Form 
 		onSubmit={handleSubmit}
 		onCancel={onCancel}
+		onStep={({title, index}) => {
+			subtitle = `${index}. ${title}`
+		}}
 		>
 
 		<Step 
-			title='aaa'
+			title='Nodes'
 			buttons={{
-				next: 'Add Nodes'
+				next: 'Next: Repo & Config'
 			}}
 			>
 			<Field
-				title='aaa'
+				title='How many nodes?'
 				validation={{
-					'AAA is required': validate.required
+					'Count is required': validate.required
 				}}
 				input={{
-					id: 'aaa',
-					type: 'text',
-					placeholder: " // aaa",
+					id: 'count',
+					type: 'number',
+					placeholder: 3,
+					value: 3
 				}}
 			/>
+
+			<Field
+				title='Provider'
+				validation={{
+					'Provider is required': validate.required
+				}}
+				input={{
+					id: 'provider',
+					type: 'select',
+					options: {
+						'DO': 'Digital Ocean',
+						'AWS': 'Amazon Web Services (AWS)',
+						'GCP': 'Google Cloud Computing (GCP)'
+					},
+					placeholder: 'Choose a provider'
+				}}
+			/>
+
 		</Step>
 
 		<Step 
-			title='bbb' 
+			title='Repo & Config' 
 			buttons={{
 				back: 'Back',
-				next: 'Confirm'
+				next: 'Next: Confirm & Deploy'
 			}}
 			>
 			<Field
-				title='bbb'
+				title='Repo URL',
+				subtitle='Paraplant will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory, and the binary should be output to ./target/release/substrate'
 				validation={{
-					'BBB is required': validate.required
+					'Repo URL is required': validate.required,
+					'Must be a valid URL': validate.url
 				}}
 				input={{
-					id: 'bbb',
-					type: 'text',
-					placeholder: " // bbb",
+					id: 'repo',
+					type: 'url',
+					placeholder: "https://github.com/myaccount/myrepo",
+				}}
+			/>
+
+			<Field
+				title='Whcih Chain Config?',
+				subtitle='xxxxxx'
+				validation={{
+					'Chain Config is required': validate.required
+				}}
+				input={{
+					id: 'config',
+					type: 'select',
+					options: {
+						'DO': 'Digital Ocean',
+						'AWS': 'Amazon Web Services (AWS)',
+						'GCP': 'Google Cloud Computing (GCP)'
+					},
+					placeholder: 'Choose a chain config'
 				}}
 			/>
 		</Step>
 
 		<Step 
-			title='ccc' 
+			title='Confirm' 
 			buttons={{
 				back: 'Back',
 				submit: 'Deploy'
 			}}
 			>
-			<Field
-				title='ccc'
-				validation={{
-					'CCC is required': validate.required
-				}}
-				input={{
-					id: 'ccc',
-					type: 'text',
-					placeholder: " // ccc",
-				}}
-			/>
+			<p>ksndksn</p>
+			<p>ksndksn</p>
+			<p>ksndksn</p>
+			<p>ksndksn</p>
 		</Step>
 	</Form>
 </PanelLayout>

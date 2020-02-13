@@ -15,9 +15,20 @@
 	export let next
 </script>
 
-<div class="form-button-group">
-	{#if back}<BackButton onClick={onBackClick}>{back}</BackButton>{/if}
-	{#if cancel}<CancelButton onClick={onCancelClick}>{cancel}</CancelButton>{/if}
-	{#if submit}<SubmitButton onClick={onSubmitClick}>{submit}</SubmitButton>{/if}
-	{#if next}<NextButton onClick={onNextClick}>{next}</NextButton>{/if}
-</div>
+<style lang="scss">
+	.form-button-group{
+		margin: 3em 0 0 0;
+		display: block;
+		display: flex;
+		justify-content: flex-end;
+	}
+</style>
+
+{#if back || cancel || submit || next}
+	<div class="form-button-group">
+		{#if back}<BackButton onClick={onBackClick}>{back}</BackButton>{/if}
+		{#if cancel}<CancelButton onClick={onCancelClick}>{cancel}</CancelButton>{/if}
+		{#if submit}<SubmitButton onClick={onSubmitClick}>{submit}</SubmitButton>{/if}
+		{#if next}<NextButton onClick={onNextClick}>{next}</NextButton>{/if}
+	</div>
+{/if}

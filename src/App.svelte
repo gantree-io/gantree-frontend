@@ -42,7 +42,7 @@
 		--color-light: #f8f8f8;
 		
 		/* colours */
-		--color-highlight: #40a8de;
+		--color-highlight: #40b3ff;
 		--color-mid-blue: #728ea8;
 		--color-light-blue: #8bc2d4;
 		--color-green: #52c41a;

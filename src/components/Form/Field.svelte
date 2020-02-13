@@ -2,9 +2,10 @@
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import PubSub from 'pubsub-js'
 	import { FIELDS } from './Wrapper.svelte';
-	import { Text, File, Json } from './fields';
+	import { Text, Select, File, Json } from './fields';
 	
 	export let title;
+	export let subtitle;
 	export let validation = {};
 	export let input;
 	
@@ -74,8 +75,15 @@
 
 <label class='form-field' for={input.id} data-field-type={input.type} data-has-error={!!field.error}>
 	<span class="title">{title}</span>
-	{#if input.type === 'text'}
+	{#if subtitle}<span class="subtitle">{subtitle}</span>{/if}
+	{#if 
+		input.type === 'text' || 
+		input.type === 'number' || 
+		input.type === 'url'
+	}
 		<Text {...input} bind:value={value}/>
+	{:else if input.type === 'select'}
+		<Select {...input} bind:value={value}/>
 	{:else if input.type === 'json'}
 		<Json {...input} bind:value={value}/>
 	{:else if input.type === 'file'}

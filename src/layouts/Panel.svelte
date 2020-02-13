@@ -102,7 +102,6 @@
 		>.body{
 			padding: 1.5em 2em;
 			overflow: scroll;
-			height: 100vh;
 		}
 	}
 </style>
