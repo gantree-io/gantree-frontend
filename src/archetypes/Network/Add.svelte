@@ -5,6 +5,7 @@
 	import Form, { Step, Field, validate } from '@components/Form'
 	import ConfigStore from '@archetypes/Config/store'
 	import { toast } from '@components/Toaster.svelte'
+	import Network from './store.js'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
@@ -32,30 +33,14 @@
 
 
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
-		console.log(fields, hasErrors, errors)
-
 		if(!hasErrors){
-
 			setLoading(true)
-			setTimeout(() => {
-				onSuccess(true)
+			Network.create(fields).then(data => {
+				toast.success(`New network added: ${data.name}. Check the status on the networks page.`)
+				onSuccess(data)
 				setLoading(false)
-			}, 1000)
-
-
-			
-			// let result = await mutation(
-			// 	mutationQuery, 
-			// 	{
-			// 		variables: {
-			// 			name: fields.name, 
-			// 			chainspec: fields.chainspec 
-			// 		}
-			// 	}
-			// )
-			// 
-			// onSuccess(result)
-			// PubSub.publish('CONFIG.ADD');
+				PubSub.publish('NETWORK.ADD');
+			})
 		}else{
 			toast.warning(`Some fields have errors`)
 		}
@@ -84,8 +69,47 @@
 		>
 
 		<Step 
+			title='name & Provider'
+			buttons={{
+				next: 'Next: Nodes'
+			}}
+			>
+
+			<Field
+				title='Network name'
+				required
+				input={{
+					id: 'name',
+					type: 'text',
+					placeholder: "Test Network",
+				}}
+			/>
+
+			<Field
+				title='Which Provider?'
+				help='You can deploy more nodes using another provider once this network has been created'
+				required
+				validation={{
+					//'Provider is required': validate.required
+				}}
+				input={{
+					id: 'provider',
+					type: 'select',
+					//value: 'AWS',
+					options: {
+						'DO': 'Digital Ocean',
+						'AWS': 'Amazon Web Services (AWS)',
+						'GCP': 'Google Cloud Computing (GCP)'
+					}
+				}}
+			/>
+
+		</Step>
+
+		<Step 
 			title='Nodes'
 			buttons={{
+				back: 'Back',
 				next: 'Next: Repo & Config'
 			}}
 			>
@@ -111,6 +135,7 @@
 
 			<Field
 				title='Are these validator nodes?'
+				required
 				input={{
 					id: 'validators',
 					type: 'switch',
@@ -119,24 +144,6 @@
 					on: 'Yes'
 				}}
 			/>
-
-			<Field
-				title='Which Provider?'
-				help='You can deploy more nodes using another provider once this network has been created'
-				validation={{
-					'Provider is required': validate.required
-				}}
-				input={{
-					id: 'provider',
-					type: 'select',
-					options: {
-						'DO': 'Digital Ocean',
-						'AWS': 'Amazon Web Services (AWS)',
-						'GCP': 'Google Cloud Computing (GCP)'
-					}
-				}}
-			/>
-
 		</Step>
 
 		<Step 
@@ -149,22 +156,24 @@
 			<Field
 				title='Repo URL'
 				subtitle='Paraplant will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory, and the binary should be output to ./target/release/substrate'
+				required
 				validation={{
-					'Repo URL is required': validate.required,
+					//'Repo URL is required': validate.required,
 					'Must be a valid URL': validate.url
 				}}
 				input={{
 					id: 'repo',
 					type: 'url',
+					value: 'https://testing.com',
 					placeholder: "https://github.com/myaccount/myrepo",
 				}}
 			/>
 
 			<Field
 				title='Which Chain Config?'
-				subtitle='xxxxxx'
+				required
 				validation={{
-					'Chain Config is required': validate.required
+					//'Chain Config is required': validate.required
 				}}
 				input={{
 					id: 'config',

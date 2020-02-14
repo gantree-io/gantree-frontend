@@ -64,9 +64,25 @@ const _delete = id => {
 	});
 }
 
+const _create = variables => {
+	  	const __ = `
+	 		mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $repo: String!, $config: String! ) {
+	 			addNetwork(name: $name, count: $count, validators: $validators, provider: $provider, repo: $repo, config: $config) {
+					_id
+					name
+	 			}
+	 		}
+	 	`;
+
+		return new Promise(async (resolve, reject) => {
+			let res = await mutation(__, {variables: variables})
+			resolve(true)
+		});
+}
 
 export default {
 	fetchOne: _fetchOne,
 	fetchAll: _fetchAll,
-	delete: _delete
+	delete: _delete,
+	create: _create
 }

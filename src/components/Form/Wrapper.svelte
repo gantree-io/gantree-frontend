@@ -19,7 +19,8 @@
 	const validation = {}
 	const required = []
 	let errors = {}
-	let touched = false
+	//let touched = false
+	let touched = []
 	let steps = {
 		names: [],
 		ids: [],
@@ -47,7 +48,7 @@
 		 	}
 		})
 
-		if(required.includes(id) && (!fields[id] || fields[id] === '')){
+		if(required.includes(id) && (typeof fields[id] === 'undefined' || fields[id] === '')){
 			errors[id] = 'Required'
 		}
 
@@ -68,11 +69,11 @@
 	const updateField = (id, value) => {
 		fields[id] = value;
 
-		touched = touched === false
-			? initialValues[id] !== value
-			: true
+		if(!touched.includes(id) && initialValues[id] !== value){
+			touched.push(id)
+		}
 
-		if(touched){
+		if(touched.includes(id)){
 			validateField(id)
 		}
 		
@@ -118,7 +119,7 @@
 
 	const handleSubmit = () => {
 		Object.keys(fields).forEach( id => {
-			touched = true
+			touched.push(id)
 			validateField(id)
 		});
 
@@ -126,7 +127,7 @@
 			fields,
 			errors,
 			hasErrors: Object.keys(errors).length > 0,
-			touched: touched,
+			touched: touched.length > 0,
 			setLoading: val => loading = !!val
 		})
 	}

@@ -4,7 +4,7 @@
 	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
 
-	//export let _id;
+	export let _id;
 	export let name;
 	export let ip;
 	export let provider;
@@ -96,7 +96,7 @@
 	}
 </style>
 
-<Paper class='node-teaser' data-status={status.toLowerCase()} elevation="4">
+<Paper class='node-teaser' data-status={status.toLowerCase()} elevation="4" data-id={_id}>
 	<div class='title'>
 		<Icon class={`material-icons status`}>{icon}</Icon>
 

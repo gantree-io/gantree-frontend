@@ -15,19 +15,16 @@
 	
 	// fetch items
 	NetworkStore.fetchOne(_id).then(data => {
-		console.log(data)
 		title = data.name
 		configName = data.config.name
 		nodes = data.nodes
 	})
-
 </script>
 
 <style lang="scss">
 	:global(.filter-list){
 		margin-bottom: 1em;
 	}
-
 </style>
 
 <PanelLayout 

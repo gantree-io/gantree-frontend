@@ -13,15 +13,33 @@
 	export let validation = {};
 	export let input;
 	
+	// determine the default value
 	let value = input.value
+	switch (input.type) {
+		case 'text':
+		case 'number':
+		case 'url':
+			value = input.value || ''
+			break;
+		case 'select':
+			value = Object.keys(input.options)[0]
+			break;
+		case 'switch':
+			value = input.value
+			break;
+		case 'json':
+		case 'file':
+		default:
+			// TODO
+			break;
+	} 
+	
+	// handle initialising field
 	const { initField, fieldError } = getContext(FIELDS);
-	
 	let [field, setValue] = initField(input.id, value, required, validation)
-
-	$: {
-		[field] = setValue(value)
-	}
+	$: { [field] = setValue(value) }
 	
+	// ask for the validate on mount
 	onMount(() => {
 		PubSub.subscribe('FORM.VALIDATE', () => {
 			[field] = setValue(value)

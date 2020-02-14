@@ -1,4 +1,5 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
 	import NetworkTeaser from '@archetypes/Network/Teaser.svelte'
 	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
@@ -17,10 +18,17 @@
  		}
  	`
 
- 	//TESTING
-	// modal.open(NetworkAdd, {
-	// 	onSuccess: () => modal.close()
-	// })
+ 	let triggerRefetch;
+
+ 	onMount(() => {
+ 		PubSub.subscribe('NETWORK.DELETE', () => triggerRefetch());
+ 		PubSub.subscribe('NETWORK.ADD', () => triggerRefetch());
+ 	})
+
+ 	onDestroy(() => {
+ 		PubSub.unsubscribe('NETWORK.DELETE');
+ 		PubSub.unsubscribe('NETWORK.ADD');
+ 	})
 </script>
 
 <PanelLayout 
@@ -44,5 +52,8 @@
 	<GraphQueryWrapper
 		query={query}
 		component={NetworkTeaser}
+		afterInit={({refetch}) => {
+			triggerRefetch = refetch
+		}}
 	/>
 </PanelLayout>

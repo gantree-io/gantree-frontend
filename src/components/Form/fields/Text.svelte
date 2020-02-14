@@ -3,6 +3,9 @@
 	export let value = null
 
 	$: {
+		if($$props.type === 'number'){
+			value = parseInt(value)
+		}
 		onChange(value)
 	}
 </script>

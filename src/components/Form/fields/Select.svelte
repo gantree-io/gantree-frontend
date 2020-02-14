@@ -1,6 +1,6 @@
 <script>
 	export let options
-	export let value = null
+	export let value
 </script>
 
 <style lang="scss">
