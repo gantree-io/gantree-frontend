@@ -1,10 +1,10 @@
 <script>
 	import { onMount } from 'svelte'
-	import { query as GQLQuery } from '@util/graphql' 
+	import { queryOld as GQLQuery } from '@util/graphql' 
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	export let query
 	export let variables = {}
-	export let field
+	export let field = null
 	export let component
 	export let props = {}
 	export let emptyText = 'No items'

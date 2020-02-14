@@ -4,7 +4,7 @@
 	import { Anchor } from '@smui/menu-surface';
 	import List, {Item, Text, Graphic} from '@smui/list';
 	import { Icon } from '@smui/common';
-	import { modal } from '@app/store.js';
+	import { Modal } from '@app/store.js';
 
 
 	let open = false
@@ -44,7 +44,7 @@
 	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 
 	// subscribe to incoming requests
-	modal.subscribe(data => {
+	Modal.subscribe(data => {
 		if(component !== data.component){
 			// already open
 			if(open){

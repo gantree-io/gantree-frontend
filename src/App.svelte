@@ -2,9 +2,10 @@
 	import ApolloClient from "apollo-boost";
 	import { configure } from '@util/graphql' 
 	import Router from 'svelte-spa-router'
-	import Panel from '@components/Panel.svelte'
+	//import Panel from '@components/Panel.svelte'
 	import Drawer from '@components/Drawer.svelte'
 	import Modal from '@components/Modal.svelte'
+	import Toaster from '@components/Toaster.svelte'
 
 	import Home from '@routes/Home.svelte'
 	import Dashboard from '@routes/Dashboard.svelte'
@@ -40,23 +41,24 @@
 		--color-grey: #b2b6b7;
 		--color-light-grey: #e1e8ea;
 		--color-light: #f8f8f8;
+		--color-xlight: #fbfbfb;
 		
 		/* colours */
 		--color-highlight: #40b3ff;
-		--color-mid-blue: #728ea8;
+		--color-mid-blue: #2196f3;
 		--color-light-blue: #8bc2d4;
-		--color-green: #52c41a;
-		--color-orange: #fa8c16;
-		--color-red: #f5222d;
+		--color-green: #4caf50;
+		--color-orange: #ff9800;
+		--color-red: #f44336;
 		--color-blue: #40a8de;
 		--color-yellow: #fadb14;
 		
 		/* status colors */
 		--color-status-success: var(--color-green);
-		--color-status-warning: var(--color-yellow);
+		--color-status-warning: var(--color-orange);
 		--color-status-error: var(--color-red);
-		--color-status-notification: var(--color-highlight);
-		--color-status-neutral: var(--color-grey);
+		--color-status-notification: var(--color-mid-blue);
+		--color-status-neutral: var(--color-light-grey);
 		
 		/* font sizes */
 		--font-size-xxlarge: 3.1rem;
@@ -86,6 +88,6 @@
 </style>
 
 <Router {routes}/>
-<Panel/>
 <Drawer/>
 <Modal/>
+<Toaster/>

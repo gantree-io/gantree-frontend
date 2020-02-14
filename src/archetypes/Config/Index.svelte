@@ -4,7 +4,7 @@
 	import ConfigTeaser from '@archetypes/Config/Teaser.svelte'
 	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import { modal } from '@app/store.js'
+	import { Modal } from '@app/store.js'
 	import ConfigAdd from './Add.svelte'
 
   	const query = `
@@ -37,9 +37,9 @@
 				text: 'Add Config',
 				icon: 'add',
 				callback: () => {
-					modal.open(ConfigAdd, 
+					Modal.open(ConfigAdd, 
 						{
-							onSuccess: () => modal.close()
+							onSuccess: () => Modal.close()
 						}
 					)
 				}

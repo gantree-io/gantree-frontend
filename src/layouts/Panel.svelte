@@ -12,7 +12,6 @@
 
  	export let header
  	export let showBreadcrumbs = false
- 	export let actions = []
 
 	let menu;
  	let menuAnchor;
@@ -111,25 +110,23 @@
 		<header class="header">
 			<span class="left">
 				{#if showBreadcrumbs}<Breadcrumbs/>{/if}
-				{#if header.title || header.subtitle}
-					<div class="title">
-						<h1 class="mdc-typography--headline4">
-							{#if header.icon}
-								<Icon class="material-icons">{header.icon}</Icon>
-							{/if}
-							{#if header.title}
-								{header.title}
-							{:else}
-								<Icon class="material-icons placeholder">autorenew</Icon>
-							{/if}
-						</h1>
-						{#if header.subtitle}
-							<p class="mdc-typography--body2">
-								// {header.subtitle}
-							</p>
+				<div class="title">
+					<h1 class="mdc-typography--headline4">
+						{#if header.icon}
+							<Icon class="material-icons">{header.icon}</Icon>
 						{/if}
-					</div>
-				{/if}
+						{#if header.title}
+							{header.title}
+						{:else}
+							<Icon class="material-icons placeholder">autorenew</Icon>
+						{/if}
+					</h1>
+					{#if header.subtitle}
+						<p class="mdc-typography--body2">
+							// {header.subtitle}
+						</p>
+					{/if}
+				</div>
 			</span>
 
 			<span class="right">
@@ -162,30 +159,3 @@
 		<slot></slot>
 	</div>
 </section>
-
-<!-- <div class='layout-panel'>
-	
-	{#if title || subtitle || actions}
-		<header class="header">
-			{#if showBreadcrumbs}<Breadcrumbs items={breadcrumbs}/>{/if}
-			
-			<h1 class="mdc-typography--headline4">
-				<Icon class="material-icons">{icon}</Icon> 
-				{title}
-			</h1>
-
-			<span class="extra">
-				{#each actions||[] as action}
-					<Button variant='text' dense on:click={action.callback}>
-						<Icon class="material-icons">{action.icon}</Icon> 
-						{action.text}
-					</Button>
-				{/each}
-			</span>
-		</header>
-	{/if}
-	
-	<section class="body">
-		<slot></slot>
-	</section>
-</div> -->

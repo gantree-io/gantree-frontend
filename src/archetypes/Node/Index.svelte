@@ -1,6 +1,6 @@
 <script context="module">
 	import ConfigDetail from '@archetypes/Config/Detail.svelte'
-	import { panel } from '@app/store.js';
+	import { Drawer } from '@app/store.js';
  	let config;
  	
  	export const actions = [
@@ -8,7 +8,7 @@
 			text: 'View Config',
 			icon: 'code',
 			callback: () => {
-				 panel.open(ConfigDetail, 
+				 Drawer.open(ConfigDetail, 
 				 	{
 				 		configId: config._id
 				 	}, 
@@ -32,8 +32,9 @@
 <script>
 	import _ from 'lodash'
 	import { awaitQuery } from '@util/graphql' 
+	import PanelLayout from '@layouts/Panel.svelte'
 	import NodeTeaser from '@archetypes/Node/Teaser.svelte'
-	import GraphQLProgress from '@components/GraphQLProgress.svelte'
+	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import FilterList from '@components/FilterList.svelte'
 	import Button, { Label } from '@smui/button';
 	import { Icon } from '@smui/common';
@@ -64,8 +65,8 @@
 	let filter = filterOptions.slice();
 
   	const query = `
- 		query network($_id: String!) {
- 			network(_id: $_id) {
+ 		query network($id: String!) {
+ 			network(id: $id) {
  				config{
  					_id
  					name
@@ -81,8 +82,6 @@
  			}
  		}
  	`;
-
- 	let fetchNodes = awaitQuery(query, {variables: {_id: networkId}})
 </script>
 
 <style lang="scss">
@@ -122,7 +121,30 @@
 	}
 </style>
 
-{#await fetchNodes()}
+
+<PanelLayout 
+	header={{
+		title: 'Config',
+		actions: [
+	 		{
+				text: 'Add Nodes',
+				icon: 'add',
+	 		}
+		]
+	}}
+	showBreadcrumbs
+	>
+	<GraphQueryWrapper
+		query={query}
+		component={NetworkDetail}
+		afterInit={({refetch}) => {
+			//triggerRefetch = refetch
+		}}
+	/>
+</PanelLayout>
+
+
+<!-- {#await fetchNodes()}
 	<GraphQLProgress/>
 {:then network}
 	{config = network.config}
@@ -151,3 +173,4 @@
 {:catch e}
 	TODO: error... {e.message}
 {/await}
+ -->

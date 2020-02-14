@@ -10,15 +10,16 @@
 	
 	export let buttons = {}
 	export let onSubmit = () => {}
-	export let onCancel = () => {}
+	//export let onCancel = () => {}
 	export let onStep = () => {}
 	
 
-	const initialValues = {};
-	const fields = {};
-	const validation = {};
-	let errors = {};
-	let touched = false;
+	const initialValues = {}
+	const fields = {}
+	const validation = {}
+	const required = []
+	let errors = {}
+	let touched = false
 	let steps = {
 		names: [],
 		ids: [],
@@ -37,12 +38,18 @@
 
 	const validateField = id => {
 		delete errors[id]
+		
 		let rules = validation[id]
+		
 		Object.keys(rules).map(msg => {
 		 	if(rules[msg](fields[id])){
 		 		errors[id] = msg
 		 	}
 		})
+
+		if(required.includes(id) && (!fields[id] || fields[id] === '')){
+			errors[id] = 'Required'
+		}
 
 		return errors[id] || []
 	}
@@ -73,9 +80,10 @@
 	}
 
 	setContext(FIELDS, {
-		initField: (id, value, validationRules={}) => {
+		initField: (id, value, isRequired, validationRules={}) => {
 			initialValues[id] = value
 			fields[id] = value
+			isRequired && required.push(id)
 			validation[id] = validationRules
 			return formatResponse(id)
 		},
@@ -135,17 +143,6 @@
 	form{
 		display: flex;
 		flex-direction: column;
-
-		:global(.form-field){
-			width: 100%;
-		}
-
-
-		:global(::placeholder){
-			color: var(--color-mid-grey);
-			font-weight: 100;
-			font-size: 0.8em;
-		}
 
 		.controls{
 			display: flex;

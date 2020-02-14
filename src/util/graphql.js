@@ -40,14 +40,20 @@ export const awaitQuery = (q, options={}) => {
 	}
 };
 
+export const query = async (q, options={}) => {
+	let result = await client.query({ query: ApolloGQL`${q}`, ...options})
+	return Object.values(result.data)[0]
+};
+
 export const mutation = async (q, options={}) => {
 	let result = await client.mutate({ mutation: ApolloGQL`${q}`, ...options})
 	return Object.values(result.data)[0]
 };
 
-export const query = (q, options={}) => client.query({query: ApolloGQL`${q}`, ...options})
+export const queryOld = (q, options={}) => client.query({query: ApolloGQL`${q}`, ...options})
 
 export default {
 	configure: configure,
-	query: query
+	query: query,
+	queryOld: queryOld
 }

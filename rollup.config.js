@@ -15,22 +15,23 @@ import dotenv from 'dotenv';
 
 const production = !process.env.ROLLUP_WATCH;
 
+// needs to be duplicated to /postcss.config.js
 const postcssOptions = () => ({
-  extensions: [".scss", ".sass"],
-  extract: false,
-  minimize: true,
-  plugins: [require("autoprefixer")],
-  use: [
-    [
-      "sass",
-      {
-        includePaths: [
-          "./src/theme",
-          "./node_modules",
-        ]
-      }
-    ]
-  ]
+	extensions: [".scss", ".sass"],
+	extract: false,
+	minimize: true,
+	plugins: [require("autoprefixer")],
+	use: [
+		[
+			"sass",
+			{
+				includePaths: [
+					"./src/theme",
+					"./node_modules",
+				]
+			}
+		]
+	]
 });
 
 export default {

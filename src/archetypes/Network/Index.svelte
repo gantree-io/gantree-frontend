@@ -2,7 +2,7 @@
 	import NetworkTeaser from '@archetypes/Network/Teaser.svelte'
 	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import { modal } from '@app/store.js'
+	import { Modal } from '@app/store.js'
 	import NetworkAdd from './Add.svelte'
 	
 	const query = `
@@ -17,10 +17,10 @@
  		}
  	`
 
- 	 //TESTING
- 	modal.open(NetworkAdd, {
-		onSuccess: () => modal.close()
-	})
+ 	//TESTING
+	// modal.open(NetworkAdd, {
+	// 	onSuccess: () => modal.close()
+	// })
 </script>
 
 <PanelLayout 
@@ -32,8 +32,8 @@
 				text: 'Add New',
 				icon: 'add',
 				callback: () => {
-					modal.open(NetworkAdd, {
-						onSuccess: () => modal.close()
+					Modal.open(NetworkAdd, {
+						onSuccess: () => Modal.close()
 					})
 				}
 	 		}

@@ -2,7 +2,7 @@
 	import _ from 'lodash'
 	import Paper, { Title } from '@smui/paper';
 	import { Icon } from '@smui/common';
-	import { drawer } from '@app/store.js';
+	import { Drawer } from '@app/store.js';
 
 	import ConfigDetail from '@archetypes/Config/Detail.svelte'
 
@@ -10,7 +10,7 @@
 	export let name = null
 
 	const handleClick = () => {
-		drawer.open(ConfigDetail, 
+		Drawer.open(ConfigDetail, 
 			{
 				configId: _id
 			}

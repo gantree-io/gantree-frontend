@@ -9,10 +9,10 @@
 	export let onSubmitClick = () => {};
 	export let onNextClick = () => {};
 	
-	export let back
-	export let cancel
-	export let submit
-	export let next
+	export let back = null
+	export let cancel = null
+	export let submit = null
+	export let next = null
 </script>
 
 <style lang="scss">

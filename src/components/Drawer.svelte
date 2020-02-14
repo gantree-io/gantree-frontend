@@ -4,7 +4,7 @@
 	import { Anchor } from '@smui/menu-surface';
 	import List, {Item, Text, Graphic} from '@smui/list';
 	import { Icon } from '@smui/common';
-	import { drawer } from '@app/store.js';
+	import { Drawer } from '@app/store.js';
 
 
 	let open = false
@@ -40,7 +40,7 @@
 	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 
 	// subscribe to incoming requests
-	drawer.subscribe(data => {
+	Drawer.subscribe(data => {
 		if(component !== data.component){
 			// already open
 			if(open){
@@ -147,15 +147,16 @@
 				right: calc(100% - 2em);
 				color: var(--color-grey);
 				font-size: 1.5em;
-				padding: 0.4em 0.2em 0.3em 0.4em;
+				padding: 0.4em 0.1em 0.3em 0.3em;
 				background: var(--color-light);
 				border-radius: 0.1em 0em 0em 0.1em;
 				cursor: e-resize;
 				z-index: -1;
-				transition: transform 0.1s;
+				transition: all 0.1s;
 
 				&:hover{
-					transform: translateX(0.1em)
+					transform: translateX(0.1em);
+					opacity: 0.9;
 				}
 			}
 
@@ -183,7 +184,7 @@
 <section class='drawer' data-open={open}>
 	<div class="overlay" on:click={handleClose} style={`transition: background ${transitionSpeed}s ease-in-out`}/>
 	<div class='inner' style={`transition: all ${transitionSpeed*0.75}s ease-out`}>
-		<Icon class="material-icons close" on:click={handleClose}>keyboard_tab</Icon>
+		<Icon class="material-icons close" on:click={handleClose}>close</Icon>
 		<svelte:component this={component} {...props}/>
 	</div>
 </section>

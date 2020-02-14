@@ -3,9 +3,10 @@
 	import Paper, { Title } from '@smui/paper';
 	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
-	import { panel } from '@app/store.js';
+	import { Drawer } from '@app/store.js';
 
-	import NodeIndex, { actions } from '@archetypes/Node/Index.svelte'
+	//import NodeIndex, { actions } from '@archetypes/Node/Index.svelte'
+	import NetworkDetail from './Detail.svelte'
 
 	export let _id = null
 	export let name = null
@@ -18,16 +19,7 @@
 	const offlineCount = countStatus('OFFLINE')
 
 	const handleClick = () => {
-		panel.open(NodeIndex, 
-			{
-				networkId: _id
-			}, 
-			{
-				title: `${name}`,
-				subtitle: `Nodes`,
-				actions: actions
-			}
-		)
+		Drawer.open(NetworkDetail, {_id: _id})
 	}
 </script>
 

@@ -1,13 +1,13 @@
 <script>
 	import PubSub from 'pubsub-js'
 	import config from './actions.js' 
-	import { drawer } from '@app/store.js';
+	import { Drawer } from '@app/store.js';
 	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Button, {Label} from '@smui/button';
 	import { Icon } from '@smui/common';
-	import ConfigTeaser from '@archetypes/Config/Teaser.svelte'
 	import Json from '@components/Json.svelte'
+	import { toast } from '@components/Toaster.svelte'
 
 	export let configId;
 
@@ -15,8 +15,8 @@
 	let chainspec = '234';
 	
 	const query = `
-		query config($_id: String!) {
-			config(_id: $_id) {
+		query config($id: String!) {
+			config(id: $id) {
 				_id
 				name
 				chainspec
@@ -47,7 +47,8 @@
 				callback: () => {
 					config.delete(configId)
 						.then(result => {
-							drawer.close()
+							toast.warning(`Config deleted`)
+							Drawer.close()
 							PubSub.publish('CONFIG.DELETE');
 						})
 
@@ -59,7 +60,7 @@
 	<GraphQueryWrapper
 		query={query}
 		variables={{
-			_id: configId
+			id: configId
 		}}
 		component={Json}
 		props={{

@@ -3,9 +3,8 @@
 	import Paper, { Title, Subtitle } from '@smui/paper';
 	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
-	import { panel } from '@app/store.js';
 
-	export let _id;
+	//export let _id;
 	export let name;
 	export let ip;
 	export let provider;
@@ -18,11 +17,6 @@
 			? 'settings'
 			: 'error'
 		)
-
-	//const countStatus = status => _.filter(nodes, node => node.status === status).length
-	// const onlineCount = countStatus('ONLINE')
-	// const pendingCount = countStatus('PENDING')
-	// const offlineCount = countStatus('OFFLINE')
 </script>
 
 <style lang="scss">
@@ -112,10 +106,10 @@
 				<Icon class={`material-icons`}>
 					{
 						type === 'VALIDATOR' 
-							? 'find_in_page' 
+							? 'insert_chart_outlined' 
 							: (type === 'FULL'
-								? 'dns'
-								: 'settings_input_antenna'
+								? 'insert_chart'
+								: 'help_outline'
 							)
 					}
 				</Icon>
