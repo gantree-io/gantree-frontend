@@ -1,4 +1,5 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
 	import _ from 'lodash'
 	import Paper, { Title } from '@smui/paper';
 	import Badge from '@components/Badge.svelte'
@@ -7,20 +8,27 @@
 
 	//import NodeIndex, { actions } from '@archetypes/Node/Index.svelte'
 	import NetworkDetail from './Detail.svelte'
+	import NetworkStore from './store.js'
 
 	export let _id = null
 	export let name = null
-	export let nodes = []
 
-	const countStatus = status => _.filter(nodes, node => node.status === status).length
+	let onlineCount = 0
+	let pendingCount = 0
+	let offlineCount = 0
+	
+	let statusSubscription
+	onMount(async () => {
+		statusSubscription = await NetworkStore.subscribe(_id, `STATUS`, ({nodes}) => {
+		 	onlineCount = nodes.online
+		 	pendingCount = nodes.pending
+		 	offlineCount = nodes.offline
+		 })
+	})
 
-	const onlineCount = countStatus('ONLINE')
-	const pendingCount = countStatus('PENDING')
-	const offlineCount = countStatus('OFFLINE')
-
-	const handleClick = () => {
-		Drawer.open(NetworkDetail, {_id: _id})
-	}
+	onDestroy(() => {
+		NetworkStore.unsubscribe(statusSubscription)
+	})
 </script>
 
 <style lang="scss">
@@ -66,7 +74,7 @@
 	}
 </style>
 
-<Paper class='network-teaser' on:click={handleClick} elevation="4">
+<Paper class='network-teaser' on:click={() => Drawer.open(NetworkDetail, {_id: _id})} elevation="4">
 	<div>
 		<Title><Icon class="material-icons">blur_on</Icon>&nbsp;{name}</Title>
 	</div>

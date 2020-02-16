@@ -12,14 +12,14 @@
 
 	let subtitle = 1
 
-	const mutationQuery = `
-		mutation addNetwork($name: String!, $chainspec: JSON!) {
-			addNetwork(name: $name, chainspec: $chainspec){
-				_id
-				name
-			}
-		}
-	`;
+	// const mutationQuery = `
+	// 	mutation addNetwork($name: String!, $chainspec: JSON!) {
+	// 		addNetwork(name: $name, chainspec: $chainspec){
+	// 			_id
+	// 			name
+	// 		}
+	// 	}
+	// `;
 	
 	// get config options
 	let configOptions = {}

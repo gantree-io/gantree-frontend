@@ -1,6 +1,7 @@
 <script>
 	import ApolloClient from "apollo-boost";
-	import { configure } from '@util/graphql' 
+	import { configure as GraphQLConfigure } from '@util/graphql' 
+	import { configure as SocketIOConfigure } from '@util/socketio' 
 	import Router from 'svelte-spa-router'
 	//import Panel from '@components/Panel.svelte'
 	import Drawer from '@components/Drawer.svelte'
@@ -12,8 +13,12 @@
 	import Components from '@routes/Components.svelte'
 	import Four04 from '@routes/Four04.svelte'
 
-	configure({
+	GraphQLConfigure({
 		uri: _env.GRAPHQL_URL || "http://localhost:4000/graphql",
+	})
+
+	SocketIOConfigure({
+		url: _env.SOCKETIO_URL || "http://localhost:3000",
 	})
 
 	const routes = {

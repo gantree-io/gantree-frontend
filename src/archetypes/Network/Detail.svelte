@@ -4,14 +4,14 @@
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Node from '@archetypes/Node/Teaser.svelte'
 	import NetworkStore from './store.js'
-	import FilterList from '@components/FilterList.svelte'
+	//import FilterList from '@components/FilterList.svelte'
+	import Filterable from '@components/Filterable.svelte'
 	import { NodeFilterOptions } from './util'
 
 	export let _id;
 	let title;
 	let configName;
-	let nodes = []
-	let filter = NodeFilterOptions.slice();
+	let nodes
 	
 	// fetch items
 	NetworkStore.fetchOne(_id).then(data => {
@@ -39,19 +39,17 @@
 	 	]
 	}}
 	>
-	{#if nodes.length}
-		<FilterList 
-			options={NodeFilterOptions}
-			count={item => _.filter(nodes||[], {type: item.key}).length}
-			on:change={({detail}) => filter = detail}
-		/>
-
-		{#each nodes as node}
-			{#if _.some(filter, ['key', node.type])}
-				<Node {...node}/>
-			{/if}
-		{/each}
-	{:else}
+	{#if !nodes}
 		<GraphQLProgress/>
+	{:else if !nodes.length}
+		[no items]
+	{:else}
+		<Filterable
+			{...NodeFilterOptions}
+			items={nodes}
+			component={Node}
+			>
+			<p>All items hidden by filters</p>
+		</Filterable>
 	{/if}
 </PanelLayout>

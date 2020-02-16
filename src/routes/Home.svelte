@@ -1,5 +1,5 @@
 <script>
-	import Button from '@components/Button.svelte';
+	import FirebaseLogin from '@components/FirebaseLogin.svelte';
 	import Centered from '@layouts/Centered.svelte'
 </script>
 
@@ -13,7 +13,8 @@
 <Centered>
 	<h1>Gantree</h1>
 	<h2>Deploy and manage your Substrate-based infrastructure</h2>
-	<Button primary>Login</Button>
-	<Button secondary>Register</Button>
+	<FirebaseLogin/>
+
+	
 	<a href="#/dashboard">Dashboard</a>
 </Centered>
