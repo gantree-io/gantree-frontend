@@ -10,6 +10,7 @@ import replace from '@rollup/plugin-replace';
 import autoPreprocess from 'svelte-preprocess'
 import svg from 'rollup-plugin-svg-import';
 import dotenv from 'dotenv';
+import css from "rollup-plugin-css-only";
 
 //TODO: get https://sveltematerialui.com/demo/ working
 
@@ -62,6 +63,8 @@ export default {
 			 	{ find: '@util', replacement: __dirname + '/src/util' },
 			 ]
 		}),
+
+		css({ output: "public/build/extra.css" }),
 		
 		svelte({
 			// enable run-time checks when not in production

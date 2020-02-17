@@ -1,5 +1,5 @@
 <script>
-	import FirebaseLogin from '@components/FirebaseLogin.svelte';
+	import LoginButtons from '@archetypes/User/LoginButtons.svelte';
 	import Centered from '@layouts/Centered.svelte'
 </script>
 
@@ -13,8 +13,6 @@
 <Centered>
 	<h1>Gantree</h1>
 	<h2>Deploy and manage your Substrate-based infrastructure</h2>
-	<FirebaseLogin/>
-
-	
+	<LoginButtons providers={['Google', 'Twitter']}/>
 	<a href="#/dashboard">Dashboard</a>
 </Centered>
