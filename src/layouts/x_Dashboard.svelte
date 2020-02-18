@@ -10,6 +10,7 @@
  
  	import Breadcrumbs from '@components/Breadcrumbs.svelte'
  	import RandomQuote from '@components/RandomQuote.svelte'
+ 	import UserAccountMenu from '@archetypes/User/AccountMenu.svelte'
  	
  	export let tabs = []
  	let active = {}
@@ -111,7 +112,7 @@
 <main>
 	<Drawer>
 		<Header>
-			<Title>Gantree</Title>
+			<Title>Ganwwtree</Title>
 			<Subtitle>We've got some oil for that</Subtitle>
 		</Header>
 		<Content>
@@ -128,10 +129,7 @@
 			<List class='bottom'>
 				<RandomQuote/>
 				<Separator nav />
-				<Item href={'#'}>
-					<Graphic class="material-icons">person</Graphic>
-					<Text>Account</Text>
-				</Item>
+				<UserAccountMenu/>
 			</List>
 		</Content>
 	</Drawer>

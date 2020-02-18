@@ -13,11 +13,16 @@
 	});
 
 	onMount(() => {
-		UserStore.firebase.subscribe(({firebase, ui}) => {
+		UserStore.firebase.subscribe(({firebase, ui, uiConfig}) => {
 			ui.start('#firebaseui-auth-container', {
 				signInFlow: 'popup',
-				signInSuccessUrl: '#/dashboard',
+				signInSuccessUrl: '/',
 				signInOptions: providers.map(provider => firebase.auth[`${provider}AuthProvider`].PROVIDER_ID),
+				// force stop auto redirect
+				callbacks:{
+					signInSuccessWithAuthResult: ({user}, redirectUrl) => false,
+					signInFailure: () => false
+				}
 			});
 		});
 	})

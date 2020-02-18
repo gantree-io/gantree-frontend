@@ -1,17 +1,15 @@
 <script>
 	import Router from 'svelte-spa-router'
-	import Dashboard from '@layouts/Dashboard.svelte'
 	import Home from '@routes/DashboardOld/Home.svelte'
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
 	import Config from '@archetypes/Config/Index.svelte'
 	import Keys from '@routes/DashboardOld/Keys.svelte'
-	import Team from '@routes/DashboardOld/Team.svelte'
+	import Team from '@archetypes/Team/Index.svelte'
 	import Billing from '@routes/DashboardOld/Billing.svelte'
 	import Docs from '@routes/DashboardOld/Docs.svelte'
 
-	import ConfigAdd from '@archetypes/Config/Add.svelte'
-
-
+	//import ConfigAdd from '@archetypes/Config/Add.svelte'
+	
 
 	import { afterUpdate } from 'svelte';
  	import { location } from 'svelte-spa-router'
@@ -23,6 +21,7 @@
  	import Button from '@smui/button';
  
  	import RandomQuote from '@components/RandomQuote.svelte'
+ 	import UserAccountMenu from '@archetypes/User/AccountMenu.svelte'
  	
  	let active = {}
  	//let breadcrumbs = [] 
@@ -39,7 +38,7 @@
 		'/': Home,
 		'/networks': NetworkIndex,
 		'/config': Config,
-		'/configadd': ConfigAdd,
+		//'/configadd': ConfigAdd,
 		'/keys': Keys,
 		'/team': Team,
 		'/billing': Billing,
@@ -62,11 +61,11 @@
 			icon: 'settings',
 			href: '#/dashboard/config',
 		},
-		{
-			name: ' - Add Config',
-			icon: 'settings',
-			href: '#/dashboard/configadd',
-		},
+		// {
+		// 	name: ' - Add Config',
+		// 	icon: 'settings',
+		// 	href: '#/dashboard/configadd',
+		// },
 		{
 			name: 'Keys',
 			icon: 'vpn_key',
@@ -105,6 +104,7 @@
 			min-height: 100vh;
 			position: relative;
 			filter: invert(90%);
+			overflow: visible;
 
 			> :global(.mdc-drawer__content > .mdc-list){
 				&.bottom{
@@ -197,10 +197,7 @@
 			<List class='bottom'>
 				<RandomQuote/>
 				<Separator nav />
-				<Item href={'#'}>
-					<Graphic class="material-icons">person</Graphic>
-					<Text>Account</Text>
-				</Item>
+				<UserAccountMenu/>
 			</List>
 		</Content>
 	</Drawer>

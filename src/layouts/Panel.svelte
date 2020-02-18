@@ -18,8 +18,6 @@
 </script>
 
 <style lang="scss">
-
-
 	.layout-panel{
 		background: var(--color-light);
 		overflow: hidden;
@@ -29,6 +27,7 @@
 		padding:0;
 		display: flex;
 		flex-direction: column;
+		max-height: 100vh;
 
 		>.header{
 			border-bottom: 1px solid var(--color-light-grey);
@@ -42,13 +41,13 @@
 				display: block;
 
 				:global(.breadcrumbs){
-					margin-bottom: 0.3em;
+					margin: 0 0 0.5em 0.4em;
 					color: var(--color-dark);
 				}
 
 				.title{
 					display: flex;
-					align-items: baseline;
+					align-items: flex-end;
 
 					h1,p{
 						margin: 0;
@@ -57,16 +56,18 @@
 
 					h1{
 						font-weight: 100;
-						:global(.placeholder){
+						display: flex;
+						align-items: flex-end;
+						line-height: 1em;
+
+						>:global(.material-icons){
 							line-height: inherit;
 							font-size: inherit;
 							vertical-align: bottom;
-							opacity: 0.2;
-							animation-name: spin;
-							animation-duration: 4000ms;
-							animation-iteration-count: infinite;
-							animation-timing-function: linear;
 						}
+						
+						>:global(.material-icons.titleicon){ margin-right: 0.2em }
+						>:global(.material-icons.-animation-spin){ opacity: 0.2 }
 					}
 
 					p{
@@ -100,6 +101,7 @@
 
 		>.body{
 			padding: 1.5em 2em;
+			height: 100vh;
 			overflow: scroll;
 		}
 	}
@@ -113,12 +115,12 @@
 				<div class="title">
 					<h1 class="mdc-typography--headline4">
 						{#if header.icon}
-							<Icon class="material-icons">{header.icon}</Icon>
+							<Icon class="material-icons titleicon">{header.icon}</Icon>
 						{/if}
 						{#if header.title}
 							{header.title}
 						{:else}
-							<Icon class="material-icons placeholder">autorenew</Icon>
+							<Icon class="material-icons -animation-spin">autorenew</Icon>
 						{/if}
 					</h1>
 					{#if header.subtitle}

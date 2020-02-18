@@ -42,7 +42,7 @@
 		/* greyscale colors */
 		--color-dark: #191919;
 		--color-dark-grey: #31393D;
-		--color-mid-grey: #879296;
+		--color-mid-grey: #6d7679;
 		--color-grey: #b2b6b7;
 		--color-light-grey: #e1e8ea;
 		--color-light: #f8f8f8;
@@ -83,6 +83,18 @@
 	:global(body){
 		background: var(--color-light);
 		font-weight: 100;
+	}
+
+	:global(.material-icons.-animation-spin){
+		animation-name: spin;
+		animation-duration: 4000ms;
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+	}
+	
+	:global(.mdc-list .mdc-list-item__graphic),
+	:global(.mdc-list.mdc-list--dense .mdc-list-item__graphic){
+		margin-right: 0.8em;
 	}
 
 

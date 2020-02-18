@@ -32,6 +32,7 @@
 <PanelLayout 
 	header={{
 		title: 'Config',
+		icon: 'settings',
 		actions: [
 	 		{
 				text: 'Add Config',

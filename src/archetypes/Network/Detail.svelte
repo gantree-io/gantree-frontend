@@ -4,7 +4,6 @@
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Node from '@archetypes/Node/Teaser.svelte'
 	import NetworkStore from './store.js'
-	//import FilterList from '@components/FilterList.svelte'
 	import Filterable from '@components/Filterable.svelte'
 	import { NodeFilterOptions } from './util'
 

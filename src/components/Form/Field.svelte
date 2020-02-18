@@ -130,7 +130,8 @@
 	{#if 
 		input.type === 'text' || 
 		input.type === 'number' || 
-		input.type === 'url'
+		input.type === 'url' ||
+		input.type === 'email'
 	}
 		<Text {...input} bind:value={value}/>
 	{:else if input.type === 'select'}
