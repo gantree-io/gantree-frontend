@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte'
-	import UserStore, { UserStatus } from './store'
+	import AppStore, { UserStatus } from '@app/store'
 	import { Icon } from '@smui/common';
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
@@ -13,7 +13,7 @@
 	let menu;
 	let menuAnchor;
 
-	UserStore.subscribe(({user, status})=> {
+	AppStore.subscribe(({user, status})=> {
 		_username = user.name
 		_status = status
 	});
@@ -58,7 +58,7 @@
 						<Graphic class="material-icons">person</Graphic>
 						<Text>My Team</Text>
 					</Item>
-					<Item on:click={UserStore.logout}>
+					<Item on:click={AppStore.logout}>
 						<Graphic class="material-icons">power_settings_new</Graphic>
 						<Text>Logout</Text>
 					</Item>

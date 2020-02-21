@@ -1,28 +1,32 @@
+<script context="module">
+	import { writable } from 'svelte/store';
+	import md5 from 'md5'
+
+	const { set, subscribe } = writable(null);
+
+	export const open = (component, props) => set({
+		component: component, 
+		props: props||{}, 
+	})
+	export const close = () => set(null)
+</script>
+
 <script>
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
-	import Menu from '@smui/menu';
-	import { Anchor } from '@smui/menu-surface';
-	import List, {Item, Text, Graphic} from '@smui/list';
 	import { Icon } from '@smui/common';
-	import { Drawer } from '@app/store.js';
 
-
-	let open = false
+	let isOpen = false
 	let component = null
 	let props = {}
-	let header = []
-	let menu;
-	let menuAnchor;
 	const transitionSpeed = 0.4
 
 	// handle drawer close
 	const handleClose = (cb => {
 		document.removeEventListener("keydown", handleKeyDown);
-		open = false
+		isOpen = false
 		setTimeout(() => {
 			component = null
 			props = {}
-			header = []
 			typeof cb === "function" && cb()
 		}, transitionSpeed * 1000)
 	})
@@ -31,19 +35,27 @@
 	const handleOpen = (data => {
 		component = data.component
 		props = data.props
-		header = data.header
-		open = true
+		isOpen = true
 		document.addEventListener("keydown", handleKeyDown);
 	})
 	
 	// watch for ESC key press & close
 	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 
-	// subscribe to incoming requests
-	Drawer.subscribe(data => {
-		if(component !== data.component){
+	
+
+	//subscribe to incoming requests
+	subscribe(data => {
+
+		// no data = close drawer
+		if(!data){
+			handleClose()
+		}
+
+		//
+		else if(component !== data.component){
 			// already open
-			if(open){
+			if(isOpen){
 				// new component? close and reopen
 				if(!!data.component){
 					handleClose(() => handleOpen(data))
@@ -93,54 +105,7 @@
 			display:flex;
 			flex-direction: column;
 			z-index: 2;
-
-			>header{
-				border-bottom: 1px solid var(--color-light-grey);
-				position: relative;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-
-				.left{
-					padding: 1em 1em 1em 2em;
-					display: flex;
-					align-items: baseline;
-					
-					h1,p{
-						margin: 0;
-						display: inline-block;
-					}
-
-					p{
-						font-weight: 100;
-						opacity: 0.8;
-						margin: 0 0.5em;
-					}
-				}
-
-				.right{
-					padding: 0;
-					display: flex;
-					align-items: center;
-					justify-content: flex-end;
-					align-self: stretch;
-
-					.menu{
-						margin-right: 1em;
-						:global(.mdc-icon-button){
-							opacity: 0.4;
-							&:hover{
-								opacity: 1;
-							}
-						}
-					}
-				}
-			}
-
-			>article{
-				padding: 1.5em 2em;
-			}
-
+		
 			:global(.close){
 				position: absolute;
 				top: 0.8rem;
@@ -181,7 +146,7 @@
 	}
 </style>
 
-<section class='drawer' data-open={open}>
+<section class='drawer' data-open={isOpen}>
 	<div class="overlay" on:click={handleClose} style={`transition: background ${transitionSpeed}s ease-in-out`}/>
 	<div class='inner' style={`transition: all ${transitionSpeed*0.75}s ease-out`}>
 		<Icon class="material-icons close" on:click={handleClose}>close</Icon>

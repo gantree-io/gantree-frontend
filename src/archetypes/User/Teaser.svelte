@@ -5,7 +5,10 @@
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
-	import UserStore from '@archetypes/User/store.js'
+	
+	import AppStore from '@app/store'
+	import User from './store'
+	import Hotwire from '@util/hotwire.js'
 
 	export let _id
 	export let name
@@ -16,27 +19,21 @@
 	
 	let menu;
 	let menuAnchor;
-	
-// 	let statusSubscription
-// 	onMount(async () => {
-// 		statusSubscription = await NetworkStore.subscribe(_id, `STATUS`, ({nodes}) => {
-// 		 	onlineCount = nodes.online
-// 		 	pendingCount = nodes.pending
-// 		 	offlineCount = nodes.offline
-// 		 })
-// 	})
-// 
-// 	onDestroy(() => {
-// 		NetworkStore.unsubscribe(statusSubscription)
-// 	})
-	
 	let _you
-	onMount(() => {
-		UserStore.subscribe(({user}) => {
+
+	onMount(async () => {
+		AppStore.subscribe(({user}) => {
 			_you = user._id === _id
 		})
+
+		const unwatch = await Hotwire.subscribe(`${_id}.UPDATE`, user => {
+			name = user.name
+			email = user.email
+			status = user.status
+		})
+
+		return () => unwatch()
 	})
-	
 </script>
 
 <style lang="scss">
@@ -108,19 +105,11 @@
 <Paper class='user-teaser' data-status={status} elevation="4">
 	<div class='title'>
 		<Icon class='material-icons'>person</Icon>
-		{#if name}
-			<Title>{name}</Title>
-		{:else}
-			?
-		{/if}
+		{#if name}<Title>{name}</Title>{/if}
 		<Content>
-			{#if isTeamOwner}
-				<Icon class="material-icons owner">stars</Icon>
-			{/if}
+			{#if isTeamOwner}<Icon class="material-icons owner">stars</Icon>{/if}
 			{email}
-			{#if _you}
-				(you) 
-			{/if}
+			{#if _you}(you){/if}
 		</Content>
 		<!-- {#if isTeamOwner}<Icon class="material-icons owner">stars</Icon>{/if} -->
 	</div>
@@ -152,27 +141,27 @@
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Make Team Owner</Text>
 								</Item>
-								<Item>
+								<Item on:click={() => User.deactivate(_id)}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Deactivate</Text>
 								</Item>
 							{/if}
 
 							{#if status === 'INVITATION_SENT'}
-								<Item>
+								<Item on:click={() => User.resendInvitation(_id)}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Resend Invitation</Text>
 								</Item>
 							{/if}
 
 							{#if status === 'INACTIVE'}
-								<Item>
+								<Item on:click={() => User.activate(_id)}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Activate</Text>
 								</Item>
 							{/if}
 
-							<Item>
+							<Item on:click={() => User.delete(_id)}>
 								<Graphic class="material-icons">person</Graphic>
 								<Text>Delete</Text>
 							</Item>

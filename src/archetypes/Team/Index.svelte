@@ -3,16 +3,17 @@
 	import _ from 'lodash'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import { Modal } from '@app/store.js'
+	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
 	//import NetworkAdd from './Add.svelte'
 	import TeamStore from './store.js'
-	import UserStore from '@archetypes/User/store.js'
+	import AppStore from '@app/store.js'
+	import Hotwire from '@util/hotwire.js'
 
 	import UserTeaser from '@archetypes/User/Teaser.svelte'
 	import UserAdd from '@archetypes/User/Add.svelte'
 	
 	// const query = `
- // 		query networks {
+	// 		query networks {
 	// 		networks{
 	// 			_id
 	// 			name
@@ -20,57 +21,62 @@
 	// 				status
 	// 			}
 	// 		}
- // 		}
- // 	`
-	
+	// 		}
+	// 	`
+
 
 	// ugh! method
-//  	let triggerRefetch;
-//  	onMount(() => {
-//  		PubSub.subscribe('TEAM.USER.DELETE', () => triggerRefetch());
-//  		PubSub.subscribe('TEAM.USER.ADD', () => triggerRefetch());
-//  	})
-// 
-//  	onDestroy(() => {
-//  		PubSub.unsubscribe('TEAM.USER.DELETE');
-//  		PubSub.unsubscribe('TEAM.USER.ADD');
-//  	})
+	//  	let triggerRefetch;
+	//  	onMount(() => {
+	//  		PubSub.subscribe('TEAM.USER.DELETE', () => triggerRefetch());
+	//  		PubSub.subscribe('TEAM.USER.ADD', () => triggerRefetch());
+	//  	})
+	// 
+	//  	onDestroy(() => {
+	//  		PubSub.unsubscribe('TEAM.USER.DELETE');
+	//  		PubSub.unsubscribe('TEAM.USER.ADD');
+	//  	})
 
 	// socket method
-//  	let statusSubscription
-//  	onMount(async () => {
-// 		statusSubscription = await TeamStore.subscribe(_id, `UPDATE`, ({nodes}) => {
-// 			onlineCount = nodes.online
-// 			pendingCount = nodes.pending
-// 			offlineCount = nodes.offline
-// 		})
-//  	})
-// 
-//  	onDestroy(() => {
-//  		TeamStore.unsubscribe(statusSubscription)
-//  	})
+	//  	let statusSubscription
+	//  	onMount(async () => {
+	// 		statusSubscription = await TeamStore.subscribe(_id, `UPDATE`, ({nodes}) => {
+	// 			onlineCount = nodes.online
+	// 			pendingCount = nodes.pending
+	// 			offlineCount = nodes.offline
+	// 		})
+	//  	})
+	// 
+	//  	onDestroy(() => {
+	//  		TeamStore.unsubscribe(statusSubscription)
+	//  	})
 
-		let team
-		let teamOwnerID
-		let currentUserID
+	let team
+	let teamOwnerID
+	let currentUserID
 
-		onMount(() => {
-			TeamStore.fetchAll().then(_team => {
-				
-				team = _team
-				teamOwnerID = _.get(_team, 'owner._id')
-
-				// {
-				// 	active: _.filter(team.users, {status: 'ACTIVE'}),
-				// 	pending: _.filter(team.users, {status: 'INVITATION_SENT'}),
-				// 	inactive: _.filter(team.users, {status: 'INACTIVE'}),
-				// }
-			})
-
-			UserStore.subscribe(({user}) => {
-				currentUserID = user._id
-			})
+	const fetchAll = () => {
+		TeamStore.fetchAll().then(_team => {
+			team = _team
+			teamOwnerID = _.get(_team, 'owner._id')
 		})
+	}
+
+	onMount(async () => {
+		fetchAll()
+
+		AppStore.subscribe(({user}) => {
+			currentUserID = user._id
+		})
+
+		const unwatchAdd = await Hotwire.subscribe(`USER.ADD`, () => fetchAll())
+		const unwatchDelete = await Hotwire.subscribe(`USER.DELETE`, () => fetchAll())
+
+		return () => {
+			unwatchAdd()
+			unwatchDelete()
+		}
+	})
 </script>
 
 <style>
@@ -93,9 +99,9 @@
 				text: 'Invite Someone',
 				icon: 'person_add',
 				callback: () => {
-					Modal.open(UserAdd, {
+					openModal(UserAdd, {
 						team_id:  _.get(team, '_id'),
-						onSuccess: () => Modal.close()
+						onSuccess: () => modelClose()
 					})
 				}
 	 		}
@@ -103,7 +109,6 @@
 	}}
 	showBreadcrumbs
 	>
-	{console.log(_.get(team, 'users'))}
 	{#if !_.get(team, 'users')}
 		<GraphQLProgress/>
 	{:else}

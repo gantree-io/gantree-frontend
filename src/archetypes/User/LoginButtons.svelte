@@ -1,19 +1,19 @@
 <script>
 	import { onMount } from 'svelte'
-	import UserStore from './store'
+	import AppStore from '@app/store'
 
 	export let providers = []
 	
 	let _username
 	let _status
 
-	UserStore.subscribe(({user, status})=> {
+	AppStore.subscribe(({user, status})=> {
 		_username = user.name
 		_status = status
 	});
 
 	onMount(() => {
-		UserStore.firebase.subscribe(({firebase, ui, uiConfig}) => {
+		AppStore.firebase.subscribe(({firebase, ui, uiConfig}) => {
 			ui.start('#firebaseui-auth-container', {
 				signInFlow: 'popup',
 				signInSuccessUrl: '/',
@@ -41,7 +41,7 @@
 	[loading]
 {:else if _status === 'authenticated'}
 	<p>logged in as {_username}</p>
-	<button on:click={UserStore.logout}>logout</button>
+	<button on:click={AppStore.logout}>logout</button>
 {/if}
 
 <div id='firebaseui-auth-container' data-status={_status}/>

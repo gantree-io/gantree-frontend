@@ -48,9 +48,7 @@
 	_toast.neutral = (text, duration) => _add(Type.NEUTRAL, text, duration)
 
 	export const toast = _toast
-
 </script>
-
 
 <script>
 	import { fly } from 'svelte/transition';

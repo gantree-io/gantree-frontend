@@ -4,7 +4,7 @@
 	import Paper, { Title } from '@smui/paper';
 	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
-	import { Drawer } from '@app/store.js';
+	import { open as OpenDrawer } from '@components/Drawer.svelte';
 
 	//import NodeIndex, { actions } from '@archetypes/Node/Index.svelte'
 	import NetworkDetail from './Detail.svelte'
@@ -74,7 +74,7 @@
 	}
 </style>
 
-<Paper class='team-teaser' on:click={() => Drawer.open(NetworkDetail, {_id: _id})} elevation="4">
+<Paper class='team-teaser' on:click={() => OpenDrawer(NetworkDetail, {_id: _id})} elevation="4">
 	<div>
 		<Title><Icon class="material-icons">blur_on</Icon>&nbsp;{name}</Title>
 	</div>

@@ -1,7 +1,7 @@
 <script>
 	import PubSub from 'pubsub-js'
 	import config from './actions.js' 
-	import { Drawer } from '@app/store.js';
+	import { close as CloseDrawer } from '@components/Drawer.svelte';
 	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Button, {Label} from '@smui/button';
@@ -48,7 +48,7 @@
 					config.delete(configId)
 						.then(result => {
 							toast.warning(`Config deleted`)
-							Drawer.close()
+							CloseDrawer()
 							PubSub.publish('CONFIG.DELETE');
 						})
 

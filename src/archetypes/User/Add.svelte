@@ -5,22 +5,11 @@
 	import Form, { Step, Field, validate } from '@components/Form'
 	import ConfigStore from '@archetypes/Config/store'
 	import { toast } from '@components/Toaster.svelte'
-	import Network from './store.js'
+	import User from './store.js'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
 
-	let subtitle = 1
-
-	// const mutationQuery = `
-	// 	mutation addNetwork($name: String!, $chainspec: JSON!) {
-	// 		addNetwork(name: $name, chainspec: $chainspec){
-	// 			_id
-	// 			name
-	// 		}
-	// 	}
-	// `;
-	
 	// get config options
 	let configOptions = {}
 	ConfigStore.fetchAll().then(configs => {
@@ -31,20 +20,17 @@
 		configOptions = options
 	})
 
-
 	const onSubmit = async ({fields, hasErrors, errors, setLoading}) => {
-		console.log(fields)
-		// if(!hasErrors){
-		// 	setLoading(true)
-		// 	Network.create(fields).then(data => {
-		// 		toast.success(`New network added: ${data.name}. Check the status on the networks page.`)
-		// 		onSuccess(data)
-		// 		setLoading(false)
-		// 		PubSub.publish('NETWORK.ADD');
-		// 	})
-		// }else{
-		// 	toast.warning(`Some fields have errors`)
-		// }
+		 if(!hasErrors){
+		 	setLoading(true)
+		 	User.add(fields).then(data => {
+		 		toast.success(`${data.email} added and invitation sent.`)
+		 		onSuccess(data)
+		 		setLoading(false)
+		 	})
+		 }else{
+		 	toast.warning(`Some fields have errors`)
+		 }
 	}
 </script>
 

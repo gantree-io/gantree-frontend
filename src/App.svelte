@@ -1,9 +1,9 @@
 <script>
 	import ApolloClient from "apollo-boost";
 	import { configure as GraphQLConfigure } from '@util/graphql' 
-	import { configure as SocketIOConfigure } from '@util/socketio' 
+	import Hotwire from '@util/hotwire' 
 	import Router from 'svelte-spa-router'
-	//import Panel from '@components/Panel.svelte'
+
 	import Drawer from '@components/Drawer.svelte'
 	import Modal from '@components/Modal.svelte'
 	import Toaster from '@components/Toaster.svelte'
@@ -17,9 +17,7 @@
 		uri: _env.GRAPHQL_URL || "http://localhost:4000/graphql",
 	})
 
-	SocketIOConfigure({
-		url: _env.SOCKETIO_URL || "http://localhost:3000",
-	})
+	Hotwire.configure({url: _env.SOCKETIO_URL})
 
 	const routes = {
 		'/': Home,

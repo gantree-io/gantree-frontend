@@ -1,14 +1,12 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
-	import _ from 'lodash'
+	import { onMount } from 'svelte';
 	import Paper, { Title } from '@smui/paper';
 	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
-	import { Drawer } from '@app/store.js';
+	import { open as OpenDrawer } from '@components/Drawer.svelte';
 
-	//import NodeIndex, { actions } from '@archetypes/Node/Index.svelte'
 	import NetworkDetail from './Detail.svelte'
-	import NetworkStore from './store.js'
+	import Hotwire from '@util/hotwire.js'
 
 	export let _id = null
 	export let name = null
@@ -17,17 +15,14 @@
 	let pendingCount = 0
 	let offlineCount = 0
 	
-	let statusSubscription
 	onMount(async () => {
-		statusSubscription = await NetworkStore.subscribe(_id, `STATUS`, ({nodes}) => {
-		 	onlineCount = nodes.online
-		 	pendingCount = nodes.pending
-		 	offlineCount = nodes.offline
-		 })
-	})
+		const unwatch = await Hotwire.subscribe(`${_id}.NODESTATUS`, ({nodes}) => {
+			onlineCount = nodes.online
+			pendingCount = nodes.pending
+			offlineCount = nodes.offline
+		})
 
-	onDestroy(() => {
-		NetworkStore.unsubscribe(statusSubscription)
+		return () => unwatch()
 	})
 </script>
 
@@ -74,7 +69,7 @@
 	}
 </style>
 
-<Paper class='network-teaser' on:click={() => Drawer.open(NetworkDetail, {_id: _id})} elevation="4">
+<Paper class='network-teaser' on:click={() => OpenDrawer(NetworkDetail, {_id: _id})} elevation="4">
 	<div>
 		<Title><Icon class="material-icons">blur_on</Icon>&nbsp;{name}</Title>
 	</div>
