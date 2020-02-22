@@ -171,8 +171,9 @@
 								<Text>Delete</Text>
 							</Item>
 						{:else}
-							<Item>
-								<Text>You keep on doing you!</Text>
+							<Item on:click={() => toast.success(`Oh, yes you do!`)}>
+								<Graphic class="material-icons">favorite</Graphic>
+								<Text>You look amazing today!</Text>
 							</Item>
 						{/if}
 

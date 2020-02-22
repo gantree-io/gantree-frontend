@@ -3,7 +3,7 @@
 	import Home from '@routes/DashboardOld/Home.svelte'
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
 	import Config from '@archetypes/Config/Index.svelte'
-	import Keys from '@routes/DashboardOld/Keys.svelte'
+	import Keys from '@archetypes/Keys/Index.svelte'
 	import Team from '@archetypes/Team/Index.svelte'
 	import Billing from '@routes/DashboardOld/Billing.svelte'
 	import Docs from '@routes/DashboardOld/Docs.svelte'

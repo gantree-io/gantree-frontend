@@ -1,6 +1,6 @@
 <script>
 	import ApolloClient from "apollo-boost";
-	import { configure as GraphQLConfigure } from '@util/graphql' 
+	import GraphQL from '@util/graphql' 
 	import Hotwire from '@util/hotwire' 
 	import Router from 'svelte-spa-router'
 
@@ -13,10 +13,11 @@
 	import Components from '@routes/Components.svelte'
 	import Four04 from '@routes/Four04.svelte'
 
-	GraphQLConfigure({
-		uri: _env.GRAPHQL_URL || "http://localhost:4000/graphql",
-	})
+	import store from './store'
+	import _ from 'lodash'
+	import { get } from 'svelte/store';
 
+	GraphQL.configure({uri: _env.GRAPHQL_URL, token: () => _.get(get(store), 'user.tokens.auth') })
 	Hotwire.configure({url: _env.SOCKETIO_URL})
 
 	const routes = {

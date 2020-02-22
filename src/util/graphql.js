@@ -5,21 +5,35 @@ import { gql as ApolloGQL } from 'apollo-boost';
 import { createHttpLink } from "apollo-link-http";
 import { onError } from "apollo-link-error";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { setContext } from 'apollo-link-context';
+
 
 let client = null
 
 export const gql = ApolloGQL
 
-export const configure = ({uri}) => {
+const configure = ({uri, token}) => {
 
 	const httpLink = createHttpLink({ uri: uri || "/graphql"});
+	
 	const errorLink = onError(({ networkError, graphQLErrors }) => {
 		console.log("graphQLErrors", graphQLErrors);
 		console.log("networkError", networkError);
 	});
 
+	const authLink = setContext((_x, { headers }) => {
+		let _token = token()
+
+		return {
+			headers: {
+				...headers,
+				authorization: _token ? `Bearer ${_token}` : "",
+			}
+		}
+	});
+
 	client = new ApolloClient({
-		link: errorLink.concat(httpLink),
+		link: authLink.concat(errorLink.concat(httpLink)),
 		cache: new InMemoryCache({addTypename: false}),
 		defaultOptions: {
 			watchQuery: {
