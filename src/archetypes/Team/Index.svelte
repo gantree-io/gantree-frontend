@@ -1,76 +1,40 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import _ from 'lodash'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
-	//import NetworkAdd from './Add.svelte'
-	import TeamStore from './store.js'
+	import Team, { fetchAll } from './store.js'
 	import AppStore from '@app/store.js'
 	import Hotwire from '@util/hotwire.js'
 
 	import UserTeaser from '@archetypes/User/Teaser.svelte'
 	import UserAdd from '@archetypes/User/Add.svelte'
 	
-	// const query = `
-	// 		query networks {
-	// 		networks{
-	// 			_id
-	// 			name
-	// 			nodes{
-	// 				status
-	// 			}
-	// 		}
-	// 		}
-	// 	`
-
-
-	// ugh! method
-	//  	let triggerRefetch;
-	//  	onMount(() => {
-	//  		PubSub.subscribe('TEAM.USER.DELETE', () => triggerRefetch());
-	//  		PubSub.subscribe('TEAM.USER.ADD', () => triggerRefetch());
-	//  	})
-	// 
-	//  	onDestroy(() => {
-	//  		PubSub.unsubscribe('TEAM.USER.DELETE');
-	//  		PubSub.unsubscribe('TEAM.USER.ADD');
-	//  	})
-
-	// socket method
-	//  	let statusSubscription
-	//  	onMount(async () => {
-	// 		statusSubscription = await TeamStore.subscribe(_id, `UPDATE`, ({nodes}) => {
-	// 			onlineCount = nodes.online
-	// 			pendingCount = nodes.pending
-	// 			offlineCount = nodes.offline
-	// 		})
-	//  	})
-	// 
-	//  	onDestroy(() => {
-	//  		TeamStore.unsubscribe(statusSubscription)
-	//  	})
-
 	let team
 	let teamOwnerID
 	let currentUserID
 
-	const fetchAll = () => {
-		TeamStore.fetchAll().then(_team => {
+	// helper function to fetch all users
+	// is called from multiple places
+	const _fetchAll = () => {
+		Team.query(fetchAll).then(_team => {
 			team = _team
 			teamOwnerID = _.get(_team, 'owner._id')
 		})
 	}
 
 	onMount(async () => {
-		fetchAll()
+		_fetchAll()
 
+		// get the curent user
 		AppStore.subscribe(({user}) => {
 			currentUserID = user._id
 		})
 
-		const unwatchAdd = await Hotwire.subscribe(`USER.ADD`, () => fetchAll())
-		const unwatchDelete = await Hotwire.subscribe(`USER.DELETE`, () => fetchAll())
+		// hotwire subscriptions
+		const unwatchAdd = await Hotwire.subscribe(`USER.ADD`, () => _fetchAll())
+		const unwatchDelete = await Hotwire.subscribe(`USER.DELETE`, () => _fetchAll())
 
 		return () => {
 			unwatchAdd()
@@ -101,7 +65,7 @@
 				callback: () => {
 					openModal(UserAdd, {
 						team_id:  _.get(team, '_id'),
-						onSuccess: () => modelClose()
+						onSuccess: () => closeModal()
 					})
 				}
 	 		}
@@ -113,25 +77,10 @@
 		<GraphQLProgress/>
 	{:else}
 		<p class="mdc-typography--body1">You can add and remove members of your team here. Please be aware that everyone in a team has full control over everything in your Paraplant environment, including other team members. Only invite those whom you fully trust.</p>
-		
 		{#each team.users as user}
 			<UserTeaser {...user} isTeamOwner={teamOwnerID === user._id} bossPrivileges={teamOwnerID === currentUserID}/>
 		{:else}
 			...nothing 
 		{/each}
-
-		<!-- <h2 class='mdc-typography--headline6'>Pending Users</h2>
-		{#each _users.pending as _user}
-			<UserTeaser {..._user} fullPrivileges={_isTeamOwner}/>
-		{:else}
-			...nothing 
-		{/each}
-
-		<h2 class='mdc-typography--headline6'>Inactive Users</h2>
-		{#each _users.inactive as _user}
-			<UserTeaser {..._user} fullPrivileges={_isTeamOwner}/>
-		{:else}
-			...nothing 
-		{/each} -->
 	{/if}
 </PanelLayout>

@@ -40,10 +40,20 @@ export const awaitQuery = (q, options={}) => {
 	}
 };
 
-export const query = async (q, options={}) => {
-	let result = await client.query({ query: ApolloGQL`${q}`, ...options})
-	return Object.values(result.data)[0]
-};
+export const query = async (q, variables={}, options={}) => new Promise(async (resolve, reject) => {
+	try {
+		let result = await client.query({ 
+			query: ApolloGQL`${q}`, 
+			variables: variables, 
+			...options
+		})
+		resolve(Object.values(result.data)[0])
+	} catch(e) {
+		// statements
+		reject(e);
+	}
+	
+});
 
 export const mutation = async (q, options={}) => {
 	let result = await client.mutate({ mutation: ApolloGQL`${q}`, ...options})

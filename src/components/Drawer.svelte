@@ -130,7 +130,7 @@
 		&[data-open='true']{
 			>.overlay{
 				background: rgba(0,0,0,0.8);
-				backdrop-filter: blur(0.1em);
+				//backdrop-filter: blur(0.1em);
 				width: 100vw;
 			}
 

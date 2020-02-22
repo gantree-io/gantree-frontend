@@ -5,7 +5,7 @@
 	import Form, { Step, Field, validate } from '@components/Form'
 	import ConfigStore from '@archetypes/Config/store'
 	import { toast } from '@components/Toaster.svelte'
-	import User from './store.js'
+	import User, { addUser } from './store'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
@@ -21,16 +21,17 @@
 	})
 
 	const onSubmit = async ({fields, hasErrors, errors, setLoading}) => {
-		 if(!hasErrors){
-		 	setLoading(true)
-		 	User.add(fields).then(data => {
-		 		toast.success(`${data.email} added and invitation sent.`)
-		 		onSuccess(data)
-		 		setLoading(false)
-		 	})
-		 }else{
-		 	toast.warning(`Some fields have errors`)
-		 }
+		let _t = toast.loading(`Inviting user...`)
+		if(!hasErrors){
+			setLoading(true)
+			User.query(addUser, fields).then(data => {
+				_t.success(`Invitation sent to ${data.email}`)
+				onSuccess(data)
+				setLoading(false)
+			})
+		}else{
+			_t.warning(`Some fields have errors`)
+		}
 	}
 </script>
 
@@ -54,17 +55,6 @@
 			submit: 'Invite'
 		}}
 		>
-
-		<Field
-			title='Name'
-			required
-			input={{
-				id: 'name',
-				type: 'text',
-				placeholder: "joe blogs",
-			}}
-		/>
-
 		<Field
 			title='Email'
 			required

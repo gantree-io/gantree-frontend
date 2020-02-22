@@ -12,27 +12,42 @@ export const UserStatus = {
 	AUTHENTICATED: 'authenticated'
 }
 
-const fetchUserByToken = token => {
-	const _q = `
-		query authByFirebaseToken($token: String!) {
-			authByFirebaseToken(token: $token) {
-				_id
-				name
-				email
-				uid
-				tokens{
-					auth
-					refresh
-				}
+const fetchUserByToken = `
+	query authByFirebaseToken($token: String!) {
+		authByFirebaseToken(token: $token) {
+			_id
+			name
+			email
+			uid
+			tokens{
+				auth
+				refresh
 			}
 		}
-	`;
+	}
+`;
 
-	return new Promise(async (resolve, reject) => {
-		let res = await query(_q, {variables: {token: token}})
-		resolve(res)
-	});
-}
+// const fetchUserByToken = token => {
+// 	const _q = `
+// 		query authByFirebaseToken($token: String!) {
+// 			authByFirebaseToken(token: $token) {
+// 				_id
+// 				name
+// 				email
+// 				uid
+// 				tokens{
+// 					auth
+// 					refresh
+// 				}
+// 			}
+// 		}
+// 	`;
+// 
+// 	return new Promise(async (resolve, reject) => {
+// 		let res = await query(_q, {variables: {token: token}})
+// 		resolve(res)
+// 	});
+// }
 
 export default (() => {
 	const defaultProps = {
@@ -52,7 +67,7 @@ export default (() => {
 		}))
 
 		firebaseUser.getIdToken().then(token => {
-			fetchUserByToken(token).then(user => {
+			query(fetchUserByToken, {token: token}).then(user => {
 				update(props => ({
 					...props,
 					user: user,

@@ -17,7 +17,7 @@
 
 <style lang="scss">
 	.form-button-group{
-		margin: 3em 0 0 0;
+		margin: 0;
 		display: block;
 		display: flex;
 		justify-content: flex-end;

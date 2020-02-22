@@ -4,16 +4,29 @@
 
 	const items = []
 	const { subscribe, set } = writable(items);
-	const Type = {
+	const types = {
 		SUCCESS: 'SUCCESS',
 		WARNING: 'WARNING',
 		ERROR: 'ERROR',
 		NOTIFICATION: 'NOTIFICATION',
 		NEUTRAL: 'NEUTRAL',
+		LOADING: 'LOADING',
 	}
 
 	const _remove = id => {
 		delete items[id]
+		set(items)
+	}
+
+	const _update = (id, type, text, duration=5000) => {
+		clearTimeout(items[id].closetimeout)
+		items[id].type = type
+		items[id].text = text
+		items[id].closetimeout = setTimeout(() => {
+			items[id].state = 'HIDE'
+			set(items)
+			setTimeout(() => _remove(id), 200)
+		}, duration)
 		set(items)
 	}
 
@@ -31,21 +44,31 @@
 		// set to in
 		setTimeout(() => {
 			items[id].state = 'SHOW'
-			set(items)
-			setTimeout(() => {
+			items[id].closetimeout = setTimeout(() => {
 				items[id].state = 'HIDE'
 				set(items)
 				setTimeout(() => _remove(id), 200)
 			}, duration)
+			set(items)
 		}, 10)
+
+		return {
+			success: (text, duration) => _update(id, types.SUCCESS, text, duration||2000),
+			warning: (text, duration) => _update(id, types.WARNING, text, duration||2000),
+			error: (text, duration) => _update(id, types.ERROR, text, duration||2000),
+			notification: (text, duration) => _update(id, types.NOTIFICATION, text, duration||2000),
+			neutral: (text, duration) => _update(id, types.NEUTRAL, text, duration||2000),
+			loading: (text, duration) => _update(id, types.LOADING, text, duration||2000),
+		}
 	}
 
-	const _toast = (text, duration) => _add(Type.NEUTRAL, text, duration)
-	_toast.success = (text, duration) => _add(Type.SUCCESS, text, duration)
-	_toast.warning = (text, duration) => _add(Type.WARNING, text, duration)
-	_toast.error = (text, duration) => _add(Type.ERROR, text, duration)
-	_toast.notification = (text, duration) => _add(Type.NOTIFICATION, text, duration)
-	_toast.neutral = (text, duration) => _add(Type.NEUTRAL, text, duration)
+	const _toast = (text, duration) => _add(types.NEUTRAL, text, duration)
+	_toast.success = (text, duration) => _add(types.SUCCESS, text, duration)
+	_toast.warning = (text, duration) => _add(types.WARNING, text, duration)
+	_toast.error = (text, duration) => _add(types.ERROR, text, duration)
+	_toast.notification = (text, duration) => _add(types.NOTIFICATION, text, duration)
+	_toast.neutral = (text, duration) => _add(types.NEUTRAL, text, duration)
+	_toast.loading = (text, duration) => _add(types.LOADING, text, duration||10000)
 
 	export const toast = _toast
 </script>
@@ -83,8 +106,11 @@
 			box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.2);
 
 			:global(.material-icons){
-				padding-right: 0.4em;
 				font-size: 1em;
+			}
+
+			.text{
+				padding-left: 0.5em;
 			}
 			
 			&[data-state='HIDE']{
@@ -99,6 +125,15 @@
 			&[data-type='ERROR']{ background: var(--color-status-error) }
 			&[data-type='NOTIFICATION']{ background: var(--color-status-notification) }
 			&[data-type='NEUTRAL']{ background: var(--color-status-neutral); color: var(--color-dark) }
+			&[data-type='LOADING']{ 
+				background: var(--color-status-notification);
+				:global(.material-icons){
+					animation-name: spin;
+					animation-duration: 4000ms;
+					animation-iteration-count: infinite;
+					animation-timing-function: linear;
+				}
+			}
 		}
 
 
@@ -112,7 +147,8 @@
 			{#if item.type === 'WARNING'}<Icon class="material-icons">error</Icon>{/if}
 			{#if item.type === 'ERROR'}<Icon class="material-icons">cancel</Icon>{/if}
 			{#if item.type === 'NOTIFICATION'}<Icon class="material-icons">notifications</Icon>{/if}
-			{item.text}
+			{#if item.type === 'LOADING'}<Icon class="material-icons">cached</Icon>{/if}
+			<span class="text">{item.text}</span>
 		</span>
 	{/each}
 </span>

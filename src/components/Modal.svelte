@@ -86,12 +86,12 @@
 			position: absolute;
 			top: 0;
 			left: 0;
-			background: rgba(0,0,0,0.85);
+			background: rgba(0,0,0,0.9);
 			width: 100vw;
 			height: 100vh;
-			transition: background 0.4s;
+			transition: background 0.2s;
 			z-index: 1;
-			backdrop-filter: blur(0.1em);
+			/*backdrop-filter: blur(0.1em);*/
 		}
 
 		>.inner{
@@ -123,6 +123,10 @@
 				transition: transform 0.1s;
 			}
 
+			:global(.layout-panel > .body){
+				height: auto;
+				overflow: hidden;
+			}
 		}
 		&[data-status="CLOSING"],
 		&[data-status="CLOSED"]{

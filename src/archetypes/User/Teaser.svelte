@@ -5,9 +5,10 @@
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
+	import { toast } from '@components/Toaster.svelte'
 	
+	import User, { resendInvitation, activate, deactivate, deleteUser } from './store'
 	import AppStore from '@app/store'
-	import User from './store'
 	import Hotwire from '@util/hotwire.js'
 
 	export let _id
@@ -137,31 +138,35 @@
 					<List dense>
 						{#if !isTeamOwner}
 							{#if status === 'ACTIVE'}
-								<Item>
+								<Item on:click={() => console.log('todo')}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Make Team Owner</Text>
 								</Item>
-								<Item on:click={() => User.deactivate(_id)}>
+								<Item on:click={() => User.query(deactivate, {_id: _id}).then(() => toast.warning(`User deactivated`))}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Deactivate</Text>
 								</Item>
 							{/if}
 
 							{#if status === 'INVITATION_SENT'}
-								<Item on:click={() => User.resendInvitation(_id)}>
+								<Item 
+									on:click={() => {
+										const _t = toast.loading(`Resending invitation...`)
+										User.query(resendInvitation, {_id: _id}).then(() => _t.success(`Invitation sent!`))
+									}}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Resend Invitation</Text>
 								</Item>
 							{/if}
 
 							{#if status === 'INACTIVE'}
-								<Item on:click={() => User.activate(_id)}>
+								<Item on:click={() => User.query(activate, {_id: _id}).then(() => toast.success(`User activated`))}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Activate</Text>
 								</Item>
 							{/if}
 
-							<Item on:click={() => User.delete(_id)}>
+							<Item on:click={() => User.query(deleteUser, {_id: _id}).then(() => toast.success(`User deleted`))}>
 								<Graphic class="material-icons">person</Graphic>
 								<Text>Delete</Text>
 							</Item>
