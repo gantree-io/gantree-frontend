@@ -6,7 +6,7 @@ import { createHttpLink } from "apollo-link-http";
 import { onError } from "apollo-link-error";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { setContext } from 'apollo-link-context';
-
+import { replace, location } from 'svelte-spa-router'
 
 let client = null
 
@@ -17,8 +17,23 @@ const configure = ({uri, token}) => {
 	const httpLink = createHttpLink({ uri: uri || "/graphql"});
 	
 	const errorLink = onError(({ networkError, graphQLErrors }) => {
-		console.log("graphQLErrors", graphQLErrors);
-		console.log("networkError", networkError);
+		if(graphQLErrors){
+			const error = graphQLErrors[0]
+			const message = error.message
+			const code = error.extensions.code
+
+			let _location = '/'
+
+			location.subscribe(val => _location = val) 
+
+			if(code === 'UNAUTHENTICATED'){
+				replace(`/authenticate${_location}`)
+			}
+		}
+
+		if(networkError){
+			console.log('todo')
+		}
 	});
 
 	const authLink = setContext((_x, { headers }) => {
@@ -63,10 +78,8 @@ export const query = async (q, variables={}, options={}) => new Promise(async (r
 		})
 		resolve(Object.values(result.data)[0])
 	} catch(e) {
-		// statements
 		reject(e);
 	}
-	
 });
 
 export const mutation = async (q, options={}) => {

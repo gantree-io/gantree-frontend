@@ -152,7 +152,7 @@
 								<Item 
 									on:click={() => {
 										const _t = toast.loading(`Resending invitation...`)
-										User.query(resendInvitation, {_id: _id}).then(() => _t.success(`Invitation sent!`))
+										User.query(resendInvitation, {_id: _id}).then(() => _t.success(`Invitation resent!`))
 									}}>
 									<Graphic class="material-icons">person</Graphic>
 									<Text>Resend Invitation</Text>

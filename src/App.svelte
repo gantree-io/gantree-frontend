@@ -10,6 +10,7 @@
 
 	import Home from '@routes/Home.svelte'
 	import Dashboard from '@routes/Dashboard.svelte'
+	import Authenticate from '@routes/Authenticate.svelte'
 	import Components from '@routes/Components.svelte'
 	import Four04 from '@routes/Four04.svelte'
 
@@ -24,6 +25,7 @@
 		'/': Home,
 		'/dashboard': Dashboard,
 		'/dashboard/*': Dashboard,
+		'/authenticate/*': Authenticate,
 		'/components': Components,
 		'*': Four04
 	}
@@ -100,6 +102,19 @@
 	@keyframes -global-spin {
 		from {transform:rotate(0deg);}
 		to {transform:rotate(360deg);}
+	}
+
+	@keyframes -global-pulse {
+		0% {opacity: 1}
+		50% {opacity: 0.2}
+		100% {opacity: 1}
+	}
+
+	:global(.material-icons.-animation-pulse){
+		animation-name: pulse;
+		animation-duration: 1000ms;
+		animation-iteration-count: infinite;
+		animation-timing-function: ease;
 	}
 </style>
 

@@ -4,7 +4,7 @@
 	import { Icon } from '@smui/common';
 	import Tooltip from '@components/Tooltip.svelte'
 	import { FIELDS } from './Wrapper.svelte';
-	import { Text, Select, File, Json, Switch } from './fields';
+	import { Text, Textarea, Select, File, Json, Switch } from './fields';
 	
 	export let title;
 	export let subtitle = null;
@@ -84,7 +84,8 @@
 		}
 
 		:global(input),
-		:global(select){
+		:global(select),
+		:global(textarea){
 			margin: 0.2em 0;
 			display: block;
 			width: 100%;
@@ -142,6 +143,8 @@
 		<File {...input} bind:file={value}/>
 	{:else if input.type === 'switch'}
 		<Switch {...input} bind:value={value}/>
+	{:else if input.type === 'textarea'}
+		<Textarea {...input} bind:value={value}/>
 	{/if}
 
 	{#if subtitle}<span class="subtitle">{subtitle}</span>{/if}

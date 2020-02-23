@@ -10,7 +10,7 @@
 	
 	export let buttons = {}
 	export let onSubmit = () => {}
-	//export let onCancel = () => {}
+	export let onCancel = () => {}
 	export let onStep = () => {}
 	
 

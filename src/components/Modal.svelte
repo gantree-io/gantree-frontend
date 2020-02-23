@@ -103,7 +103,7 @@
 			width: 90vw;
 			height: auto;
 			max-width: 40rem;
-			max-height: 30rem;
+			//max-height: 30rem;
 			padding: 0;
 			opacity: 1;
 			transition: all 0.15s ease-out;

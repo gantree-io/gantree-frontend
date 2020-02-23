@@ -2,6 +2,7 @@
 import Wrapper from "./Wrapper.svelte";
 import Step from "./Step.svelte";
 import Field from "./Field.svelte";
+import Hidden from "./Hidden.svelte";
 
 // buttons
 import ButtonGroup from "./buttons/ButtonGroup.svelte";
@@ -18,6 +19,7 @@ export default Wrapper
 export {
 	Step,
 	Field,
+	Hidden,
 	ButtonGroup,
 	SubmitButton,
 	CancelButton,
