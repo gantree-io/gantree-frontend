@@ -5,11 +5,9 @@ export const fetchAll = `
 	query keys {
 		keys {
 			_id
-			key
 			provider
 		}
 	}`
-
 
 // mutations
 export const addKey = `

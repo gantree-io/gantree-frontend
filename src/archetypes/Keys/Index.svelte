@@ -4,27 +4,14 @@
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Keys, { fetchAll } from './store.js'
-	import Hotwire from '@util/hotwire.js'
+	import Hotwire from '@components/Hotwire.svelte'
 	import KeyTeaser from './Teaser.svelte'
 	
 	let keys
 
-	//const _fetchAll = () => Keys.query(fetchAll).then(_keys => keys = _keys)
-
-	onMount(async () => {
-		const _fetchAll = () => Keys.query(fetchAll).then(_keys => keys = _keys)
-		
-		_fetchAll()
-
-		// hotwire subscriptions
-		const unwatchAdd = await Hotwire.subscribe(`KEY.ADD`, () => _fetchAll())
-		const unwatchDelete = await Hotwire.subscribe(`KEY.DELETE`, () => _fetchAll())
-
-		return () => {
-			unwatchAdd()
-			unwatchDelete()
-		}
-	})
+	const _fetchAll = () => Keys.query(fetchAll).then(_keys => keys = _keys)
+	
+	onMount(() => _fetchAll())
 </script>
 
 <style>
@@ -37,20 +24,34 @@
 	}
 </style>
 
-<PanelLayout 
-	header={{
-		title: 'Keys',
-		//subtitle: _.get(team, 'name'),
-		icon: 'vpn_key',
-	}}
-	showBreadcrumbs
+<Hotwire
+	subscriptions={[
+		{
+			event: 'KEY.ADD',
+			callback: () => _fetchAll()
+		},
+		{
+			event: 'KEY.DELETE',
+			callback: () => _fetchAll()
+		}
+	]}
 	>
-	<p class="mdc-typography--body1">In order to deploy blockchain nodes on your own infrastructure, Paraplant needs access to your cloud accounts.</p>
-	{#if !keys}
-		<GraphQLProgress/>
-	{:else}
-		<KeyTeaser provider="DO" name='Digital Ocean' {..._.find(keys, {provider: 'DO'})}/>
-		<KeyTeaser provider="AWS" name='Amazon Web Services' {..._.find(keys, {provider: 'AWS'})}/>
-		<KeyTeaser provider="GCP" name='Google Cloud Services' {..._.find(keys, {provider: 'GCP'})}/>
-	{/if}
-</PanelLayout>
+
+	<PanelLayout 
+		header={{
+			title: 'Keys',
+			//subtitle: _.get(team, 'name'),
+			icon: 'vpn_key',
+		}}
+		showBreadcrumbs
+		>
+		<p class="mdc-typography--body1">In order to deploy blockchain nodes on your own infrastructure, Paraplant needs access to your cloud accounts.</p>
+		{#if !keys}
+			<GraphQLProgress/>
+		{:else}
+			<KeyTeaser provider="DO" name='Digital Ocean' {..._.find(keys, {provider: 'DO'})}/>
+			<KeyTeaser provider="AWS" name='Amazon Web Services' {..._.find(keys, {provider: 'AWS'})}/>
+			<KeyTeaser provider="GCP" name='Google Cloud Services' {..._.find(keys, {provider: 'GCP'})}/>
+		{/if}
+	</PanelLayout>
+</Hotwire>

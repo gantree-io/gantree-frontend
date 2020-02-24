@@ -1,35 +1,16 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import Paper, { Title, Subtitle, Content} from '@smui/paper';
+	import Paper, { Title, Content} from '@smui/paper';
 	import { Icon } from '@smui/common';
-	import Menu from '@smui/menu';
-	import Button, {Label} from '@smui/button';
-	import List, {Item, Text, Separator, Graphic} from '@smui/list';
-	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
+	import Button, { Label } from '@smui/button';
 	import { toast } from '@components/Toaster.svelte'
 	import { open as OpenModal, close as CloseModal} from '@components/Modal.svelte'
 	import Key, { deleteKey } from './store'
-
 	import KeyAdd from './Add.svelte'
 	
-	//import User, { resendInvitation, activate, deactivate, deleteUser } from './store'
-	//import AppStore from '@app/store'
-	import Hotwire from '@util/hotwire.js'
-
 	export let _id
 	export let provider
 	export let name
-	export let key
-	
-	let menu;
-	let menuAnchor;
-
-	onMount(async () => {
-		const unwatch = await Hotwire.subscribe(`${_id}.UPDATE`, _key => {
-			key = _key
-		})
-		return () => unwatch()
-	})
 </script>
 
 <style lang="scss">
@@ -48,7 +29,12 @@
 			align-items: flex-end;
 
 			:global(.material-icons){
-				color: var(--color-status-error);
+				&.key{
+					margin-left: -0.1em;
+					width: 0.5em;
+					overflow: hidden;
+					direction: rtl;
+				}
 			}
 
 			:global(.smui-paper__title){
@@ -84,6 +70,7 @@
 
 		&[data-active='false']{
 			background-color: var(--color-dark-grey);
+			opacity: 0.9;
 
 			.title{
 				:global(.material-icons){
@@ -96,16 +83,16 @@
 	}
 </style>
 
-<Paper class='key-teaser' data-active={!!key} elevation={key ? 4 : 0}>
+<Paper class='key-teaser' data-active={!!_id} elevation={_id ? 4 : 0}>
 	<div class='title'>
-		<!-- <Icon class='material-icons'>vpn_key</Icon> -->
-		<Icon class='material-icons'>{!!key ? 'check_circle' : 'cancel'}</Icon>
+		<Icon class='material-icons'>{!!_id ? 'check_circle' : 'cancel'}</Icon>
+		<Icon class='material-icons key'>vpn_key</Icon>
 		<Title>{provider}</Title>
 		<Content>{name}</Content>
 	</div>
 	<div class='controls'>
 		<div class={`mdc-typography--caption`}>
-			{#if key}
+			{#if _id}
 				<Button 
 					on:click={() => {
 						Key.query(deleteKey, {_id: _id}).then(() => {
@@ -113,7 +100,7 @@
 						})
 					}}
 					>
-					remove
+					<Label>Delete Key</Label>
 					<Icon class='material-icons'>close</Icon>
 				</Button>
 			{:else}
@@ -126,36 +113,10 @@
 						})
 					}}
 					>
-					Configure Key&nbsp;&nbsp;
-					<Icon class='material-icons'>vpn_key</Icon>
+					<Label>Add Key</Label>
+					<Icon class='material-icons'>add</Icon>
 				</Button>
 			{/if}
 		</div>
-
-		<!-- <div class='menu' bind:this={menuAnchor}>
-			<IconButton on:click={() => menu.setOpen(true)}>
-				<IconButtonIcon class="material-icons">menu</IconButtonIcon>
-			</IconButton>
-			<Menu 
-				bind:this={menu} 
-				bind:anchorElement={menuAnchor} 
-				anchorCorner="BOTTOM_LEFT"
-				>
-				<List dense>
-					{#if !key}
-						<Item on:click={() => console.log('todo: add')}>
-							<Graphic class="material-icons">person</Graphic>
-							<Text>Add Key</Text>
-						</Item>
-					{:else}
-						<Item on:click={() => console.log('todo: delete')}>
-							<Graphic class="material-icons">person</Graphic>
-							<Text>Delete Key</Text>
-						</Item>
-					{/if}
-				</List>
-			</Menu>
-		</div> -->
-
 	</div>
 </Paper>

@@ -1,38 +1,73 @@
 <script>
 	import ApolloClient from "apollo-boost";
 	import GraphQL from '@util/graphql' 
-	import Hotwire from '@util/hotwire' 
-	import Router from 'svelte-spa-router'
+	import { configure as configureHotwire } from '@components/Hotwire.svelte' 
+	import AuthRouter, { configure as configureAuthRouter } from '@components/AuthRouter.svelte' 
+	
 
 	import Drawer from '@components/Drawer.svelte'
 	import Modal from '@components/Modal.svelte'
 	import Toaster from '@components/Toaster.svelte'
 
+	// routes
 	import Home from '@routes/Home.svelte'
-	import Dashboard from '@routes/Dashboard.svelte'
 	import Authenticate from '@routes/Authenticate.svelte'
-	import Components from '@routes/Components.svelte'
+	import Dashboard from '@routes/Dashboard.svelte'
+	import Account from '@routes/Account.svelte'
+	import AccountSetup from '@routes/AccountSetup.svelte'
 	import Four04 from '@routes/Four04.svelte'
+	// --> dashboard routes
+	import DashboardHome from '@routes/DashboardOld/Home.svelte'
+	import Network from '@archetypes/Network/Index.svelte'
+	import Config from '@archetypes/Config/Index.svelte'
+	import Keys from '@archetypes/Keys/Index.svelte'
+	import Team from '@archetypes/Team/Index.svelte'
+	import Billing from '@routes/DashboardOld/Billing.svelte'
+	import Docs from '@routes/DashboardOld/Docs.svelte'
 
-	import store from './store'
+
+	import AppStore, { UserStatus, AccountStatus } from './store'
 	import _ from 'lodash'
 	import { get } from 'svelte/store';
 
-	GraphQL.configure({uri: _env.GRAPHQL_URL, token: () => _.get(get(store), 'user.tokens.auth') })
-	Hotwire.configure({url: _env.SOCKETIO_URL})
+	// configure graphql
+	GraphQL.configure({
+		uri: _env.GRAPHQL_URL, 
+		token: () => _.get(get(AppStore), 'user.tokens.auth') 
+	})
+	
+	// configure hotwire
+	configureHotwire({url: _env.SOCKETIO_URL})
+	
+	// configure the router
+	configureAuthRouter({
+		notFound: Four04,
+		authRoute: '/authenticate',
+		onPrivateRoute: ({push, location}) => {
+			AppStore.subscribe(({userStatus, accountStatus}) => {
+				// not authenticated? push to auth page
+				if(userStatus !== UserStatus.AUTHENTICATED) push(`/authenticate`)
+				// account not complete? push to account/setup page 
+				if(accountStatus === AccountStatus.INCOMPLETE) push(`/account/setup`)
+			})
+		}
+	})
 
 	const routes = {
-		'/': Home,
-		'/dashboard': Dashboard,
-		'/dashboard/*': Dashboard,
-		'/authenticate/*': Authenticate,
-		'/components': Components,
-		'*': Four04
+		public: {
+			'/': Home,
+			'/authenticate': Authenticate,
+		},
+		private: {
+			'/dashboard': Dashboard,
+			'/dashboard/*': Dashboard,
+			'/account': Account,
+			'/account/setup': AccountSetup,
+		}
 	}
 </script>
 
 <svelte:head>
-	<!-- <link href="https://fonts.googleapis.com/css?family=Merriweather:300,700|Open+Sans:300,400&display=swap" rel="stylesheet"> -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
@@ -118,7 +153,8 @@
 	}
 </style>
 
-<Router {routes}/>
+<AuthRouter {routes}/>
+<!-- <Router {routes}/> -->
 <Drawer/>
 <Modal/>
 <Toaster/>

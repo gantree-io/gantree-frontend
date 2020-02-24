@@ -2,7 +2,7 @@
 	import { writable } from 'svelte/store';
 	import md5 from 'md5'
 
-	const items = []
+	const items = {}
 	const { subscribe, set } = writable(items);
 	const types = {
 		SUCCESS: 'SUCCESS',
@@ -19,15 +19,17 @@
 	}
 
 	const _update = (id, type, text, duration=5000) => {
-		clearTimeout(items[id].closetimeout)
-		items[id].type = type
-		items[id].text = text
-		items[id].closetimeout = setTimeout(() => {
-			items[id].state = 'HIDE'
+		if(items[id]){
+			clearTimeout(items[id].closetimeout)
+			items[id].type = type
+			items[id].text = text
+			items[id].closetimeout = setTimeout(() => {
+				items[id].state = 'HIDE'
+				set(items)
+				setTimeout(() => _remove(id), 200)
+			}, duration)
 			set(items)
-			setTimeout(() => _remove(id), 200)
-		}, duration)
-		set(items)
+		}
 	}
 
 	const _add = (type, text, duration=5000) => {
@@ -74,14 +76,19 @@
 </script>
 
 <script>
+	import { onDestroy } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { bounceInOut } from 'svelte/easing';
 	import { Icon } from '@smui/common';
 
- 	let items = {}
+ 	let _items = {}
  	subscribe(data => {
- 		items = data
+ 		_items = data
  	});
+
+ 	onDestroy(() => {
+ 		console.log(111, 222, _items)
+ 	})
 </script>
 
 <style lang="scss">
@@ -141,7 +148,7 @@
 </style>
 
 <span class='toaster'>
-	{#each Object.values(items) as item}
+	{#each Object.values(_items) as item}
 		<span class="slice" data-state={item.state} data-type={item.type}>
 			{#if item.type === 'SUCCESS'}<Icon class="material-icons">check_circle</Icon>{/if}
 			{#if item.type === 'WARNING'}<Icon class="material-icons">error</Icon>{/if}

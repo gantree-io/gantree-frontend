@@ -19,7 +19,6 @@ const _connect = () => io(_url || "http://localhost:3000", {
 const _useSocket = () => new Promise((resolve, reject) => {
 	if(!_socket){
 		_socket = _connect()
-		_socket
 			.on('connect', () => resolve(_socket))
 			.on('reconnect', () => resolve(_socket))
 			.on('disconnect', () => _connect())
@@ -35,16 +34,16 @@ const _configure = ({url}) => {
 // remove subscription by id 
 const _unsubscribe = async _id => {
 	const subscription = _subscriptions[_id]
-	const name = subscription.name
+	const event = subscription.event
 	delete subscription[_id]
 	
 	// TODO: check no more subscriptions to this room and leave
-	await _useSocket().then(_io => _io.emit('leaveroom', name))
+	_useSocket().then(_io => _io.emit('leaveroom', event))
 }
 
 // add new subscription & listen
 // return callback to unsubscribe
-const _subscribe = async (event, callback) => await _useSocket()
+const _subscribe = (event, callback) => _useSocket()
 	.then(_io => {
 		const _id = uuid()
 

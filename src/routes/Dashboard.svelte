@@ -1,5 +1,17 @@
 <script>
-	import Router from 'svelte-spa-router'
+	import { afterUpdate } from 'svelte'
+	import AuthRouter from '@components/AuthRouter.svelte' 
+ 	import _ from 'lodash'
+ 	import Drawer, {AppContent, Content, Header, Title, Subtitle} from '@smui/drawer';
+ 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
+ 	import { Icon } from '@smui/common';
+ 	import Button from '@smui/button';
+
+ 	import RandomQuote from '@components/RandomQuote.svelte'
+ 	import UserAccountMenu from '@archetypes/User/AccountMenu.svelte'
+ 	import AppStore, { AccountStatus } from '@app/store.js'
+	
+	// routes
 	import Home from '@routes/DashboardOld/Home.svelte'
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
 	import Config from '@archetypes/Config/Index.svelte'
@@ -8,41 +20,30 @@
 	import Billing from '@routes/DashboardOld/Billing.svelte'
 	import Docs from '@routes/DashboardOld/Docs.svelte'
 
-	//import ConfigAdd from '@archetypes/Config/Add.svelte'
-	
-
-	import { afterUpdate } from 'svelte';
- 	import { location } from 'svelte-spa-router'
- 	import _ from 'lodash'
-
- 	import Drawer, {AppContent, Content, Header, Title, Subtitle} from '@smui/drawer';
- 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
- 	import { Icon } from '@smui/common';
- 	import Button from '@smui/button';
- 
- 	import RandomQuote from '@components/RandomQuote.svelte'
- 	import UserAccountMenu from '@archetypes/User/AccountMenu.svelte'
  	
  	let active = {}
- 	//let breadcrumbs = [] 
- 	
- 	afterUpdate(() => {
- 		active = _.find(tabs, {href: `#${$location}`})
- 		//breadcrumbs = active.href.split('/').slice(0, -1)
- 	});
-
-
-
+	
+	// define the routes
+	// const routes = {
+	// 	'/': Home,
+	// 	'/networks': NetworkIndex,
+	// 	'/config': Config,
+	// 	'/keys': Keys,
+	// 	'/team': Team,
+	// 	'/billing': Billing,
+	// 	'/docs': Docs,
+	// }
 
 	const routes = {
-		'/': Home,
-		'/networks': NetworkIndex,
-		'/config': Config,
-		//'/configadd': ConfigAdd,
-		'/keys': Keys,
-		'/team': Team,
-		'/billing': Billing,
-		'/docs': Docs,
+		private: {
+			'/': Home,
+			'/networks': NetworkIndex,
+			'/config': Config,
+			'/keys': Keys,
+			'/team': Team,
+			'/billing': Billing,
+			'/docs': Docs,
+		}
 	}
 
 	const tabs = [
@@ -61,11 +62,6 @@
 			icon: 'settings',
 			href: '#/dashboard/config',
 		},
-		// {
-		// 	name: ' - Add Config',
-		// 	icon: 'settings',
-		// 	href: '#/dashboard/configadd',
-		// },
 		{
 			name: 'Keys',
 			icon: 'vpn_key',
@@ -87,6 +83,11 @@
 			href: '#/dashboard/docs'
 		}
 	]
+
+	afterUpdate(() => {
+		// set the active path
+		//active = _.find(tabs, {href: `#${$location}`})
+	});
 </script>
 
 <style lang="scss">
@@ -203,6 +204,6 @@
 	</Drawer>
 
 	<AppContent>
-		<Router {routes} prefix='/dashboard' />
+		<AuthRouter {routes} prefix='/dashboard' />
 	</AppContent>
 </main>

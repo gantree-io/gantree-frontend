@@ -1,33 +1,33 @@
 <script>
-	import { replace } from 'svelte-spa-router'
+	import { push, querystring } from 'svelte-spa-router'
 	import { Icon } from '@smui/common';
 	import { toast } from '@components/Toaster.svelte'
 	import Centered from '@layouts/Centered.svelte'
 	import AppStore, { UserStatus } from '@app/store'
+	import { parse } from 'qs'
 	
-	export let params = {}
-	export let redirect = `/${params.wild}` || '/'
+	let redirect = parse($querystring).redirect || '/dashboard'
 
 	let _t = toast.loading('... authenticating')
 
-	AppStore.subscribe(({status}) => {
-		switch (status) {
-			case  UserStatus.UNAUTHENTICATED:
-				_t.error('Authentication failed')
-				replace('/')
-				break;
-			case  UserStatus.LOADING:
-				// stay here while loading
-				break;
-			case  UserStatus.AUTHENTICATED:
-				_t.success(`Logged in!`)
-				replace(redirect)
-				break;
-			default:
-				// statements_def
-				break;
-		}
-	})
+	 AppStore.subscribe(({userStatus}) => {
+	 	switch (userStatus) {
+	 		case  UserStatus.UNAUTHENTICATED:
+	 			_t.error('Authentication failed')
+	 			push('/')
+	 			break;
+	 		case  UserStatus.LOADING:
+	 			// stay here while loading
+	 			break;
+	 		case  UserStatus.AUTHENTICATED:
+	 			_t.success(`Logged in!`)
+	 			push(redirect)
+	 			break;
+	 		default:
+	 			// statements_def
+	 			break;
+	 	}
+	 })
 </script>
 
 <style lang="scss">

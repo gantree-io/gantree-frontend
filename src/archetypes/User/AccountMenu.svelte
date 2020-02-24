@@ -13,9 +13,9 @@
 	let menu;
 	let menuAnchor;
 
-	AppStore.subscribe(({user, status})=> {
+	AppStore.subscribe(({user, userStatus})=> {
 		_username = user.name
-		_status = status
+		_status = userStatus
 	});
 </script>
 
@@ -58,7 +58,7 @@
 						<Graphic class="material-icons">person</Graphic>
 						<Text>My Team</Text>
 					</Item>
-					<Item on:click={AppStore.logout}>
+					<Item on:click={() => AppStore.logout()}>
 						<Graphic class="material-icons">power_settings_new</Graphic>
 						<Text>Logout</Text>
 					</Item>

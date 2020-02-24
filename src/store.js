@@ -12,6 +12,12 @@ export const UserStatus = {
 	AUTHENTICATED: 'authenticated'
 }
 
+export const AccountStatus = {
+	UNKNOWN: 'UNKNOWN',
+	INCOMPLETE: 'INCOMPLETE',
+	COMPLETE: 'COMPLETE',
+}
+
 const fetchUserByToken = `
 	query authByFirebaseToken($token: String!) {
 		authByFirebaseToken(token: $token) {
@@ -27,21 +33,35 @@ const fetchUserByToken = `
 	}
 `;
 
+export const setName = `
+	mutation setName($name: String!) {
+		setName(name: $name) {
+			name
+		}
+	}
+`;
+
 export default (() => {
 	const defaultProps = {
 		user: {},
 		firebaseUser: {},
-		status: UserStatus.LOADING
+		userStatus: UserStatus.LOADING,
+		accountStatus: AccountStatus.UNKNOWN
 	}
 	
 	const { set, update, subscribe } = writable(defaultProps);
+
+	// can be extended later to add more checks
+	const _determineAccountStatus = user => {
+		return user.name ? AccountStatus.COMPLETE : AccountStatus.INCOMPLETE
+	}
 	
-	const _handleLogin = (firebaseUser) => {
+	const _handleLogin = firebaseUser => {
 		update(props => ({
 			...props,
 			user: {},
 			firebaseUser: firebaseUser,
-			status: UserStatus.LOADING
+			userStatus: UserStatus.LOADING
 		}))
 
 		firebaseUser.getIdToken().then(token => {
@@ -49,11 +69,9 @@ export default (() => {
 				update(props => ({
 					...props,
 					user: user,
-					status: UserStatus.AUTHENTICATED
+					userStatus: UserStatus.AUTHENTICATED,
+					accountStatus: _determineAccountStatus(user)
 				}))
-				
-				//toast.success(`Login success!`)
-				//push('/dashboard')
 			})
 		})
 	}
@@ -61,11 +79,12 @@ export default (() => {
 	const _handleLogout = () => {
 		set({
 			...defaultProps,
-			status: UserStatus.UNAUTHENTICATED
+			userStatus: UserStatus.UNAUTHENTICATED,
+			accountStatus: AccountStatus.UNKNOWN
 		})
 		firebase.auth().signOut()
-		//toast.success(`You are logged out`)
-		//push('/')
+		toast.success(`You have been logged out`)
+		push('/')
 	}
 
 	firebase.initializeApp({
@@ -81,17 +100,33 @@ export default (() => {
 	firebase.auth().onAuthStateChanged(firebaseUser => {
 		firebaseUser
 			? _handleLogin(firebaseUser)
-			: _handleLogout()
+			: update({
+				...defaultProps,
+				userStatus: UserStatus.UNAUTHENTICATED,
+				accountStatus: AccountStatus.UNKNOWN
+			})
 	})
 	
 	return {
-		set,
+		//set,
 		subscribe,
 		firebase: writable({
 			firebase: firebase,
 			ui: new firebaseui.auth.AuthUI(firebase.auth(), () => {})
 		}),
-		logout: _handleLogout,
-		myself: () => defaultProps.user
+		setUserName: name => {
+			update(props => ({
+				...props,
+				user: {
+					...props.user,
+					name: name
+				},
+				accountStatus: AccountStatus.COMPLETE
+			}))
+		},
+		logout: () => _handleLogout(),
+		myself: () => defaultProps.user,
+		query: query,
+		mutation: mutation
 	}
 })()

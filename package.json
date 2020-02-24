@@ -29,6 +29,7 @@
     "md5": "^2.2.1",
     "node-sass": "^4.13.1",
     "pubsub-js": "^1.8.0",
+    "qs": "^6.9.1",
     "rollup-plugin-css-only": "^2.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-postcss": "^2.0.6",

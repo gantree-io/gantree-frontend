@@ -6,7 +6,7 @@
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
 	import Team, { fetchAll } from './store.js'
 	import AppStore from '@app/store.js'
-	import Hotwire from '@util/hotwire.js'
+	import Hotwire from '@components/hotwire.svelte'
 
 	import UserTeaser from '@archetypes/User/Teaser.svelte'
 	import UserAdd from '@archetypes/User/Add.svelte'
@@ -28,18 +28,7 @@
 		_fetchAll()
 
 		// get the curent user
-		AppStore.subscribe(({user}) => {
-			currentUserID = user._id
-		})
-
-		// hotwire subscriptions
-		const unwatchAdd = await Hotwire.subscribe(`USER.ADD`, () => _fetchAll())
-		const unwatchDelete = await Hotwire.subscribe(`USER.DELETE`, () => _fetchAll())
-
-		return () => {
-			unwatchAdd()
-			unwatchDelete()
-		}
+		AppStore.subscribe(({user}) => currentUserID = user._id)
 	})
 </script>
 
@@ -53,34 +42,47 @@
 	}
 </style>
 
-<PanelLayout 
-	header={{
-		title: 'Team',
-		subtitle: _.get(team, 'name'),
-		icon: 'people',
-		actions: [
-	 		{
-				text: 'Invite Someone',
-				icon: 'person_add',
-				callback: () => {
-					openModal(UserAdd, {
-						team_id:  _.get(team, '_id'),
-						onSuccess: () => closeModal()
-					})
-				}
-	 		}
-	 	]
-	}}
-	showBreadcrumbs
+<Hotwire
+	subscriptions={[
+		{
+			event: `USER.ADD`,
+			callback: () => _fetchAll()
+		},
+		{
+			event: `USER.DELETE`,
+			callback: () => _fetchAll()
+		}
+	]}
 	>
-	{#if !_.get(team, 'users')}
-		<GraphQLProgress/>
-	{:else}
-		<p class="mdc-typography--body1">You can add and remove members of your team here. Please be aware that everyone in a team has full control over everything in your Paraplant environment, including other team members. Only invite those whom you fully trust.</p>
-		{#each team.users as user}
-			<UserTeaser {...user} isTeamOwner={teamOwnerID === user._id} bossPrivileges={teamOwnerID === currentUserID}/>
+	<PanelLayout 
+		header={{
+			title: 'Team',
+			subtitle: _.get(team, 'name'),
+			icon: 'people',
+			actions: [
+		 		{
+					text: 'Invite Someone',
+					icon: 'person_add',
+					callback: () => {
+						openModal(UserAdd, {
+							team_id:  _.get(team, '_id'),
+							onSuccess: () => closeModal()
+						})
+					}
+		 		}
+		 	]
+		}}
+		showBreadcrumbs
+		>
+		{#if !_.get(team, 'users')}
+			<GraphQLProgress/>
 		{:else}
-			...nothing 
-		{/each}
-	{/if}
-</PanelLayout>
+			<p class="mdc-typography--body1">You can add and remove members of your team here. Please be aware that everyone in a team has full control over everything in your Paraplant environment, including other team members. Only invite those whom you fully trust.</p>
+			{#each team.users as user}
+				<UserTeaser {...user} isTeamOwner={teamOwnerID === user._id} bossPrivileges={teamOwnerID === currentUserID}/>
+			{:else}
+				...nothing 
+			{/each}
+		{/if}
+	</PanelLayout>
+</Hotwire>
