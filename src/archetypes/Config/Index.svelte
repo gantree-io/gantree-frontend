@@ -1,59 +1,58 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
-	import PubSub from 'pubsub-js'
+	import { onMount } from 'svelte';
 	import ConfigTeaser from '@archetypes/Config/Teaser.svelte'
-	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
 	import ConfigAdd from './Add.svelte'
+	import Hotwire from '@components/Hotwire.svelte'
+	import GraphQLProgress from '@components/GraphQLProgress.svelte'
+	import Config, { fetchAll } from './store.js'
 
-  	const query = `
- 		query configs {
-			configs{
-				_id
-				name
-			}
- 		}
- 	`;
-
- 	onMount(() => {
- 		PubSub.subscribe('CONFIG.DELETE', () => triggerRefetch());
- 		PubSub.subscribe('CONFIG.ADD', () => triggerRefetch());
- 	})
-
- 	onDestroy(() => {
- 		PubSub.unsubscribe('CONFIG.DELETE');
- 		PubSub.unsubscribe('CONFIG.ADD');
- 	})
-
- 	let triggerRefetch;
+  	let configs
+  	const _fetchAll = () => Config.query(fetchAll).then(_configs => configs = _configs)
+  	onMount(() => _fetchAll())
 </script>
 
-<PanelLayout 
-	header={{
-		title: 'Config',
-		icon: 'settings',
-		actions: [
-	 		{
-				text: 'Add Config',
-				icon: 'add',
-				callback: () => {
-					openModal(ConfigAdd, 
-						{
-							onSuccess: () => closeModal()
-						}
-					)
-				}
-	 		}
-		]
-	}}
-	showBreadcrumbs
+<Hotwire
+	subscriptions={[
+		{
+			event: 'CONFIG.ADD',
+			callback: () => _fetchAll()
+		},
+		{
+			event: 'CONFIG.DELETE',
+			callback: () => _fetchAll()
+		}
+	]}
 	>
-	<GraphQueryWrapper
-		query={query}
-		component={ConfigTeaser}
-		afterInit={({refetch}) => {
-			triggerRefetch = refetch
+	<PanelLayout 
+		header={{
+			title: 'Config',
+			icon: 'settings',
+			actions: [
+		 		{
+					text: 'Add Config',
+					icon: 'add',
+					callback: () => {
+						openModal(ConfigAdd, 
+							{
+								onSuccess: () => closeModal()
+							}
+						)
+					}
+		 		}
+			]
 		}}
-	/>
-</PanelLayout>
+		showBreadcrumbs
+		>
+		{#if !configs}
+			<GraphQLProgress/>
+		{:else}
+			{#each configs as config}
+				<ConfigTeaser {...config}/>
+			{:else}
+				...nothing 
+			{/each}
+		{/if}
+	</PanelLayout>
+</Hotwire>

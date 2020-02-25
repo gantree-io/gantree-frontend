@@ -1,9 +1,8 @@
 <script>
-	import _ from 'lodash'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Node from '@archetypes/Node/Teaser.svelte'
-	import NetworkStore from './store.js'
+	import Network, { fetchOne } from './store.js'
 	import Filterable from '@components/Filterable.svelte'
 	import { NodeFilterOptions } from './util'
 
@@ -13,7 +12,7 @@
 	let nodes
 	
 	// fetch items
-	NetworkStore.fetchOne(_id).then(data => {
+	Network.query(fetchOne, {_id: _id}).then(data => {
 		title = data.name
 		configName = data.config.name
 		nodes = data.nodes

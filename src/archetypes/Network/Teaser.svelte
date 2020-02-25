@@ -1,10 +1,16 @@
 <script>
 	import Paper, { Title } from '@smui/paper';
-	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
+	import Menu from '@smui/menu';
+	import List, {Item, Text, Separator, Graphic} from '@smui/list';
+	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
 	import { open as OpenDrawer } from '@components/Drawer.svelte';
+	import Badge from '@components/Badge.svelte'
 	import NetworkDetail from './Detail.svelte'
 	import Hotwire from '@components/Hotwire.svelte'
+	import { toast } from '@components/Toaster.svelte'
+	import { dialog } from '@components/Dialog.svelte'
+	import Network, { deleteNetwork } from './store.js'
 
 	export let _id = null
 	export let name = null
@@ -12,6 +18,8 @@
 	let onlineCount = 0
 	let pendingCount = 0
 	let offlineCount = 0
+	let menu;
+	let menuAnchor;
 </script>
 
 <style lang="scss">
@@ -33,7 +41,7 @@
 
 		* :global(.badge){
 			display: inline-flex;
-			margin-left: 1em;
+			margin-left: 0.5em;
 
 			:global(.value){
 				color: var(--color-dark)
@@ -74,9 +82,47 @@
 			<Title><Icon class="material-icons">blur_on</Icon>&nbsp;{name}</Title>
 		</div>
 		<div class='controls'>
-			<Badge value={onlineCount} label='Online' success disabled={!onlineCount}/>
-			<Badge value={pendingCount} label='Pending' warning disabled={!pendingCount}/>
-			<Badge value={offlineCount} label='Offline' error disabled={!offlineCount}/>
+			<Badge value={onlineCount} success disabled={!onlineCount}/>
+			<Badge value={pendingCount} warning disabled={!pendingCount}/>
+			<Badge value={offlineCount} error disabled={!offlineCount}/>
+
+			<div 
+				class='menu' 
+				bind:this={menuAnchor} 
+				on:click={e => {
+					e.preventDefault()
+					e.stopPropagation()
+				}}
+				>
+				<IconButton on:click={() => menu.setOpen(true)}>
+					<IconButtonIcon class="material-icons">menu</IconButtonIcon>
+				</IconButton>
+				<Menu 
+					bind:this={menu} 
+					bind:anchorElement={menuAnchor} 
+					anchorCorner="BOTTOM_LEFT"
+					>
+					<List dense>
+						<Item 
+							on:click={e => {
+								e.preventDefault()
+								e.stopPropagation()
+								dialog.warning({
+									title: "Confirm network deletion",
+									subtitle: 'Deleting this network will remove the network and all nodes. This cannot be undone',
+									confirmButton: 'Confirm Network Deletion',
+									onConfirm: () => Network.query(deleteNetwork, {_id: _id}).then(() => toast.success(`Network deleted`)),
+									cancelButton: 'Take me back!',
+									confirmWord: 'DELETE'
+								})
+							}}
+							>
+							<Graphic class="material-icons">delete</Graphic>
+							<Text>Delete</Text>
+						</Item>
+					</List>
+				</Menu>
+			</div>
 		</div>
 	</Paper>
 </Hotwire>

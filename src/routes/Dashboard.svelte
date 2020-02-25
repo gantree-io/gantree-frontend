@@ -12,32 +12,19 @@
  	import AppStore, { AccountStatus } from '@app/store.js'
 	
 	// routes
-	import Home from '@routes/DashboardOld/Home.svelte'
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
 	import Config from '@archetypes/Config/Index.svelte'
 	import Keys from '@archetypes/Keys/Index.svelte'
 	import Team from '@archetypes/Team/Index.svelte'
-	import Billing from '@routes/DashboardOld/Billing.svelte'
-	import Docs from '@routes/DashboardOld/Docs.svelte'
-
+	import Billing from '@archetypes/Pages/Billing.svelte'
+	import Docs from '@archetypes/Pages/Docs.svelte'
  	
  	let active = {}
 	
-	// define the routes
-	// const routes = {
-	// 	'/': Home,
-	// 	'/networks': NetworkIndex,
-	// 	'/config': Config,
-	// 	'/keys': Keys,
-	// 	'/team': Team,
-	// 	'/billing': Billing,
-	// 	'/docs': Docs,
-	// }
-
 	const routes = {
 		private: {
-			'/': Home,
-			'/networks': NetworkIndex,
+			'/': NetworkIndex,
+			//'/networks': NetworkIndex,
 			'/config': Config,
 			'/keys': Keys,
 			'/team': Team,
@@ -48,15 +35,15 @@
 
 	const tabs = [
 		{
-			name: 'Dashboard',
-			icon: 'dashboard',
-			href: '#/dashboard'
-		},
-		{
 			name: 'Networks',
 			icon: 'blur_on',
-			href: '#/dashboard/networks'
+			href: '#/dashboard'
 		},
+		// {
+		// 	name: 'Networks',
+		// 	icon: 'blur_on',
+		// 	href: '#/dashboard/networks'
+		// },
 		{
 			name: 'Configs',
 			icon: 'settings',

@@ -1,1 +1,0 @@
-<h1>Dashboard Config</h1>

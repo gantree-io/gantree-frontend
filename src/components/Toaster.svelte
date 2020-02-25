@@ -132,15 +132,7 @@
 			&[data-type='ERROR']{ background: var(--color-status-error) }
 			&[data-type='NOTIFICATION']{ background: var(--color-status-notification) }
 			&[data-type='NEUTRAL']{ background: var(--color-status-neutral); color: var(--color-dark) }
-			&[data-type='LOADING']{ 
-				background: var(--color-status-notification);
-				:global(.material-icons){
-					animation-name: spin;
-					animation-duration: 4000ms;
-					animation-iteration-count: infinite;
-					animation-timing-function: linear;
-				}
-			}
+			&[data-type='LOADING']{ background: var(--color-status-notification) }
 		}
 
 
@@ -154,7 +146,7 @@
 			{#if item.type === 'WARNING'}<Icon class="material-icons">error</Icon>{/if}
 			{#if item.type === 'ERROR'}<Icon class="material-icons">cancel</Icon>{/if}
 			{#if item.type === 'NOTIFICATION'}<Icon class="material-icons">notifications</Icon>{/if}
-			{#if item.type === 'LOADING'}<Icon class="material-icons">cached</Icon>{/if}
+			{#if item.type === 'LOADING'}<Icon class="material-icons -animation-spin">cached</Icon>{/if}
 			<span class="text">{item.text}</span>
 		</span>
 	{/each}

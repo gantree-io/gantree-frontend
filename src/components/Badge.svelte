@@ -44,5 +44,5 @@
 
 <span class='badge' class:success class:warning class:error class:disabled>
 	<span class="value">{value}</span>
-	<span class="label">{label}</span>
+	{#if label}<span class="label">{label}</span>{/if}
 </span>

@@ -1,77 +1,59 @@
 <script>
-	import PubSub from 'pubsub-js'
-	import config from './actions.js' 
+	import { onMount } from 'svelte';
+	import _ from 'lodash'
 	import { close as CloseDrawer } from '@components/Drawer.svelte';
-	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Button, {Label} from '@smui/button';
 	import { Icon } from '@smui/common';
 	import Json from '@components/Json.svelte'
 	import { toast } from '@components/Toaster.svelte'
+	import Hotwire from '@components/Hotwire.svelte'
+	import Config, { fetchOne } from './store.js'
+	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 
-	export let configId;
+	export let _id;
 
-	let title = '';
-	let chainspec = '234';
-	
-	const query = `
-		query config($id: String!) {
-			config(id: $id) {
-				_id
-				name
-				chainspec
-			}
-		}
-	`;
+	let config
+	const _fetchAll = () => Config.query(fetchOne, {_id: _id}).then(_config => config = _config)
+	onMount(() => _fetchAll())
 </script>
 
 <style lang="scss">
 </style>
 
-<PanelLayout 
-	header={{
-		title: title,
-		subtitle: 'chainspec.json',
-		actions: [
-	 		{
-				text: 'Copy',
-				icon: 'file_copy'
-	 		},
-	 		{
-				text: 'Download',
-				icon: 'get_app'
-	 		},
-	 		{
-				text: 'Delete',
-				icon: 'delete',
-				callback: () => {
-					config.delete(configId)
-						.then(result => {
-							toast.warning(`Config deleted`)
-							CloseDrawer()
-							PubSub.publish('CONFIG.DELETE');
-						})
-
-				}
-	 		}
-	 	]
-	}}
+<Hotwire
+	subscriptions={[
+		{
+			event: 'CONFIG.ADD',
+			callback: () => _fetchAll()
+		},
+		{
+			event: 'CONFIG.DELETE',
+			callback: () => _fetchAll()
+		}
+	]}
 	>
-	<GraphQueryWrapper
-		query={query}
-		variables={{
-			id: configId
+	<PanelLayout 
+		header={{
+			title: _.get(config, 'name'),
+			subtitle: 'chainspec.json',
+			actions: [
+		 		{
+					text: 'Copy',
+					icon: 'file_copy'
+		 		},
+		 		{
+					text: 'Download',
+					icon: 'get_app'
+		 		}
+		 	]
 		}}
-		component={Json}
-		props={{
-			highlight: true,
-			darktheme: true,
-			data: chainspec
-		}}
-		afterInit={({refetch, data}) => {
-			//triggerRefetch = refetch
-			title = data.name
-			chainspec = data.chainspec
-		}}
-	/>
-</PanelLayout>
+		>
+		
+		{#if !config}
+			<GraphQLProgress/>
+		{:else}
+			<Json data={config.chainspec} highlight darktheme/>
+		{/if}
+	</PanelLayout>
+</Hotwire>

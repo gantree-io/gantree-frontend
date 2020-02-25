@@ -9,7 +9,8 @@
 	// ---> global components
 	import Drawer from '@components/Drawer.svelte'
 	import Modal from '@components/Modal.svelte'
-	import Toaster, { toast } from '@components/Toaster.svelte'
+	import Toaster from '@components/Toaster.svelte'
+	import Dialog from '@components/Dialog.svelte'
 	// ---> routes
 	import Home from '@routes/Home.svelte'
 	import Authenticate from '@routes/Authenticate.svelte'
@@ -44,8 +45,11 @@
 			404: Error404,
 			503: Error503
 		},
-		onPrivateRoute: ({push}) => {
+		onPrivateRoute: ({push, location}) => {
 			AppStore.subscribe(({userStatus, accountStatus}) => {
+				// redirect /dashboard to /dashboard/networks
+				//if(location === '/dashboard') push(`/dashboard/networks`)
+				
 				// not authenticated? push to auth page
 				if(userStatus !== UserStatus.AUTHENTICATED) push(`/authenticate?redirect=${$location}`)
 				// account not complete? push to account/setup page 
@@ -152,9 +156,17 @@
 		animation-iteration-count: infinite;
 		animation-timing-function: ease;
 	}
+
+	:global(.material-icons.-animation-spin){
+		animation-name: spin;
+		animation-duration: 3000ms;
+		animation-iteration-count: infinite;
+		animation-timing-function: ease;
+	}
 </style>
 
 <AuthRouter {routes}/>
 <Drawer/>
 <Modal/>
 <Toaster/>
+<Dialog/>

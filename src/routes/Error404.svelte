@@ -27,7 +27,6 @@
 	}
 </style>
 
-
 <Centered>
 	<IconButton class={'home'} on:click={() => push('/')}>
 		<IconButtonIcon class="material-icons">home</IconButtonIcon>

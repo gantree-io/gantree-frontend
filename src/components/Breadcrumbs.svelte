@@ -2,7 +2,7 @@
 	import { afterUpdate } from 'svelte';
 	import { location } from 'svelte-spa-router'
 	import Link from "@components/Link.svelte";
-	import Icon from "@components/Icon.svelte";
+	import { Icon } from '@smui/common';
 	
 	let breadcrumbs = []
 
@@ -45,6 +45,11 @@
 		:global(svg){
 			display: block
 		}
+
+		:global(.material-icons.-home){
+			display: block;
+			font-size: 1.2em
+		}
 	}
 
 	.divider{
@@ -63,7 +68,8 @@
 	{#each breadcrumbs as breadcrumb}
 		<Link to={breadcrumb.url}>
 			{#if breadcrumb.title === '#'}
-				<Icon type='home'/>
+				<!-- <Icon type='home'/> -->
+				<Icon class="material-icons -home">house</Icon>
 			{:else}
 				{breadcrumb.title}
 			{/if}

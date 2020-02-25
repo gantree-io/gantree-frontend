@@ -6,7 +6,7 @@
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
 	import Team, { fetchAll } from './store.js'
 	import AppStore from '@app/store.js'
-	import Hotwire from '@components/hotwire.svelte'
+	import Hotwire from '@components/Hotwire.svelte'
 
 	import UserTeaser from '@archetypes/User/Teaser.svelte'
 	import UserAdd from '@archetypes/User/Add.svelte'

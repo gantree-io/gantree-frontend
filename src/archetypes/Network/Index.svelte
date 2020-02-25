@@ -1,59 +1,56 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
-	import NetworkTeaser from '@archetypes/Network/Teaser.svelte'
-	import GraphQueryWrapper from '@components/GraphQueryWrapper.svelte'
+	import { onMount } from 'svelte';
+	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
+	import Hotwire from '@components/Hotwire.svelte'
+	import Network, { fetchAll } from './store.js'
 	import NetworkAdd from './Add.svelte'
+	import NetworkTeaser from '@archetypes/Network/Teaser.svelte'
 	
-	const query = `
- 		query networks {
-			networks{
-				_id
-				name
-				nodes{
-					status
-				}
-			}
- 		}
- 	`
-
- 	let triggerRefetch;
-
- 	onMount(() => {
- 		PubSub.subscribe('NETWORK.DELETE', () => triggerRefetch());
- 		PubSub.subscribe('NETWORK.ADD', () => triggerRefetch());
- 	})
-
- 	onDestroy(() => {
- 		PubSub.unsubscribe('NETWORK.DELETE');
- 		PubSub.unsubscribe('NETWORK.ADD');
- 	})
+ 	let networks
+	const _fetchAll = () => Network.query(fetchAll).then(_networks => networks = _networks)
+	onMount(() => _fetchAll())
 </script>
 
-<PanelLayout 
-	header={{
-		title: 'Neworks',
-		icon: 'blur_on',
-		actions: [
-	 		{
-				text: 'Add New',
-				icon: 'add',
-				callback: () => {
-					openModal(NetworkAdd, {
-						onSuccess: () => closeModal()
-					})
-				}
-	 		}
-	 	]
-	}}
-	showBreadcrumbs
+<Hotwire
+	subscriptions={[
+		{
+			event: `NETWORK.ADD`,
+			callback: () => _fetchAll()
+		},
+		{
+			event: `NETWORK.DELETE`,
+			callback: () => _fetchAll()
+		}
+	]}
 	>
-	<GraphQueryWrapper
-		query={query}
-		component={NetworkTeaser}
-		afterInit={({refetch}) => {
-			triggerRefetch = refetch
+	<PanelLayout 
+		header={{
+			title: 'Neworks',
+			icon: 'blur_on',
+			actions: [
+		 		{
+					text: 'Add Network',
+					icon: 'add',
+					callback: () => {
+						openModal(NetworkAdd, {
+							onSuccess: () => closeModal()
+						})
+					}
+		 		}
+		 	]
 		}}
-	/>
-</PanelLayout>
+		showBreadcrumbs
+		>
+		{#if !networks}
+			<GraphQLProgress/>
+		{:else}
+			{#each networks as network}
+				<NetworkTeaser {...network}/>
+			{:else}
+				...nothing 
+			{/each}
+		{/if}
+	</PanelLayout>
+</Hotwire>

@@ -1,5 +1,5 @@
 <script>
-	import Icon from "@components/Icon.svelte";
+	import { Icon } from '@smui/common';
 
 	//export let type;
 	//https://api.whatdoestrumpthink.com/api/v1/quotes/random
@@ -21,6 +21,7 @@
 
 	q{
 		display: block;
+		line-height: 1.5em;
 	}
 
 	.cite{
@@ -31,16 +32,21 @@
 		line-height: 1em;
 	}
 
-	:global(.icon.trump){
+	:global(.material-icons.-quote),
+	:global(.material-icons.-loading){
 		font-size: 1.5rem;
+	}
+
+	:global(.material-icons.-quote){
+		display: block;
 	}
 </style>
 
 <span class='quote'>
 	{#await quote}
-		<Icon type='spinner'/>
+		<Icon class="material-icons -loading -animation-spin">autorenew</Icon>
 	{:then value}
-		<Icon type='trump'/>
+		<Icon class="material-icons -quote">format_quote</Icon>
 		<q>{value}</q>
 		<span class="cite"> - Donald Trump</span>
 	{/await}

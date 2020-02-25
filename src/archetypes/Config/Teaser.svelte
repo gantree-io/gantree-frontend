@@ -1,21 +1,20 @@
 <script>
-	import _ from 'lodash'
 	import Paper, { Title } from '@smui/paper';
-	import { Icon } from '@smui/common';
 	import { open as OpenDrawer } from '@components/Drawer.svelte';
+	import { Icon } from '@smui/common';
+	import Menu from '@smui/menu';
+	import List, {Item, Text, Separator, Graphic} from '@smui/list';
+	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
+	import Config, { deleteOne } from './store.js'
+	import { toast } from '@components/Toaster.svelte'
 
 	import ConfigDetail from '@archetypes/Config/Detail.svelte'
 
-	export let _id = null
-	export let name = null
+	export let _id
+	export let name
 
-	const handleClick = () => {
-		OpenDrawer(ConfigDetail, 
-			{
-				configId: _id
-			}
-		)
-	}
+	let menu;
+	let menuAnchor;
 </script>
 
 <style lang="scss">
@@ -28,6 +27,7 @@
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
 		margin-bottom: 0.6em;
+		padding: 14px 16px;
 
 		* :global(.smui-paper__title){
 			margin: 0;
@@ -61,11 +61,40 @@
 	}
 </style>
 
-<Paper class='config-teaser' on:click={handleClick} elevation="4">
+<Paper class='config-teaser' on:click={() => OpenDrawer(ConfigDetail, {_id: _id})} elevation="4">
 	<div>
 		<Title><Icon class="material-icons">code</Icon>&nbsp;{name}</Title>
 	</div>
 	<div class='controls'>
-		[controls]
+		<div 
+			class='menu' 
+			bind:this={menuAnchor} 
+			on:click={e => {
+				e.preventDefault()
+				e.stopPropagation()
+			}}
+			>
+			<IconButton on:click={() => menu.setOpen(true)}>
+				<IconButtonIcon class="material-icons">menu</IconButtonIcon>
+			</IconButton>
+			<Menu 
+				bind:this={menu} 
+				bind:anchorElement={menuAnchor} 
+				anchorCorner="BOTTOM_LEFT"
+				>
+				<List dense>
+					<Item 
+						on:click={e => {
+							e.preventDefault()
+							e.stopPropagation()
+							Config.query(deleteOne, {_id: _id}).then(() => toast.success(`Config deleted`))
+						}}
+						>
+						<Graphic class="material-icons">delete</Graphic>
+						<Text>Delete</Text>
+					</Item>
+				</List>
+			</Menu>
+		</div>
 	</div>
 </Paper>

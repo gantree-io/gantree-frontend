@@ -3,27 +3,18 @@
 	import { mutation } from '@util/graphql'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Form, { Step, Field, validate } from '@components/Form'
-	import ConfigStore from '@archetypes/Config/store'
+	import ConfigStore, { fetchAll } from '@archetypes/Config/store'
 	import { toast } from '@components/Toaster.svelte'
-	import Network from './store.js'
+	import Network, { addNetwork }  from './store.js'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
 
 	let subtitle = 1
 
-	// const mutationQuery = `
-	// 	mutation addNetwork($name: String!, $chainspec: JSON!) {
-	// 		addNetwork(name: $name, chainspec: $chainspec){
-	// 			_id
-	// 			name
-	// 		}
-	// 	}
-	// `;
-	
 	// get config options
 	let configOptions = {}
-	ConfigStore.fetchAll().then(configs => {
+	ConfigStore.query(fetchAll).then(configs => {
 		let options = {}
 		configs.forEach(config => {
 			options[config._id] = config.name
@@ -35,11 +26,10 @@
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
 		if(!hasErrors){
 			setLoading(true)
-			Network.create(fields).then(data => {
-				toast.success(`New network added: ${data.name}. Check the status on the networks page.`)
+			Network.query(addNetwork, fields).then(data => {
+				toast.success(`New network added: ${data.name}.`)
 				onSuccess(data)
 				setLoading(false)
-				PubSub.publish('NETWORK.ADD');
 			})
 		}else{
 			toast.warning(`Some fields have errors`)
@@ -69,7 +59,7 @@
 		>
 
 		<Step 
-			title='name & Provider'
+			title='Name & Provider'
 			buttons={{
 				next: 'Next: Nodes'
 			}}

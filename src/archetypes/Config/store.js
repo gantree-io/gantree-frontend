@@ -1,59 +1,33 @@
-import { mutation } from '@util/graphql' 
+import { query, mutation } from '@util/graphql' 
 
-const _delete = id => {
-	
-  	const _q = `
- 		mutation deleteConfig($id: String!) {
- 			deleteConfig(id: $id) {
-				_id
- 			}
- 		}
- 	`;
+export const fetchAll = `
+	query configs {
+		configs {
+			_id
+			name
+		}
+	}
+`
 
-	return new Promise(async (resolve, reject) => {
-		let res = await mutation(_q, {variables: {id: id}})
-		resolve(true)
-	});
-}
+export const fetchOne = `
+	query config($_id: String!) {
+		config(_id: $_id) {
+			_id
+			name
+			chainspec
+		}
+	}
+`
 
-const _fetchAll = id => {
-	
-  	const _q = `
- 		query configs {
- 			configs {
-				_id
-				name
-				chainspec
- 			}
- 		}
- 	`;
-
-	return new Promise(async (resolve, reject) => {
-		let res = await mutation(_q, {variables: {id: id}})
-		resolve(res)
-	});
-}
-
-const _fetchOne = id => {
-	
-  	const _q = `
- 		query config($id: String!) {
- 			config(id: $id) {
-				_id
-				name
-				chainspec
- 			}
- 		}
- 	`;
-
-	return new Promise(async (resolve, reject) => {
-		let res = await mutation(_q, {variables: {id: id}})
-		resolve(res)
-	});
-}
+export const deleteOne = `
+	mutation deleteConfig($_id: String!) {
+		deleteConfig(_id: $_id){
+			_id
+		}
+	}
+`
 
 export default {
-	delete: _delete,
-	fetchOne: _fetchOne,
-	fetchAll: _fetchAll
+	query: query,
+	mutation: mutation
 }

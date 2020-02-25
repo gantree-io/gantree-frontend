@@ -1,87 +1,56 @@
 import { query, mutation } from '@util/graphql'
-const _fetchAll = id => {
-  	const _q = `
- 		query networks {
- 			networks {
+
+export const fetchAll = `
+	query networks {
+		networks {
+			_id
+			name
+			config{
+				name
+			}
+			nodes{
+				status
+			}
+		}
+	}
+`;
+
+export const fetchOne = `
+	query network($_id: String!) {
+		network(_id: $_id) {
+			_id
+			name
+			config{
+				name
+			}
+			nodes{
 				_id
 				name
-				config
-				nodes{
-					status
-				}
- 			}
- 		}
- 	`;
+				ip
+				provider
+				status
+				type
+			}
+		}
+	}
+`;
 
-	return new Promise(async (resolve, reject) => {
-		let res = await query(_q, {variables: {id: id}})
-		resolve(res)
-	});
-}
+export const deleteNetwork = `
+	mutation deleteNetwork($_id: String!) {
+		deleteNetwork(_id: $_id)
+	}
+`;
 
-const _fetchOne = _id => {
-  	const _q = `
-  		query network($_id: String!) {
-  			network(_id: $_id) {
-  				_id
-  				name
-  				config{
-  					name
-  				}
-  				nodes{
-  					_id
-  					name
-  					ip
-  					provider
-  					status
-  					type
-  				}
-  			}
-  		}
-  	`;
-
-	return new Promise(async (resolve, reject) => {
-		let res = await query(_q, {variables: {_id: _id}})
-		resolve(res)
-	});
-}
-
-
-const _delete = id => {
-	
-  	const _q = `
- 		mutation deleteConfig($id: String!) {
- 			deleteConfig(id: $id) {
-				_id
- 			}
- 		}
- 	`;
-
-	return new Promise(async (resolve, reject) => {
-		let res = await mutation(_q, {variables: {id: id}})
-		resolve(true)
-	});
-}
-
-const _create = variables => {
-  	const __ = `
- 		mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $repo: String!, $config: String! ) {
- 			addNetwork(name: $name, count: $count, validators: $validators, provider: $provider, repo: $repo, config: $config) {
-				_id
-				name
- 			}
- 		}
- 	`;
-
-	return new Promise(async (resolve, reject) => {
-		let res = await mutation(__, {variables: variables})
-		resolve(true)
-	});
-}
+export const addNetwork = `
+	mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $repo: String!, $config: String! ) {
+		addNetwork(name: $name, count: $count, validators: $validators, provider: $provider, repo: $repo, config: $config) {
+			_id
+			name
+		}
+	}
+`
 
 export default {
-	fetchOne: _fetchOne,
-	fetchAll: _fetchAll,
-	delete: _delete,
-	create: _create,
+	query,
+	mutation
 }

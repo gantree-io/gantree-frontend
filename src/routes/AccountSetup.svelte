@@ -48,7 +48,6 @@
 	}
 </style>
 
-
 <Centered>
 	<h1 class='mdc-typography--headline3'>Welcome to Gantree</h1>
 	<h2 class='mdc-typography--headline5'>Configure your account</h2>

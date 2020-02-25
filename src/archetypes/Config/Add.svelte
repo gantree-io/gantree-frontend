@@ -33,7 +33,6 @@
 			
 			toast.success(`Config ${result.name} added`)
 			onSuccess(result)
-			PubSub.publish('CONFIG.ADD');
 		}else{
 			
 		}
@@ -55,8 +54,10 @@
 	<Form 
 		onSubmit={handleSubmit}
 		onCancel={onCancel}
-		submitButtonText='Upload'
-		cancelButtonText='cancel'
+		buttons={{
+			cancel: 'Cancel',
+			submit: 'Add'
+		}}
 		>
 		
 		<Field
