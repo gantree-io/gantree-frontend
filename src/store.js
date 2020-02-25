@@ -6,12 +6,24 @@ import * as firebaseui from 'firebaseui'
 import { query, mutation } from '@util/graphql'
 import { toast } from '@components/Toaster.svelte'
 
-export const UserStatus = {
-	UNAUTHENTICATED: 'unauthenticated',
-	LOADING: 'loading',
-	AUTHENTICATED: 'authenticated'
+// the status of the app connection to the backend
+export const NetworkStatus = {
+	INITIALISED: 'INITIALISED',
+	ONLINE: 'ONLINE',
+	OFFLINE: 'OFFLINE',
 }
 
+// the user auth status
+export const UserStatus = {
+	INITIALISED: 'INITIALISED',
+	UNAUTHENTICATED: 'UNAUTHENTICATED',
+	LOADING: 'LOADING',
+	AUTHENTICATED: 'AUTHENTICATED'
+}
+
+// user account status is used to determine if 
+// the users' account is complete enough to continue
+// to dashboard, or be intercepted by a create account page
 export const AccountStatus = {
 	UNKNOWN: 'UNKNOWN',
 	INCOMPLETE: 'INCOMPLETE',
@@ -45,7 +57,8 @@ export default (() => {
 	const defaultProps = {
 		user: {},
 		firebaseUser: {},
-		userStatus: UserStatus.LOADING,
+		networkStatus: NetworkStatus.INITIALISED,
+		userStatus: UserStatus.INITIALISED,
 		accountStatus: AccountStatus.UNKNOWN
 	}
 	
@@ -72,6 +85,9 @@ export default (() => {
 					userStatus: UserStatus.AUTHENTICATED,
 					accountStatus: _determineAccountStatus(user)
 				}))
+			}).catch(e => {
+				//toast.error(e.message)
+				//push('/')
 			})
 		})
 	}
@@ -100,11 +116,10 @@ export default (() => {
 	firebase.auth().onAuthStateChanged(firebaseUser => {
 		firebaseUser
 			? _handleLogin(firebaseUser)
-			: update({
+			: update(props => ({
 				...defaultProps,
 				userStatus: UserStatus.UNAUTHENTICATED,
-				accountStatus: AccountStatus.UNKNOWN
-			})
+			}))
 	})
 	
 	return {
@@ -123,6 +138,13 @@ export default (() => {
 				},
 				accountStatus: AccountStatus.COMPLETE
 			}))
+		},
+		setNetworkStatus: status => {
+			console.log(status)
+			 update(props => ({
+			 	...props,
+			 	NetworkStatus: Object.keys(NetworkStatus).includes(status) ? status : NetworkStatus.OFFLINE
+			 }))
 		},
 		logout: () => _handleLogout(),
 		myself: () => defaultProps.user,

@@ -9,30 +9,25 @@ import { setContext } from 'apollo-link-context';
 import { replace, location } from 'svelte-spa-router'
 
 let client = null
+let onGraphQLError
+let onNetworkError
 
 export const gql = ApolloGQL
 
-const configure = ({uri, token}) => {
+export const configure = ({uri, token, ...props}) => {
+
+	onGraphQLError = props.onGraphQLError
+	onNetworkError = props.onNetworkError
 
 	const httpLink = createHttpLink({ uri: uri || "/graphql"});
 	
-	const errorLink = onError(({ networkError, graphQLErrors }) => {
+	const errorLink = onError(({ networkError, graphQLErrors}) => {
 		if(graphQLErrors){
-			const error = graphQLErrors[0]
-			const message = error.message
-			const code = error.extensions.code
-
-			let _location = '/'
-
-			location.subscribe(val => _location = val) 
-
-			if(code === 'UNAUTHENTICATED'){
-				replace(`/authenticate${_location}`)
-			}
+			//onGraphQLError && onGraphQLError(graphQLErrors[0])
 		}
 
 		if(networkError){
-			console.log('todo')
+			//onNetworkError && onNetworkError(networkError)
 		}
 	});
 
@@ -76,9 +71,20 @@ export const query = async (q, variables={}, options={}) => new Promise(async (r
 			variables: variables, 
 			...options
 		})
+
+		if(result.errors){
+			let error = {
+				message: result.errors[0].message,
+				code: result.errors[0].extensions.code
+			}
+			onGraphQLError && onGraphQLError(error)
+			reject(error)
+		}
+
 		resolve(Object.values(result.data)[0])
-	} catch(e) {
-		reject(e);
+	} 
+	catch(e) {
+		//console.log(e)
 	}
 });
 
@@ -90,7 +96,7 @@ export const mutation = async (q, options={}) => {
 export const queryOld = (q, options={}) => client.query({query: ApolloGQL`${q}`, ...options})
 
 export default {
-	configure: configure,
+	//configure: configureGraphQL,
 	query: query,
 	queryOld: queryOld
 }

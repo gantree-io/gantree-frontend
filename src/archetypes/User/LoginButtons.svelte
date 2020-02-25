@@ -1,15 +1,15 @@
 <script>
 	import { onMount } from 'svelte'
-	import AppStore from '@app/store'
+	import AppStore, { UserStatus } from '@app/store'
 
 	export let providers = []
 	
 	let _username
-	let _status
+	let _userStatus
 
-	AppStore.subscribe(({user, status})=> {
+	AppStore.subscribe(({user, userStatus})=> {
 		_username = user.name
-		_status = status
+		_userStatus = userStatus
 	});
 
 	onMount(() => {
@@ -30,18 +30,18 @@
 
 <style lang="scss">
 	#firebaseui-auth-container{
-		&[data-status='authenticated'],
-		&[data-status='loading']{
+		&[data-status='AUTHENTICATED'],
+		&[data-status='LOADING']{
 			display: none
 		}
 	}
 </style>
 
-{#if _status === 'loading'}
+{#if _userStatus === UserStatus.LOADING}
 	[loading]
-{:else if _status === 'authenticated'}
+{:else if _userStatus === UserStatus.AUTHENTICATED}
 	<p>logged in as {_username}</p>
 	<button on:click={AppStore.logout}>logout</button>
 {/if}
 
-<div id='firebaseui-auth-container' data-status={_status}/>
+<div id='firebaseui-auth-container' data-status={_userStatus}/>

@@ -1,39 +1,38 @@
 <script>
+	import { get } from 'svelte/store';
 	import ApolloClient from "apollo-boost";
-	import GraphQL from '@util/graphql' 
+	import _ from 'lodash'
+	import GraphQL, { configure as configureGraphQL } from '@util/graphql' 
 	import { configure as configureHotwire } from '@components/Hotwire.svelte' 
-	import AuthRouter, { configure as configureAuthRouter } from '@components/AuthRouter.svelte' 
-	
-
+	import AuthRouter, { configure as configureAuthRouter, triggerError, location } from '@components/AuthRouter.svelte'
+	import AppStore, { UserStatus, AccountStatus, NetworkStatus } from './store'
+	// ---> global components
 	import Drawer from '@components/Drawer.svelte'
 	import Modal from '@components/Modal.svelte'
-	import Toaster from '@components/Toaster.svelte'
-
-	// routes
+	import Toaster, { toast } from '@components/Toaster.svelte'
+	// ---> routes
 	import Home from '@routes/Home.svelte'
 	import Authenticate from '@routes/Authenticate.svelte'
 	import Dashboard from '@routes/Dashboard.svelte'
 	import Account from '@routes/Account.svelte'
 	import AccountSetup from '@routes/AccountSetup.svelte'
-	import Four04 from '@routes/Four04.svelte'
-	// --> dashboard routes
-	import DashboardHome from '@routes/DashboardOld/Home.svelte'
-	import Network from '@archetypes/Network/Index.svelte'
-	import Config from '@archetypes/Config/Index.svelte'
-	import Keys from '@archetypes/Keys/Index.svelte'
-	import Team from '@archetypes/Team/Index.svelte'
-	import Billing from '@routes/DashboardOld/Billing.svelte'
-	import Docs from '@routes/DashboardOld/Docs.svelte'
-
-
-	import AppStore, { UserStatus, AccountStatus } from './store'
-	import _ from 'lodash'
-	import { get } from 'svelte/store';
+	import Error404 from '@routes/Error404.svelte'
+	import Error503 from '@routes/Error503.svelte'
 
 	// configure graphql
-	GraphQL.configure({
+	configureGraphQL({
 		uri: _env.GRAPHQL_URL, 
-		token: () => _.get(get(AppStore), 'user.tokens.auth') 
+		token: () => _.get(get(AppStore), 'user.tokens.auth'),
+		onNetworkError: e => {
+			AppStore.setNetworkStatus(NetworkStatus.OFFLINE)
+			triggerError(503, e.message)
+		},
+		onGraphQLError: e => {
+			if(e.extensions.code === 'UNAUTHENTICATED'){
+				console.log($location)
+				push(`/authenticate`)
+			}
+		}
 	})
 	
 	// configure hotwire
@@ -41,14 +40,16 @@
 	
 	// configure the router
 	configureAuthRouter({
-		notFound: Four04,
-		authRoute: '/authenticate',
-		onPrivateRoute: ({push, location}) => {
+		errorRoutes: {
+			404: Error404,
+			503: Error503
+		},
+		onPrivateRoute: ({push}) => {
 			AppStore.subscribe(({userStatus, accountStatus}) => {
 				// not authenticated? push to auth page
-				if(userStatus !== UserStatus.AUTHENTICATED) push(`/authenticate`)
+				if(userStatus !== UserStatus.AUTHENTICATED) push(`/authenticate?redirect=${$location}`)
 				// account not complete? push to account/setup page 
-				if(accountStatus === AccountStatus.INCOMPLETE) push(`/account/setup`)
+				else if(accountStatus === AccountStatus.INCOMPLETE) push(`/account/setup`)
 			})
 		}
 	})
@@ -154,7 +155,6 @@
 </style>
 
 <AuthRouter {routes}/>
-<!-- <Router {routes}/> -->
 <Drawer/>
 <Modal/>
 <Toaster/>
