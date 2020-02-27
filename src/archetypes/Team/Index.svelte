@@ -51,7 +51,11 @@
 		{
 			event: `USER.DELETE`,
 			callback: () => _fetchAll()
-		}
+		},
+		{
+			event: `TEAM.UPDATE`,
+			callback: () => _fetchAll()
+		},
 	]}
 	>
 	<PanelLayout 

@@ -29,9 +29,14 @@
 			triggerError(503, e.message)
 		},
 		onGraphQLError: e => {
-			if(e.extensions.code === 'UNAUTHENTICATED'){
-				console.log($location)
-				push(`/authenticate`)
+			if(e.code === 'UNAUTHENTICATED'){
+				// if we're on the authenticate page then stop authenticating
+				if($location === '/authenticate'){
+					AppStore.logout()
+					push(`/`)
+				}else{
+					push(`/authenticate`)
+				}
 			}
 		}
 	})

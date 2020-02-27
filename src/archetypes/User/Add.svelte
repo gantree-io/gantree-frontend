@@ -3,16 +3,18 @@
 	import { mutation } from '@util/graphql'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Form, { Step, Field, validate } from '@components/Form'
-	import ConfigStore from '@archetypes/Config/store'
+	import Config, { fetchAll } from '@archetypes/Config/store'
 	import { toast } from '@components/Toaster.svelte'
-	import User, { addUser } from './store'
+	import User, { inviteUser } from './store'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
 
 	// get config options
 	let configOptions = {}
-	ConfigStore.fetchAll().then(configs => {
+
+
+	Config.query(fetchAll).then(configs => {
 		let options = {}
 		configs.forEach(config => {
 			options[config._id] = config.name
@@ -20,11 +22,12 @@
 		configOptions = options
 	})
 
+
 	const onSubmit = async ({fields, hasErrors, errors, setLoading}) => {
 		let _t = toast.loading(`Inviting user...`)
 		if(!hasErrors){
 			setLoading(true)
-			User.query(addUser, fields).then(data => {
+			User.query(inviteUser, fields).then(data => {
 				_t.success(`Invitation sent to ${data.email}`)
 				onSuccess(data)
 				setLoading(false)

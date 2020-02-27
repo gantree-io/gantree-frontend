@@ -51,7 +51,11 @@ export const configure = ({uri, token, ...props}) => {
 				errorPolicy: 'all',
 			},
 			query: {
-				fetchPolicy: 'no-cache'
+				fetchPolicy: 'no-cache',
+				errorPolicy: 'all',
+			},
+			mutate: {
+				errorPolicy: 'all',
 			}
 		}
 	});
@@ -70,6 +74,8 @@ export const query = async (q, variables={}, options={}) => new Promise(async (r
 			query: ApolloGQL`${q}`, 
 			variables: variables, 
 			...options
+		}).catch(e => {
+			console.log(e.message)
 		})
 
 		if(result.errors){
@@ -84,14 +90,33 @@ export const query = async (q, variables={}, options={}) => new Promise(async (r
 		resolve(Object.values(result.data)[0])
 	} 
 	catch(e) {
-		//console.log(e)
+		//console.log(e.message)
 	}
 });
 
-export const mutation = async (q, options={}) => {
-	let result = await client.mutate({ mutation: ApolloGQL`${q}`, ...options})
-	return Object.values(result.data)[0]
-};
+export const mutation = async (q, variables={}, options={}) => new Promise(async (resolve, reject) => {
+	try {
+		let result = await client.mutate({
+			mutation: ApolloGQL`${q}`, 
+			variables: variables, 
+			...options
+		})
+
+		if(result.errors){
+			let error = {
+				message: result.errors[0].message,
+				code: result.errors[0].extensions.code
+			}
+			onGraphQLError && onGraphQLError(error)
+			reject(error)
+		}
+
+		resolve(Object.values(result.data)[0])
+	} 
+	catch(e) {
+		console.log(e)
+	}
+});
 
 export const queryOld = (q, options={}) => client.query({query: ApolloGQL`${q}`, ...options})
 

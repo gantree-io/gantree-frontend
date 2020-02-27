@@ -123,7 +123,6 @@ export default (() => {
 	})
 	
 	return {
-		//set,
 		subscribe,
 		firebase: writable({
 			firebase: firebase,

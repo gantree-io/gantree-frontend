@@ -18,6 +18,14 @@ export const fetchAll = `
 	}
 `;
 
+export const updateOwner = `
+	mutation updateOwner($_id: String!){
+		updateOwner(_id: $_id){
+			_id
+		}
+	}
+`
+
 export default {
 	query,
 	mutation

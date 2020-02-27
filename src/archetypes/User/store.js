@@ -20,9 +20,9 @@ export const fetchOne = `
 
 
 // mutations
-export const addUser = `
-	mutation addUser($email: String!) {
-		addUser(email: $email) {
+export const inviteUser = `
+	mutation inviteUser($email: String!) {
+		inviteUser(email: $email) {
 			_id
 			email
 		}
