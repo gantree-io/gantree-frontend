@@ -50,11 +50,11 @@
 				anchorCorner="BOTTOM_LEFT"
 				>
 				<List dense>
-					<Item>
+					<Item href='#/account'>
 						<Graphic class="material-icons">person</Graphic>
 						<Text>My Account</Text>
 					</Item>
-					<Item>
+					<Item href='#/dashboard/team'>
 						<Graphic class="material-icons">person</Graphic>
 						<Text>My Team</Text>
 					</Item>

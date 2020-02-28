@@ -2,7 +2,7 @@
 	export let onChange = () => {}
 	export let off
 	export let on
-	export let value
+	export let value = false
 
 	$: {
 		onChange(value)

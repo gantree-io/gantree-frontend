@@ -1,19 +1,9 @@
 <script context="module">
 	let _url = "http://localhost:3000"
 	export const configure = ({url}) => _url = url
-	export const SUBSCRIPTIONS = {};
-</script>
-
-<script>
-	import { onMount, setContext, getContext } from 'svelte';
-	import uuid from 'uuid/v4'
-	import _ from 'lodash'
-	import io from 'socket.io-client';
-
-	export let subscriptions
-	//let SUBSCRIPTIONS = {};
+	export const subscribe = (event, callback) => _subscribe([{event, callback}])
+	const SUBSCRIPTIONS = {};
 	let _socket
-	//const _subs = {}
 
 	// connect to our socket endpoint
 	const connect = () => io(_url, {
@@ -36,7 +26,7 @@
 		}
 	})
 
-	const subscribe = _subscriptions => useSocket()
+	const _subscribe = _subscriptions => useSocket()
 		.then(_io => {
 			let _ids = []
 			_subscriptions.forEach(_subscription => {
@@ -60,13 +50,22 @@
 			return _ids
 		})
 
-	const unsubscribe = ids => useSocket()
+	const _unsubscribe = ids => useSocket()
 		.then(_io => {
 			ids.forEach(id => {
 				_io.emit('leaveroom', SUBSCRIPTIONS[id].event)
 				delete SUBSCRIPTIONS[id]
 			})
 		})
+</script>
+
+<script>
+	import { onMount, setContext, getContext } from 'svelte';
+	import uuid from 'uuid/v4'
+	import _ from 'lodash'
+	import io from 'socket.io-client';
+
+	export let subscriptions
 	
 	// on mount we want to establish a connection a particular event, on a
 	// paticular object, for a paticular team, defined by the room...!
@@ -81,13 +80,9 @@
 	// Include the TEAM ID if one exists
 	onMount( () => {
 		let localIDs = []
-		subscribe(subscriptions).then(_localIDs => localIDs = _localIDs)
-		return () => unsubscribe(localIDs)
+		_subscribe(subscriptions).then(_localIDs => localIDs = _localIDs)
+		return () => _unsubscribe(localIDs)
 	})
-
-	
 </script>
-
-
 
 <slot/>

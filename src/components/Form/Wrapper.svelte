@@ -205,5 +205,5 @@
 	data-loading={loading}
 	>
 	<slot></slot>
-	<ButtonGroup {...buttons}/>
+	<ButtonGroup {...buttons} onCancelClick={onCancel}/>
 </form>

@@ -5,6 +5,7 @@ import 'firebase/auth'
 import * as firebaseui from 'firebaseui'
 import { query, mutation } from '@util/graphql'
 import { toast } from '@components/Toaster.svelte'
+import { subscribe as hotwireSubscribe } from '@components/Hotwire.svelte'
 
 // the status of the app connection to the backend
 export const NetworkStatus = {
@@ -30,13 +31,14 @@ export const AccountStatus = {
 	COMPLETE: 'COMPLETE',
 }
 
-const fetchUserByToken = `
+export const fetchUserByToken = `
 	query authByFirebaseToken($token: String!) {
 		authByFirebaseToken(token: $token) {
 			_id
 			name
 			email
 			uid
+			subscribed
 			tokens{
 				auth
 				refresh
@@ -46,12 +48,18 @@ const fetchUserByToken = `
 `;
 
 export const setName = `
-	mutation setName($name: String!) {
+	mutation setName($name: String,) {
 		setName(name: $name) {
-			name
+			_id
 		}
 	}
 `;
+
+export const updateAccount = `
+	mutation updateAccount($name: String!, $subscribed: Boolean!) {
+		updateAccount(name: $name, subscribed: $subscribed)
+	}
+`
 
 export default (() => {
 	const defaultProps = {
@@ -85,6 +93,18 @@ export default (() => {
 					userStatus: UserStatus.AUTHENTICATED,
 					accountStatus: _determineAccountStatus(user)
 				}))
+				
+				// subscribe to updates on this user
+				hotwireSubscribe(`${user._id}.UPDATE`, _updateduser => {
+					update(props => ({
+						...props,
+						user: {
+							...props.user,
+							name: _updateduser.name,
+							subscribed: _updateduser.subscribed
+						},
+					}))
+				})
 			}).catch(e => {
 				//toast.error(e.message)
 				//push('/')
@@ -92,7 +112,7 @@ export default (() => {
 		})
 	}
 
-	const _handleLogout = () => {
+	const _handleLogout = redirect => {
 		set({
 			...defaultProps,
 			userStatus: UserStatus.UNAUTHENTICATED,
@@ -100,7 +120,7 @@ export default (() => {
 		})
 		firebase.auth().signOut()
 		toast.success(`You have been logged out`)
-		push('/')
+		push(redirect||'/')
 	}
 
 	firebase.initializeApp({
@@ -145,7 +165,7 @@ export default (() => {
 			 	NetworkStatus: Object.keys(NetworkStatus).includes(status) ? status : NetworkStatus.OFFLINE
 			 }))
 		},
-		logout: () => _handleLogout(),
+		logout: redirect => _handleLogout(redirect),
 		myself: () => defaultProps.user,
 		query: query,
 		mutation: mutation

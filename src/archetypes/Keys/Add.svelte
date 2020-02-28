@@ -15,7 +15,7 @@
 	const onSubmit = async ({fields, hasErrors, errors, setLoading}) => {
 		 let _t = toast.loading(`Adding & Verifying Key...`)
 		 if(!hasErrors){
-		 	//setLoading(true)
+		 	setLoading(true)
 		 	Key.query(addKey, fields).then(data => {
 		 		_t.success(`Key added successfully`)
 		 		onSuccess(data)

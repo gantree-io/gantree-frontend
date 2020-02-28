@@ -1,17 +1,18 @@
 <script>
+	import { onMount } from 'svelte';
 	import Centered from '@layouts/Centered.svelte'
 	import Form, { Field } from '@components/Form'
 	import { toast } from '@components/Toaster.svelte'
 	import { Icon } from '@smui/common';
 	import { replace } from 'svelte-spa-router'
-	import AppStore, { setName } from '@app/store'
+	import App, { AccountStatus, setName } from '@app/store'
 
 	const onSubmit = async ({fields, hasErrors, errors, setLoading}) => {
 		let _t = toast.loading(`Configuring your account...`)
 		if(!hasErrors){
 			setLoading(true)
-			AppStore.query(setName, fields).then(data => {
-				AppStore.setUserName(data.name)
+			App.query(setName, fields).then(data => {
+				App.setUserName(data.name)
 				_t.success(`Account configured. Welcome to Gantree!`)
 				setLoading(false)
 				replace('/dashboard')
@@ -20,6 +21,14 @@
 			_t.warning(`Some fields have errors`)
 		}
 	}
+
+	onMount(async () => {
+		App.subscribe(({accountStatus}) => {
+			if(accountStatus === AccountStatus.COMPLETE){
+				replace('/dashboard')
+			}
+		})
+	})
 </script>
 
 <style lang="scss">
@@ -56,8 +65,10 @@
 
 	<Form 
 		onSubmit={onSubmit}
+		onCancel={() => App.logout()}
 		buttons={{
-			submit: 'Continue'
+			submit: 'Continue',
+			cancel: 'Take me back'
 		}}
 		>
 		<Field

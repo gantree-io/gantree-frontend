@@ -7,6 +7,14 @@
 	}
 </script>
 
-<button class='mdc-button form-button --cancel' type='reset' on:click={handleClick}>
+<style lang="scss">
+	button.form-button.-cancel{
+		font-size: 0.8em;
+		color: var(--color-grey);
+		font-weight: 400;
+	}
+</style>
+
+<button class='mdc-button form-button -cancel' type='reset' on:click={handleClick}>
 	<slot></slot>
 </button>
