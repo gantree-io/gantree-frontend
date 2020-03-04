@@ -45,7 +45,7 @@
 		margin: 0.3em 0
 	}
 
-	:global(form){
+	>:global(form){
 		>:global(.form-button-group){
 			justify-content: center !important;
 		}

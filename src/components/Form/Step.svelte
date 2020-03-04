@@ -35,6 +35,10 @@
 			overflow: hidden;
 			display: none;
 		}
+
+		> :global(.form-button-group[data-count='1']){
+			justify-content: flex-end
+		}
 	}
 </style>
 

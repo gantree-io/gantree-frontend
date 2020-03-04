@@ -18,14 +18,15 @@
 <style lang="scss">
 	.form-button-group{
 		margin: 0;
-		display: block;
+		margin-top: 3em;
 		display: flex;
-		justify-content: flex-end;
+		align-items: center;
+		justify-content: space-between;
 	}
 </style>
 
 {#if back || cancel || submit || next}
-	<div class="form-button-group">
+	<div class="form-button-group" data-count={!!back + !!cancel + !!submit + !!next}>
 		{#if back}<BackButton onClick={onBackClick}>{back}</BackButton>{/if}
 		{#if cancel}<CancelButton onClick={onCancelClick}>{cancel}</CancelButton>{/if}
 		{#if submit}<SubmitButton onClick={onSubmitClick}>{submit}</SubmitButton>{/if}

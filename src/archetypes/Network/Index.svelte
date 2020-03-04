@@ -22,6 +22,10 @@
 		{
 			event: `NETWORK.DELETE`,
 			callback: () => _fetchAll()
+		},
+		{
+			event: `NETWORK.UPDATE`,
+			callback: () => _fetchAll()
 		}
 	]}
 	>

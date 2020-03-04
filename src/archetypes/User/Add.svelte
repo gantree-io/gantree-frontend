@@ -1,27 +1,12 @@
 <script>
 	import { form } from 'svelte-forms';
-	import { mutation } from '@util/graphql'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import Form, { Step, Field, validate } from '@components/Form'
-	import Config, { fetchAll } from '@archetypes/Config/store'
+	import Form, { Field, validate } from '@components/Form'
 	import { toast } from '@components/Toaster.svelte'
 	import User, { inviteUser } from './store'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
-
-	// get config options
-	let configOptions = {}
-
-
-	Config.query(fetchAll).then(configs => {
-		let options = {}
-		configs.forEach(config => {
-			options[config._id] = config.name
-		})
-		configOptions = options
-	})
-
 
 	const onSubmit = async ({fields, hasErrors, errors, setLoading}) => {
 		let _t = toast.loading(`Inviting user...`)

@@ -1,6 +1,6 @@
 <script>
 	export let onChange = () => {}
-	export let value = null
+	export let value = ''
 
 	$: {
 		if($$props.type === 'number'){

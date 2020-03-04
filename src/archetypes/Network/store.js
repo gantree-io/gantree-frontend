@@ -5,7 +5,7 @@ export const fetchAll = `
 		networks {
 			_id
 			name
-			config{
+			chainspec{
 				name
 			}
 			nodes{
@@ -20,7 +20,7 @@ export const fetchOne = `
 		network(_id: $_id) {
 			_id
 			name
-			config{
+			chainspec{
 				name
 			}
 			nodes{
@@ -42,8 +42,8 @@ export const deleteNetwork = `
 `;
 
 export const addNetwork = `
-	mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $repo: String!, $config: String! ) {
-		addNetwork(name: $name, count: $count, validators: $validators, provider: $provider, repo: $repo, config: $config) {
+	mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $binary_url: String!, $binary_name: String!, $chainspec: String! ) {
+		addNetwork(name: $name, count: $count, validators: $validators, provider: $provider, binary_url: $binary_url, binary_name: $binary_name, chainspec: $chainspec) {
 			_id
 			name
 		}

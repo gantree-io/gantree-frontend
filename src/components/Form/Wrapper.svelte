@@ -10,6 +10,7 @@
 	
 	export let buttons = {}
 	export let onSubmit = () => {}
+	export let onChange = () => {}
 	export let onCancel = () => {}
 	export let onStep = () => {}
 	
@@ -19,7 +20,6 @@
 	const validation = {}
 	const required = []
 	let errors = {}
-	//let touched = false
 	let touched = []
 	let steps = {
 		names: [],
@@ -36,7 +36,8 @@
 
 		PubSub.publish('FORM.STEP', steps.ids[steps.current]);
 	}
-
+	
+	// valiudate a field based on required and validation props
 	const validateField = id => {
 		delete errors[id]
 		
@@ -47,15 +48,24 @@
 		 		errors[id] = msg
 		 	}
 		})
-
-		if(required.includes(id) && (typeof fields[id] === 'undefined' || fields[id] === '')){
+		
+		// make sure field contains someting is it's required
+		if(
+			required.includes(id) &&
+			fields[id] !== false &&
+			(
+				typeof fields[id] === 'undefined' || 
+				fields[id] === '' || 
+				!fields[id]
+			)
+		){
 			errors[id] = 'Required'
 		}
 
 		return errors[id] || []
 	}
-
-	const formatResponse = id => {
+	
+	const formatFieldData = id => {
 		return [
 			{
 				initialValue: initialValues[id],
@@ -69,6 +79,7 @@
 	const updateField = (id, value) => {
 		fields[id] = value;
 
+		// check if the field has been altered in any way
 		if(!touched.includes(id) && initialValues[id] !== value){
 			touched.push(id)
 		}
@@ -76,8 +87,10 @@
 		if(touched.includes(id)){
 			validateField(id)
 		}
+
+		handleChange()
 		
-		return formatResponse(id)
+		return formatFieldData(id)
 	}
 
 	setContext(FIELDS, {
@@ -86,7 +99,7 @@
 			fields[id] = value
 			isRequired && required.push(id)
 			validation[id] = validationRules
-			return formatResponse(id)
+			return formatFieldData(id)
 		},
 		fieldProps: id => {
 			return {
@@ -101,6 +114,7 @@
 			return steps.current
 		},
 		stepForward: () => {
+			// TODO: check valid before allowing next step
 			steps.current = steps.current >= steps.ids.length - 1
 				? steps.current
 				: steps.current + 1
@@ -117,19 +131,27 @@
 		currentStep: steps.current
 	});
 
+	const formatResponse = () => ({
+		fields,
+		errors,
+		hasErrors: Object.keys(errors).length > 0,
+		touched: touched.length > 0,
+		setLoading: val => loading = !!val
+	})
+
+	const handleChange = () => {
+		let response = formatResponse()
+		onChange(response)
+	}
+
 	const handleSubmit = () => {
 		Object.keys(fields).forEach( id => {
 			touched.push(id)
 			validateField(id)
 		});
 
-		onSubmit({
-			fields,
-			errors,
-			hasErrors: Object.keys(errors).length > 0,
-			touched: touched.length > 0,
-			setLoading: val => loading = !!val
-		})
+		let response = formatResponse()
+		onSubmit(response)
 	}
 
 	onMount(() => {
@@ -145,44 +167,12 @@
 		display: flex;
 		flex-direction: column;
 
-		.controls{
-			display: flex;
-			align-items: center;
-			justify-content: flex-end;
-
-			:global(.form-button),
-			:global(.form-button-submit),
-			:global(.form-button-cancel){
-				display: inline-block;
-				padding: 0.7em 2em;
-				font-weight: 100;
-				font-size: 1em;
-				cursor: pointer;
-				opacity: 0.8;
-				transition: padding 0.1s ease-in-out;
-				border: none;
-				
-				&:hover{
-					opacity: 1;
-				}
-			}
-
-			:global(.form-button-submit){
-				color: var(--color-light-grey);
-				background: var(--color-highlight);
-				&:hover{
-					padding: 0.7em 2.2em;
-				}
-			}
-
-			:global(.form-button-cancel){
-				color: var(--color-highlight);
-				background: none;
-			}
+		:global(.form-button-group){
+			justify-content: space-between;
 		}
 
 		&[data-has-errors="true"]{
-			.controls{
+			:global(.form-button-group){
 				:global(.form-button-submit){
 					opacity: 0.5;
 					cursor: not-allowed;

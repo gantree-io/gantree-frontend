@@ -17,27 +17,32 @@
 	let value = input.value
 	switch (input.type) {
 		case 'text':
+		case 'textarea':
 		case 'number':
 		case 'url':
 			value = input.value || ''
 			break;
 		case 'select':
-			value = Object.keys(input.options)[0]
+			value = input.value || input.options && Object.keys(input.options).length ? Object.keys(input.options)[0] : null
 			break;
 		case 'switch':
-			value = input.value
+			value = input.value || false
 			break;
 		case 'json':
 		case 'file':
-		default:
-			// TODO
+			value = input.value || null
 			break;
-	} 
-	
+		default:
+			value = input.value || ''
+			break;
+	}
+
 	// handle initialising field
 	const { initField, fieldError } = getContext(FIELDS);
 	let [field, setValue] = initField(input.id, value, required, validation)
-	$: { [field] = setValue(value) }
+	$: {
+		[field] = setValue(value)
+	}
 	
 	// ask for the validate on mount
 	onMount(() => {

@@ -5,8 +5,10 @@
 	import Button, { Label } from '@smui/button';
 	import { toast } from '@components/Toaster.svelte'
 	import { open as OpenModal, close as CloseModal} from '@components/Modal.svelte'
-	import Key, { deleteKey } from './store'
-	import KeyAdd from './Add.svelte'
+	import Credentials, { deleteProvider } from './store'
+	import AddAWS from './AddAWS.svelte'
+	import AddGCP from './AddGCP.svelte'
+	import AddDO from './AddDO.svelte'
 	
 	export let _id
 	export let provider
@@ -14,7 +16,7 @@
 </script>
 
 <style lang="scss">
-	:global(.key-teaser.smui-paper){
+	:global(.provider-teaser.smui-paper){
 		background-color: var(--color-grey);
 		color: var(--color-light);
 		display: flex;
@@ -83,7 +85,7 @@
 	}
 </style>
 
-<Paper class='key-teaser' data-active={!!_id} elevation={_id ? 4 : 0}>
+<Paper class='provider-teaser' data-active={!!_id} elevation={_id ? 4 : 0}>
 	<div class='title'>
 		<Icon class='material-icons'>{!!_id ? 'check_circle' : 'cancel'}</Icon>
 		<Icon class='material-icons key'>vpn_key</Icon>
@@ -94,11 +96,7 @@
 		<div class={`mdc-typography--caption`}>
 			{#if _id}
 				<Button 
-					on:click={() => {
-						Key.query(deleteKey, {_id: _id}).then(() => {
-							toast.success(`Key removed`)
-						})
-					}}
+					on:click={() => Credentials.query(deleteProvider, {_id: _id}).then(() => toast.success(`Key removed`))}
 					>
 					<Label>Delete Key</Label>
 					<Icon class='material-icons'>close</Icon>
@@ -106,14 +104,22 @@
 			{:else}
 				<Button 
 					on:click={() => {
-						OpenModal(KeyAdd, {
+						
+						let modal
+						switch (provider) {
+							case 'AWS': modal = AddAWS; break;
+							case 'GCP': modal = AddGCP; break;
+							case 'DO': modal = AddDO; break;
+							default: break;
+						}
+
+						OpenModal(modal, {
 							onSuccess: () => CloseModal(),
-							name: name,
-							provider: provider
+							onCancel: () => CloseModal()
 						})
 					}}
 					>
-					<Label>Add Key</Label>
+					<Label>Add Credentials</Label>
 					<Icon class='material-icons'>add</Icon>
 				</Button>
 			{/if}

@@ -13,8 +13,8 @@
 	
 	// routes
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
-	import Config from '@archetypes/Config/Index.svelte'
-	import Keys from '@archetypes/Keys/Index.svelte'
+	import Chainspec from '@archetypes/Chainspec/Index.svelte'
+	import Providers from '@archetypes/Providers/Index.svelte'
 	import Team from '@archetypes/Team/Index.svelte'
 	import Billing from '@archetypes/Pages/Billing.svelte'
 	import Docs from '@archetypes/Pages/Docs.svelte'
@@ -25,8 +25,8 @@
 		private: {
 			'/': NetworkIndex,
 			//'/networks': NetworkIndex,
-			'/config': Config,
-			'/keys': Keys,
+			'/config': Chainspec,
+			'/keys': Providers,
 			'/team': Team,
 			'/billing': Billing,
 			'/docs': Docs,

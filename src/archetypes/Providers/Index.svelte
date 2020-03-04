@@ -3,13 +3,13 @@
 	import _ from 'lodash'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import Keys, { fetchAll } from './store.js'
+	import Providers, { fetchAll } from './store.js'
 	import Hotwire from '@components/Hotwire.svelte'
-	import KeyTeaser from './Teaser.svelte'
+	import Teaser from './Teaser.svelte'
 	
-	let keys
+	let providers = {}
 
-	const _fetchAll = () => Keys.query(fetchAll).then(_keys => keys = _keys)
+	const _fetchAll = () => Providers.query(fetchAll).then(_providers => providers = _providers)
 	
 	onMount(() => _fetchAll())
 </script>
@@ -27,11 +27,11 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: 'KEY.ADD',
+			event: 'CREDENTIALS.ADD',
 			callback: () => _fetchAll()
 		},
 		{
-			event: 'KEY.DELETE',
+			event: 'CREDENTIALS.DELETE',
 			callback: () => _fetchAll()
 		}
 	]}
@@ -46,12 +46,12 @@
 		showBreadcrumbs
 		>
 		<p class="mdc-typography--body1">In order to deploy blockchain nodes on your own infrastructure, Paraplant needs access to your cloud accounts.</p>
-		{#if !keys}
+		{#if !providers}
 			<GraphQLProgress/>
 		{:else}
-			<KeyTeaser provider="DO" name='Digital Ocean' {..._.find(keys, {provider: 'DO'})}/>
-			<KeyTeaser provider="AWS" name='Amazon Web Services' {..._.find(keys, {provider: 'AWS'})}/>
-			<KeyTeaser provider="GCP" name='Google Cloud Services' {..._.find(keys, {provider: 'GCP'})}/>
+			<Teaser provider="DO" name='Digital Ocean' {..._.find(providers, {provider: 'DO'})}/>
+			<Teaser provider="AWS" name='Amazon Web Services' {..._.find(providers, {provider: 'AWS'})}/>
+			<Teaser provider="GCP" name='Google Cloud Services' {..._.find(providers, {provider: 'GCP'})}/>
 		{/if}
 	</PanelLayout>
 </Hotwire>

@@ -8,13 +8,13 @@
 	import Json from '@components/Json.svelte'
 	import { toast } from '@components/Toaster.svelte'
 	import Hotwire from '@components/Hotwire.svelte'
-	import Config, { fetchOne } from './store.js'
+	import Chainspec, { fetchOne } from './store.js'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 
 	export let _id;
 
-	let config
-	const _fetchAll = () => Config.query(fetchOne, {_id: _id}).then(_config => config = _config)
+	let detail
+	const _fetchAll = () => Chainspec.query(fetchOne, {_id: _id}).then(chainspec => detail = chainspec)
 	onMount(() => _fetchAll())
 </script>
 
@@ -24,18 +24,18 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: 'CONFIG.ADD',
+			event: 'CHAINSPEC.ADD',
 			callback: () => _fetchAll()
 		},
 		{
-			event: 'CONFIG.DELETE',
+			event: 'CHAINSPEC.DELETE',
 			callback: () => _fetchAll()
 		}
 	]}
 	>
 	<PanelLayout 
 		header={{
-			title: _.get(config, 'name'),
+			title: _.get(detail, 'name'),
 			subtitle: 'chainspec.json',
 			actions: [
 		 		{
@@ -50,10 +50,10 @@
 		}}
 		>
 		
-		{#if !config}
+		{#if !detail}
 			<GraphQLProgress/>
 		{:else}
-			<Json data={config.chainspec} highlight darktheme/>
+			<Json data={detail.chainspec} highlight darktheme/>
 		{/if}
 	</PanelLayout>
 </Hotwire>

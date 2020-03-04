@@ -8,13 +8,13 @@
 
 	export let _id;
 	let title;
-	let configName;
+	let chainspecName;
 	let nodes
 	
 	// fetch items
 	Network.query(fetchOne, {_id: _id}).then(data => {
 		title = data.name
-		configName = data.config.name
+		chainspecName = data.chainspec.name
 		nodes = data.nodes
 	})
 </script>
@@ -28,7 +28,7 @@
 <PanelLayout 
 	header={{
 		title: title,
-		subtitle: configName && `Config: ${configName}`,
+		subtitle: chainspecName && `Config: ${chainspecName}`,
 		actions: [
 	 		{
 				text: 'Delete',

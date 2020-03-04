@@ -129,6 +129,7 @@
 	:global(body){
 		background: var(--color-light);
 		font-weight: 100;
+		:global(strong){ font-weight: 500 } 
 	}
 
 	:global(.material-icons.-animation-spin){

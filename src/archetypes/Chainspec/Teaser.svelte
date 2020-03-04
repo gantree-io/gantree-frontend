@@ -5,10 +5,10 @@
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
-	import Config, { deleteOne } from './store.js'
+	import Chainspec, { deleteOne } from './store.js'
 	import { toast } from '@components/Toaster.svelte'
 
-	import ConfigDetail from '@archetypes/Config/Detail.svelte'
+	import ChainspecDetail from '@archetypes/Chainspec/Detail.svelte'
 
 	export let _id
 	export let name
@@ -18,7 +18,7 @@
 </script>
 
 <style lang="scss">
-	:global(.config-teaser.smui-paper){
+	:global(.chainspec-teaser.smui-paper){
 		background-color: var(--color-dark-grey);
 		color: var(--color-light);
 		display: flex;
@@ -61,7 +61,7 @@
 	}
 </style>
 
-<Paper class='config-teaser' on:click={() => OpenDrawer(ConfigDetail, {_id: _id})} elevation="4">
+<Paper class='chainspec-teaser' on:click={() => OpenDrawer(ChainspecDetail, {_id: _id})} elevation="4">
 	<div>
 		<Title><Icon class="material-icons">code</Icon>&nbsp;{name}</Title>
 	</div>
@@ -87,7 +87,7 @@
 						on:click={e => {
 							e.preventDefault()
 							e.stopPropagation()
-							Config.query(deleteOne, {_id: _id}).then(() => toast.success(`Config deleted`))
+							Chainspec.query(deleteOne, {_id: _id}).then(() => toast.success(`Chainspec deleted`))
 						}}
 						>
 						<Graphic class="material-icons">delete</Graphic>

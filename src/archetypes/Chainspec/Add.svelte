@@ -4,39 +4,25 @@
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Form, { Field, validate } from '@components/Form'
 	import { toast } from '@components/Toaster.svelte'
+	import Chainspec, { addChainspec } from '@archetypes/Chainspec/store'
 
 	export let onSuccess = () => {}
 	export let onCancel = () => {}
 
-   	const mutationQuery = `
- 	 	mutation addConfig($name: String!, $chainspec: JSON!) {
-		 	addConfig(name: $name, chainspec: $chainspec){
-		 		_id
-		 		name
-		 		chainspec
-		 	}
- 	 	}
- 	 `;
-
-
-	const handleSubmit = async ({fields, hasErrors}) => {
+	// handle network deployment
+	const handleSubmit = async ({fields, hasErrors, errors, setLoading}) => {
 		if(!hasErrors){
-			let result = await mutation(
-				mutationQuery, 
-				{
-					variables: {
-						name: fields.name, 
-						chainspec: fields.chainspec 
-					}
-				}
-			)
-			
-			toast.success(`Config ${result.name} added`)
-			onSuccess(result)
+			setLoading(true)
+			Chainspec.mutation(addChainspec, fields).then(data => {
+				toast.success(`Chainspec ${fields.name} added`)
+				onSuccess(data)
+				setLoading(false)
+			})
 		}else{
-			
+			toast.warning(`Some fields have errors`)
 		}
 	}
+
 </script>
 
 <style lang="scss">
