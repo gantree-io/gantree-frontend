@@ -1,16 +1,24 @@
 <script>
 	import { onMount } from 'svelte';
-	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
+	import GraphQLProgress from '@components/GraphQLProgress.svelte'
+	import NoResults from '@components/NoResults.svelte'
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
 	import Hotwire from '@components/Hotwire.svelte'
 	import Network, { fetchAll } from './store.js'
-	import NetworkAdd from './Add.svelte'
-	import NetworkTeaser from '@archetypes/Network/Teaser.svelte'
+	import Add from './Add.svelte'
+	import Teaser from './Teaser.svelte'
 	
  	let networks
 	const _fetchAll = () => Network.query(fetchAll).then(_networks => networks = _networks)
+	
 	onMount(() => _fetchAll())
+
+	const handleOpenAddModal = () => {
+		openModal(Add, {
+			onSuccess: () => closeModal()
+		})
+	}
 </script>
 
 <Hotwire
@@ -37,11 +45,7 @@
 		 		{
 					text: 'Add Network',
 					icon: 'add',
-					callback: () => {
-						openModal(NetworkAdd, {
-							onSuccess: () => closeModal()
-						})
-					}
+					callback: handleOpenAddModal
 		 		}
 		 	]
 		}}
@@ -51,9 +55,11 @@
 			<GraphQLProgress/>
 		{:else}
 			{#each networks as network}
-				<NetworkTeaser {...network}/>
+				<Teaser {...network}/>
 			{:else}
-				...nothing 
+				<NoResults title='No networks available'>
+					Start by adding a <span class='inline-link' on:click={handleOpenAddModal}>new network</span> now
+				</NoResults>
 			{/each}
 		{/if}
 	</PanelLayout>

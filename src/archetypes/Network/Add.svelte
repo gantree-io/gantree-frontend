@@ -19,7 +19,10 @@
 	// we want all available chainspecs
 	let chainspecOptions
 	Chainspec.query(fetchAllChainspecs).then(chainspecs => {
-		let options = {default: 'Default Chainspec'}
+		let options = {
+			default: 'Default Chainspec',
+			new: 'Build New Chainspec'
+		}
 		chainspecs.forEach(chainspec => options[chainspec._id] = chainspec.name)
 		chainspecOptions = options
 	})

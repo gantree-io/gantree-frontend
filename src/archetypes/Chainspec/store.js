@@ -10,11 +10,11 @@ export const fetchAll = `
 `
 
 export const fetchOne = `
-	query chainspec($_id: String!) {
-		chainspec(_id: $_id) {
+	query chainspec($_id: String! $full: Boolean) {
+		chainspec(_id: $_id full: $full) {
 			_id
 			name
-			chainspec
+			file
 		}
 	}
 `

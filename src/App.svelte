@@ -169,6 +169,12 @@
 		animation-iteration-count: infinite;
 		animation-timing-function: ease;
 	}
+
+	:global(.inline-link){
+		color: var(--color-mid-blue);
+		font-weight: 400;
+		cursor: pointer
+	}
 </style>
 
 <AuthRouter {routes}/>

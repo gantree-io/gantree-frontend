@@ -14,7 +14,9 @@
 	export let _id;
 
 	let detail
-	const _fetchAll = () => Chainspec.query(fetchOne, {_id: _id}).then(chainspec => detail = chainspec)
+	const _fetchAll = () => Chainspec.query(fetchOne, {_id: _id}).then(_detail => {
+		detail = _detail
+	})
 	onMount(() => _fetchAll())
 </script>
 
@@ -44,7 +46,17 @@
 		 		},
 		 		{
 					text: 'Download',
-					icon: 'get_app'
+					icon: 'get_app',
+					callback: () => {
+						Chainspec.query(fetchOne, {_id: _id, full: true}).then(_detail => {
+							let downloadAnchorNode = document.createElement('a');
+							downloadAnchorNode.setAttribute("href", `data:text/json;charset=utf-8, ${encodeURIComponent(_detail.file)}`);
+							downloadAnchorNode.setAttribute("download", `${_detail.name.toLowerCase()}.chainspec.json`);
+							document.body.appendChild(downloadAnchorNode); // required for firefox
+							downloadAnchorNode.click();
+							downloadAnchorNode.remove();
+						})
+					}
 		 		}
 		 	]
 		}}
@@ -53,7 +65,7 @@
 		{#if !detail}
 			<GraphQLProgress/>
 		{:else}
-			<Json data={detail.chainspec} highlight darktheme/>
+			<Json data={detail.file} highlight darktheme/>
 		{/if}
 	</PanelLayout>
 </Hotwire>
