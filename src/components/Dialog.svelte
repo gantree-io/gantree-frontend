@@ -58,7 +58,7 @@
  	const handleConfirm = () => {
 		if(!disabled){
 			_.get(item, 'onConfirm', ()=>{})()
-			setTimeout(() => _close(), 500)
+			setTimeout(() => _close(), 200)
 		}
  	}
 
@@ -171,7 +171,10 @@
 				align-items: center;
 				justify-content: space-between;
 
-				& > :global(.confirm){ cursor: pointer }
+				& > :global(.confirm){ 
+					cursor: pointer;
+					color: var(--color-light);
+				}
 			}
 
 			&[data-type='SUCCESS']{ 

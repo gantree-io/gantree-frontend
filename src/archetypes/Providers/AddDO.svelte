@@ -37,7 +37,8 @@
 	}}
 	>
 	<p class="mdc-typography--body1">
-		Paraplant requires your Digital Ocean Token with <strong>read + write access</strong>. Click here for instructions on how to retrieve this.
+		Paraplant requires your Digital Ocean Token with <strong>read + write access</strong>. 
+		<a href='https://google.com' target="_blank" nofollow noreferrer>Click here for instructions on how to retrieve this</a>.
 	</p>
 	<Form 
 		onSubmit={onSubmit}

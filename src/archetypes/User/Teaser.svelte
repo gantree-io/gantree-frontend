@@ -202,7 +202,7 @@
 										e.stopPropagation()
 										dialog.warning({
 											title: "Delete user",
-											subtitle: 'Remove this user from your team?',
+											subtitle: 'This account will be removed and will no longer have access to Gantree.',
 											confirmButton: 'Confirm Delete',
 											onConfirm: () => User.query(deleteUser, {_id: _id}).then(() => toast.success(`User deleted`)),
 											cancelButton: 'Take me back!',

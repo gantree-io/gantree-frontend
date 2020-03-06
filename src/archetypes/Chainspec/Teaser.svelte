@@ -12,6 +12,7 @@
 
 	export let _id
 	export let name
+	export let networkCount = 0
 
 	let menu;
 	let menuAnchor;
@@ -52,6 +53,19 @@
 		.controls{
 			display: flex;
 			align-items: center;
+
+			.status{
+				display: flex;
+				align-items: center;
+				color: var(--color-mid-grey);
+
+				&[data-used="true"]{ color: var(--color-status-success) }
+
+				:global(.material-icons){
+					font-size: 1.2em;
+					margin-left: 0.3em
+				}
+			}
 		}
 
 		&:hover{
@@ -66,6 +80,15 @@
 		<Title><Icon class="material-icons">code</Icon>&nbsp;{name}</Title>
 	</div>
 	<div class='controls'>
+		
+		<div class={`mdc-typography--caption status`} data-used={networkCount > 0}>
+			{#if networkCount > 0}
+				Used by {networkCount} network{networkCount > 1 ? 's' : ''}<Icon class='material-icons'>check_circle</Icon>
+			{:else}
+				Used by 0 networks <Icon class='material-icons'>lens</Icon>
+			{/if}
+		</div>
+
 		<div 
 			class='menu' 
 			bind:this={menuAnchor} 

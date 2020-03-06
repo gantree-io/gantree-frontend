@@ -1,14 +1,23 @@
 import { query, mutation } from '@util/graphql'
 
-// queries
+// featc all providers
 export const fetchAll = `
-	query providers {
-		providers {
+	query providers($withCount: Boolean) {
+		providers(withCount: $withCount) {
 			_id
 			provider
 			name
+			networkCount
+			nodeCount
 		}
 	}`
+
+// count of all providers enabled
+export const count = `
+	query providerCount {
+		providerCount
+	}
+`
 
 // mutations
 export const addDO = `
@@ -17,7 +26,7 @@ export const addDO = `
 			_id
 		}
 	}
-`;
+`
 
 export const addAWS = `
 	mutation addProviderAWS($aws_access_key_id: String!, $aws_secret_access_key: String!) {
@@ -25,7 +34,7 @@ export const addAWS = `
 			_id
 		}
 	}
-`;
+`
 
 export const addGCP = `
 	mutation addProviderGCP($google_application_credentials: String!) {
@@ -33,13 +42,13 @@ export const addGCP = `
 			_id
 		}
 	}
-`;
+`
 
 export const deleteProvider = `
 	mutation deleteProvider($_id: String!) {
 		deleteProvider(_id: $_id)
 	}
-`;
+`
 
 export default {
 	query,

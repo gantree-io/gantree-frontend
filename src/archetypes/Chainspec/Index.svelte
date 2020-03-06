@@ -7,9 +7,19 @@
 	import Hotwire from '@components/Hotwire.svelte'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import Chainspec, { fetchAll } from './store.js'
+	import NoResults from '@components/NoResults.svelte'
 
   	let chainspecs
-  	const _fetchAll = () => Chainspec.query(fetchAll).then(_chainspecs => chainspecs = _chainspecs)
+  	
+  	const _fetchAll = () => Chainspec
+  		.query(fetchAll, {withCount: true})
+  		.then(_chainspecs => chainspecs = _chainspecs)
+  	
+  	const handleChainspecAdd = () => openModal(ChainspecAdd, { 
+  		onSuccess: () => closeModal() ,
+  		onCancel: () => closeModal() 
+  	})
+  	
   	onMount(() => _fetchAll())
 </script>
 
@@ -27,19 +37,13 @@
 	>
 	<PanelLayout 
 		header={{
-			title: 'Config',
+			title: 'Chainspecs',
 			icon: 'settings',
 			actions: [
 		 		{
 					text: 'Add Chainspec',
 					icon: 'add',
-					callback: () => {
-						openModal(ChainspecAdd, 
-							{
-								onSuccess: () => closeModal()
-							}
-						)
-					}
+					callback: handleChainspecAdd
 		 		}
 			]
 		}}
@@ -51,7 +55,12 @@
 			{#each chainspecs as chainspec}
 				<ChainspecTeaser {...chainspec}/>
 			{:else}
-				...nothing 
+				<NoResults 
+					title='You have no custom chainspecs'
+					disclaimer='A network can still be configured by using the default chainspec, available when creating a new network.'
+					>
+					Start by adding a <span class='inline-link' on:click={handleChainspecAdd}>new chainspec</span> now.<br/>
+				</NoResults>
 			{/each}
 		{/if}
 	</PanelLayout>

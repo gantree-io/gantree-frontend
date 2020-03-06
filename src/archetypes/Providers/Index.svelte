@@ -7,9 +7,9 @@
 	import Hotwire from '@components/Hotwire.svelte'
 	import Teaser from './Teaser.svelte'
 	
-	let providers = {}
+	let providers
 
-	const _fetchAll = () => Providers.query(fetchAll).then(_providers => providers = _providers)
+	const _fetchAll = () => Providers.query(fetchAll, {withCount: true}).then(_providers => providers = _providers)
 	
 	onMount(() => _fetchAll())
 </script>
@@ -39,7 +39,7 @@
 
 	<PanelLayout 
 		header={{
-			title: 'Keys',
+			title: 'Providers',
 			//subtitle: _.get(team, 'name'),
 			icon: 'vpn_key',
 		}}

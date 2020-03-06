@@ -81,11 +81,11 @@
 		{#if !_.get(team, 'users')}
 			<GraphQLProgress/>
 		{:else}
-			<p class="mdc-typography--body1">You can add and remove members of your team here. Please be aware that everyone in a team has full control over everything in your Paraplant environment, including other team members. Only invite those whom you fully trust.</p>
+			<p class="mdc-typography--body1">
+				You can manage members of your team here. Please be aware that everyone in a team has full control over everything in your Paraplant environment. Only invite those whom you fully trust. 
+			</p>
 			{#each team.users as user}
 				<UserTeaser {...user} isTeamOwner={teamOwnerID === user._id} bossPrivileges={teamOwnerID === currentUserID}/>
-			{:else}
-				...nothing 
 			{/each}
 		{/if}
 	</PanelLayout>

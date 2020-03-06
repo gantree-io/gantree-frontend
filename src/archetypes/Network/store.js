@@ -5,9 +5,7 @@ export const fetchAll = `
 		networks {
 			_id
 			name
-			chainspec{
-				name
-			}
+			chainspec
 			nodes{
 				status
 			}
@@ -20,16 +18,14 @@ export const fetchOne = `
 		network(_id: $_id) {
 			_id
 			name
-			chainspec{
-				name
-			}
+			chainspec
 			nodes{
 				_id
 				name
 				ip
 				provider
 				status
-				type
+				validator
 			}
 		}
 	}

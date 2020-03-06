@@ -33,9 +33,9 @@
 				// if we're on the authenticate page then stop authenticating
 				if($location === '/authenticate'){
 					AppStore.logout()
-					push(`/`)
+					//push(`/`)
 				}else{
-					push(`/authenticate`)
+					//push(`/authenticate`)
 				}
 			}
 		}
@@ -174,6 +174,12 @@
 		color: var(--color-mid-blue);
 		font-weight: 400;
 		cursor: pointer
+	}
+
+	:global(*[class^='mdc-typography']){
+		:global(.smaller){
+			font-size: 0.9em
+		}
 	}
 </style>
 

@@ -1,5 +1,6 @@
-export const NodeFilterOptions = {
-	filterkey: 'type',
+export const nodeFilterOptions = {
+	filterkey: 'validator',
+	
 	options: [
 		{
 			key: 'VALIDATOR', 
@@ -14,5 +15,9 @@ export const NodeFilterOptions = {
 			showCount: true,
 			icon: 'dns'
 		}
-	]
+	],
+	filtercallback: (item, filters) => {
+		console.log(filters)
+		return item.type
+	}
 }

@@ -39,7 +39,8 @@
 	}}
 	>
 	<p class="mdc-typography--body1">
-		Paraplant requires your Google Cloud Credentials with <strong>write access to compute and network resources</strong>. Click here for instructions on how to retrieve this.
+		Paraplant requires your Google Cloud Credentials with <strong>write access to compute and network resources</strong>.
+		<a href='https://google.com' target="_blank" nofollow noreferrer>Click here for instructions on how to retrieve this</a>.
 	</p>
 	<Form 
 		onSubmit={onSubmit}

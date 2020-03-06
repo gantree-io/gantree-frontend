@@ -13,23 +13,22 @@
 	
 	// routes
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
-	import Chainspec from '@archetypes/Chainspec/Index.svelte'
-	import Providers from '@archetypes/Providers/Index.svelte'
-	import Team from '@archetypes/Team/Index.svelte'
-	import Billing from '@archetypes/Pages/Billing.svelte'
-	import Docs from '@archetypes/Pages/Docs.svelte'
+	import ChainspecIndex from '@archetypes/Chainspec/Index.svelte'
+	import ProviderIndex from '@archetypes/Providers/Index.svelte'
+	import TeamIndex from '@archetypes/Team/Index.svelte'
+	import BillingPage from '@archetypes/Pages/Billing.svelte'
+	import DocsPage from '@archetypes/Pages/Docs.svelte'
  	
  	let active = {}
 	
 	const routes = {
 		private: {
 			'/': NetworkIndex,
-			//'/networks': NetworkIndex,
-			'/config': Chainspec,
-			'/keys': Providers,
-			'/team': Team,
-			'/billing': Billing,
-			'/docs': Docs,
+			'/chainspecs': ChainspecIndex,
+			'/providers': ProviderIndex,
+			'/team': TeamIndex,
+			'/billing': BillingPage,
+			'/docs': DocsPage,
 		}
 	}
 
@@ -39,20 +38,15 @@
 			icon: 'blur_on',
 			href: '#/dashboard'
 		},
-		// {
-		// 	name: 'Networks',
-		// 	icon: 'blur_on',
-		// 	href: '#/dashboard/networks'
-		// },
 		{
-			name: 'Configs',
-			icon: 'settings',
-			href: '#/dashboard/config',
+			name: 'Chainspecs',
+			icon: 'code',
+			href: '#/dashboard/chainspecs',
 		},
 		{
-			name: 'Keys',
+			name: 'Providers',
 			icon: 'vpn_key',
-			href: '#/dashboard/keys'
+			href: '#/dashboard/providers'
 		},
 		{
 			name: 'Team',

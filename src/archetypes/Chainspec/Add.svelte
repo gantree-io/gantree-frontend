@@ -22,7 +22,6 @@
 			toast.warning(`Some fields have errors`)
 		}
 	}
-
 </script>
 
 <style lang="scss">

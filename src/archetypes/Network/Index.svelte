@@ -1,39 +1,56 @@
 <script>
 	import { onMount } from 'svelte';
+	import { push } from 'svelte-spa-router'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import NoResults from '@components/NoResults.svelte'
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
 	import Hotwire from '@components/Hotwire.svelte'
 	import Network, { fetchAll } from './store.js'
+	import Providers, { count } from '@archetypes/Providers/store.js'
 	import Add from './Add.svelte'
 	import Teaser from './Teaser.svelte'
+	import { dialog } from '@components/Dialog.svelte'
 	
  	let networks
-	const _fetchAll = () => Network.query(fetchAll).then(_networks => networks = _networks)
-	
-	onMount(() => _fetchAll())
+ 	let chainspecCount = 0
 
-	const handleOpenAddModal = () => {
-		openModal(Add, {
-			onSuccess: () => closeModal()
-		})
+	const fetchNetworks = () => Network.query(fetchAll).then(_networks => networks = _networks)
+	const handleAddNetwork = () => {
+		if(chainspecCount <= 0){
+			dialog.notification({
+				title: "No provider credentials",
+				subtitle: 'Before adding a new network you\'ll need to configure some credentials on the providers page.',
+				confirmButton: 'Add credentials',
+				onConfirm: () => push('#/dashboard/keys'),
+				cancelButton: `I'm good`,
+			})
+		}else{
+			openModal(Add, {onSuccess: () => closeModal()})
+		}
 	}
+	
+	onMount(() => {
+		fetchNetworks()
+		Providers.query(count).then(_count => {
+			chainspecCount = _count
+		})
+	})
 </script>
 
 <Hotwire
 	subscriptions={[
 		{
 			event: `NETWORK.ADD`,
-			callback: () => _fetchAll()
+			callback: () => fetchNetworks()
 		},
 		{
 			event: `NETWORK.DELETE`,
-			callback: () => _fetchAll()
+			callback: () => fetchNetworks()
 		},
 		{
 			event: `NETWORK.UPDATE`,
-			callback: () => _fetchAll()
+			callback: () => fetchNetworks()
 		}
 	]}
 	>
@@ -45,7 +62,7 @@
 		 		{
 					text: 'Add Network',
 					icon: 'add',
-					callback: handleOpenAddModal
+					callback: handleAddNetwork
 		 		}
 		 	]
 		}}
@@ -58,7 +75,7 @@
 				<Teaser {...network}/>
 			{:else}
 				<NoResults title='No networks available'>
-					Start by adding a <span class='inline-link' on:click={handleOpenAddModal}>new network</span> now
+					Start by adding a <span class='inline-link' on:click={handleAddNetwork}>new network</span> now
 				</NoResults>
 			{/each}
 		{/if}

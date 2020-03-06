@@ -1,10 +1,11 @@
 import { query, mutation } from '@util/graphql' 
 
 export const fetchAll = `
-	query chainspecs {
-		chainspecs {
+	query chainspecs($withCount: Boolean) {
+		chainspecs(withCount: $withCount) {
 			_id
 			name
+			networkCount
 		}
 	}
 `
