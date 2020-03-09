@@ -1,7 +1,21 @@
 <script context="module">
 	let _url = "http://localhost:3000"
-	export const configure = ({url}) => _url = url
-	export const subscribe = (event, callback) => _subscribe([{event, callback}])
+	let _team
+	let handleDisconnect
+	let handleReconnect
+
+	export const configure = ({url, onDisconnect=()=>{}, onReconnect=()=>{}}) => {
+		_url = url
+		handleDisconnect = onDisconnect
+		handleReconnect = onReconnect
+	}
+
+	export const subscribe = (name, event, callback) => _subscribe([{name, event, callback}])
+
+	export const setTeam = team => {
+		_team = team
+	}
+	
 	const SUBSCRIPTIONS = {};
 	let _socket
 
@@ -9,40 +23,44 @@
 	const connect = () => io(_url, {
 		reconnection: true,
 		reconnectionDelay: 1000,
-		reconnectionDelayMax : 1000,
+		reconnectionDelayMax : 2000,
 		reconnectionAttempts: 5
 	})
-	.on('error', () => console.log('todo: error'))
-
+	
 	// get the global socket connection
 	const useSocket = () => new Promise((resolve, reject) => {
 		if(!_socket){
 			_socket = connect()
+				.on('error', () => console.log('todo: error'))
 				.on('connect', () => resolve(_socket))
-				.on('reconnect', () => resolve(_socket))
-				.on('disconnect', () => connect())
+				.on('reconnect', () => handleReconnect())
+				.on('reconnect_failed', () => handleDisconnect())
 		}else{
 			resolve(_socket)
 		}
 	})
 
-	const _subscribe = _subscriptions => useSocket()
+	const _subscribe = _subs => useSocket()
 		.then(_io => {
 			let _ids = []
-			_subscriptions.forEach(_subscription => {
+			_subs.forEach(_sub => {
 				const _id = uuid()
+				const _room = `${_team}.${_sub.name}`
 
 				// add to subscriptions pool
-				SUBSCRIPTIONS[_id] = _subscription
-				
-				// fire callback for all event subscriptions
-				_io.on(_subscription.event, data => {
-					_.filter(Object.values(SUBSCRIPTIONS), { 'event': _subscription.event })
-						.map(s => s.callback(data))
-				})
+				SUBSCRIPTIONS[_id] = {
+					room: _room,
+					callback: _sub.callback
+				}
 
 				// join room
-				_io.emit('joinroom', _subscription.event)
+				_io.emit('joinroom', _room)
+			
+				// fire callback for all event subscriptions
+				_io.on(`${_sub.name}.${_sub.event}`, data => {
+					_.filter(Object.values(SUBSCRIPTIONS), { 'room': _room })
+						.map(s => s.callback(data))
+				})
 
 				_ids.push(_id)
 			})
@@ -53,7 +71,7 @@
 	const _unsubscribe = ids => useSocket()
 		.then(_io => {
 			ids.forEach(id => {
-				_io.emit('leaveroom', SUBSCRIPTIONS[id].event)
+				_io.emit('leaveroom', SUBSCRIPTIONS[id].room)
 				delete SUBSCRIPTIONS[id]
 			})
 		})
@@ -70,7 +88,7 @@
 	// on mount we want to establish a connection a particular event, on a
 	// paticular object, for a paticular team, defined by the room...!
 	// 
-	// ie: 3rd parties cannot subscribe to updates to objects which don't belong
+	// ie: 3rd parties cannot subscribe to updates to updates on objects which don't belong
 	// to them - we can make this unique with the team._id and check serverside
 	// before subscribing 
 	//

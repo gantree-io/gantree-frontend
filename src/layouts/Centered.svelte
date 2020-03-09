@@ -3,10 +3,10 @@
 	//import IconButton, { Icon } from '@smui/icon-button';
 	import Button, { Label, Icon } from '@smui/button';
 
-	export let icon
-	export let title
-	export let subtitle
-	export let copy
+	export let icon = null
+	export let title = null
+	export let subtitle = null
+	export let copy = null
 	export let back = {
 		text: null,
 		icon: 'home',
@@ -68,9 +68,6 @@
 			{#if back.icon}<Icon class="material-icons">{back.icon}</Icon>{/if}
 			{#if back.text}<Label>{back.text}</Label>{/if}
 		</Button>
-		<!-- <IconButton class={'back'} on:click={back.action}>
-			<Icon class="material-icons">{back.icon}</Icon>
-		</IconButton> -->
 	{/if}
 	<div class="content">
 		{#if icon}<Icon class="material-icons title-icon">{icon}</Icon>{/if}

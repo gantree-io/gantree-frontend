@@ -1,11 +1,12 @@
 import { writable } from 'svelte/store';
-import { push } from 'svelte-spa-router'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import * as firebaseui from 'firebaseui'
 import { query, mutation } from '@util/graphql'
-import { toast } from '@components/Toaster.svelte'
-import { subscribe as hotwireSubscribe } from '@components/Hotwire.svelte'
+
+let onLogin = () => {}
+let onLoginFailure = () => {}
+let onLogout = () => {}
 
 // the status of the app connection to the backend
 export const NetworkStatus = {
@@ -39,6 +40,10 @@ export const fetchUserByToken = `
 			email
 			uid
 			subscribed
+			team{
+				_id
+				name
+			}
 			tokens{
 				auth
 				refresh
@@ -93,21 +98,11 @@ export default (() => {
 					userStatus: UserStatus.AUTHENTICATED,
 					accountStatus: _determineAccountStatus(user)
 				}))
-				
-				// subscribe to updates on this user
-				hotwireSubscribe(`${user._id}.UPDATE`, _updateduser => {
-					update(props => ({
-						...props,
-						user: {
-							...props.user,
-							name: _updateduser.name,
-							subscribed: _updateduser.subscribed
-						},
-					}))
-				})
+
+				// fire login callbacks
+				onLogin(user)
 			}).catch(e => {
-				//toast.error(e.message)
-				//push('/')
+				onLoginFailure()
 			})
 		})
 	}
@@ -119,8 +114,7 @@ export default (() => {
 			accountStatus: AccountStatus.UNKNOWN
 		})
 		firebase.auth().signOut()
-		toast.success(`You have been logged out`)
-		push(redirect||'/')
+		onLogout()
 	}
 
 	firebase.initializeApp({
@@ -159,15 +153,17 @@ export default (() => {
 			}))
 		},
 		setNetworkStatus: status => {
-			console.log(status)
-			 update(props => ({
-			 	...props,
-			 	NetworkStatus: Object.keys(NetworkStatus).includes(status) ? status : NetworkStatus.OFFLINE
-			 }))
+			update(props => ({
+				...props,
+				NetworkStatus: Object.keys(NetworkStatus).includes(status) ? status : NetworkStatus.OFFLINE
+			}))
 		},
 		logout: redirect => _handleLogout(redirect),
 		myself: () => defaultProps.user,
+		onLogin: cb => onLogin = cb,
+		onLoginFailure: cb => onLoginFailure = cb,
+		onLogout: cb => onLogout = cb,
 		query: query,
-		mutation: mutation
+		mutation: mutation,
 	}
 })()

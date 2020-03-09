@@ -41,15 +41,18 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: `NETWORK.ADD`,
+			name: 'NETWORK',
+			event: 'ADD',
 			callback: () => fetchNetworks()
 		},
 		{
-			event: `NETWORK.DELETE`,
+			name: 'NETWORK',
+			event: 'DELETE',
 			callback: () => fetchNetworks()
 		},
 		{
-			event: `NETWORK.UPDATE`,
+			name: 'NETWORK',
+			event: 'UPDATE',
 			callback: () => fetchNetworks()
 		}
 	]}

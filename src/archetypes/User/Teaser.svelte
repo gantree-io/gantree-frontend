@@ -103,7 +103,8 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: `${_id}.UPDATE`,
+			name: _id,
+			event: `UPDATE`,
 			callback: user => {
 				name = user.name
 				email = user.email

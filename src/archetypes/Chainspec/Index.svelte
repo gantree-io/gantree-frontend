@@ -26,11 +26,13 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: 'CHAINSPEC.ADD',
+			name: 'CHAINSPEC',
+			event: 'ADD',
 			callback: () => _fetchAll()
 		},
 		{
-			event: 'CHAINSPEC.DELETE',
+			name: 'CHAINSPEC',
+			event: 'DELETE',
 			callback: () => _fetchAll()
 		}
 	]}

@@ -34,6 +34,6 @@
 	}
 </style>
 
-<div class="filterable-option" data-active={$activeFilters.includes(key)} data-count={itemCount[key]} on:click={() => toggleFilter(key)}>
+<div class="filterable-option" data-active={$activeFilters.includes(key)} data-count={$itemCount[key]||0} on:click={() => toggleFilter(key)}>
 	<slot></slot>
 </div>

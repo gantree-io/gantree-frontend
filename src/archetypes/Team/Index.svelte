@@ -45,15 +45,18 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: `USER.ADD`,
+			name: 'USER',
+			event: `ADD`,
 			callback: () => _fetchAll()
 		},
 		{
-			event: `USER.DELETE`,
+			name: 'USER',
+			event: `DELETE`,
 			callback: () => _fetchAll()
 		},
 		{
-			event: `TEAM.UPDATE`,
+			name: 'TEAM',
+			event: `UPDATE`,
 			callback: () => _fetchAll()
 		},
 	]}

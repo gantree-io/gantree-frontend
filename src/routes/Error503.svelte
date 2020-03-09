@@ -1,8 +1,27 @@
 <script>
+	import { onMount } from 'svelte';
 	import { push } from 'svelte-spa-router'
 	import { Icon } from '@smui/common';
 	import Centered from '@layouts/Centered.svelte'
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
+	import { checkConnection } from '@util/graphql';
+
+	onMount(() => {
+		let check = () => {
+			checkConnection()
+				.then(() => {
+					push('/')
+				})
+		}
+
+		check()
+		
+		let interval = setInterval(check, 2000)
+
+		return () => {
+			clearInterval(interval)
+		}
+	})
 </script>
 
 <style lang="scss">
@@ -20,9 +39,10 @@
 	}
 </style>
 
-<Centered>
-	<h1 class='mdc-typography--headline3'>503</h1>
-	<h2 class='mdc-typography--headline5'>Looks like a network error!</h2>
-	<Icon class="material-icons icon">error</Icon>
-	<p class="mdc-typography--body1">Unfortunately the site is down - please try again later!</p>
-</Centered>
+<Centered
+	icon='error'
+	title='503'
+	subtitle='Looks like a network error!'
+	copy='Unfortunately the site is down - please try again later!'
+	back={null}
+/>

@@ -2,15 +2,17 @@
 	import { get } from 'svelte/store';
 	import ApolloClient from "apollo-boost";
 	import _ from 'lodash'
-	import GraphQL, { configure as configureGraphQL } from '@util/graphql' 
-	import { configure as configureHotwire } from '@components/Hotwire.svelte' 
-	import AuthRouter, { configure as configureAuthRouter, triggerError, location } from '@components/AuthRouter.svelte'
+	import { configure as configureGraphQL } from '@util/graphql' 
+	import { configure as configureHotwire, subscribe as hotwireSubscribe, setTeam as hotwireSetTeam } from '@components/Hotwire.svelte' 
+	import AuthRouter, { configure as configureAuthRouter, triggerError, location, push } from '@components/AuthRouter.svelte'
 	import AppStore, { UserStatus, AccountStatus, NetworkStatus } from './store'
+	
 	// ---> global components
 	import Drawer from '@components/Drawer.svelte'
 	import Modal from '@components/Modal.svelte'
-	import Toaster from '@components/Toaster.svelte'
+	import Toaster, { toast } from '@components/Toaster.svelte'
 	import Dialog from '@components/Dialog.svelte'
+	
 	// ---> routes
 	import Home from '@routes/Home.svelte'
 	import Authenticate from '@routes/Authenticate.svelte'
@@ -24,25 +26,32 @@
 	configureGraphQL({
 		uri: _env.GRAPHQL_URL, 
 		token: () => _.get(get(AppStore), 'user.tokens.auth'),
-		onNetworkError: e => {
-			AppStore.setNetworkStatus(NetworkStatus.OFFLINE)
-			triggerError(503, e.message)
+		onNetworkError: msg => {
+			triggerError(503)
 		},
 		onGraphQLError: e => {
 			if(e.code === 'UNAUTHENTICATED'){
 				// if we're on the authenticate page then stop authenticating
 				if($location === '/authenticate'){
-					AppStore.logout()
-					//push(`/`)
+					//AppStore.logout()
+					push(`/`)
 				}else{
-					//push(`/authenticate`)
+					push(`/authenticate`)
 				}
 			}
 		}
 	})
 	
 	// configure hotwire
-	configureHotwire({url: _env.SOCKETIO_URL})
+	configureHotwire({
+		url: _env.SOCKETIO_URL,
+		onDisconnect: () => {
+			toast.warning(`Socket disconnected: You are no longer receving live updates from the server`)
+		},
+		onReconnect: () => {
+			toast.success(`Socket connected: You are now receving live updates from the server`)
+		}
+	})
 	
 	// configure the router
 	configureAuthRouter({
@@ -50,11 +59,8 @@
 			404: Error404,
 			503: Error503
 		},
-		onPrivateRoute: ({push, location}) => {
+		onPrivateRoute: ({location}) => {
 			AppStore.subscribe(({userStatus, accountStatus}) => {
-				// redirect /dashboard to /dashboard/networks
-				//if(location === '/dashboard') push(`/dashboard/networks`)
-				
 				// not authenticated? push to auth page
 				if(userStatus !== UserStatus.AUTHENTICATED) push(`/authenticate?redirect=${$location}`)
 				// account not complete? push to account/setup page 
@@ -62,7 +68,8 @@
 			})
 		}
 	})
-
+	
+	// configure routes
 	const routes = {
 		public: {
 			'/': Home,
@@ -75,6 +82,32 @@
 			'/account/setup': AccountSetup,
 		}
 	}
+
+	// handle login/logout
+	AppStore.onLogin((user) => {
+		// TODO set hotwire teamID.... (room prefix...?)
+		hotwireSetTeam(user.team._id)
+
+		// subscribe to updates on this user
+		hotwireSubscribe(user._id, `UPDATE`, _updateduser => {
+			console.log(_updateduser)
+
+			// update(props => ({
+			// 	...props,
+			// 	user: {
+			// 		...props.user,
+			// 		name: _updateduser.name,
+			// 		subscribed: _updateduser.subscribed
+			// 	},
+			// }))
+		})
+
+		
+
+
+		push(`/dashboard`)
+	})
+	AppStore.onLogout(() => push(`/`))
 </script>
 
 <svelte:head>

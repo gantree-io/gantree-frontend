@@ -7,45 +7,40 @@
 	import { writable } from 'svelte/store';
 	import NoResults from '@components/NoResults.svelte'
 
-	const filters = [];
-	const itemCount = {};
+	const filters = writable([])
 	const activeFilters = writable([])
+	const itemCount = writable({})
 
 	setContext(FILTERABLE, {
 		registerFilter: key => {
-			filters.push(key);
-			activeFilters.update(items => {
-				items.push(key)
-				return items
-			})
+			filters.update(items => items.concat([key]))
+			activeFilters.update(items => items.concat([key]))
 		},
 		registerItem: key => {
-			if(itemCount[key]){
-				itemCount[key] = itemCount[key] + 1
-			}else {
-				itemCount[key] = 1
-			}
+			itemCount.update(items => {
+				if(!items[key]) { items[key] = 0 }
+				items[key] = items[key] + 1
+				return items
+			})
 		},
 		toggleFilter: key => {
  			if($activeFilters.includes(key)){
  				activeFilters.update(items => items.filter(i => i !== key))
  			}else{
- 				activeFilters.update(items => {
- 					items.push(key)
- 					return items
- 				})
+ 				activeFilters.update(items => items.concat([key]))
  			}
 		},
+		filters,
 		activeFilters,
-		itemCount
+		itemCount,
 	});
 </script>
 
 <slot/>
 {#if $activeFilters.length <= 0}
 	<NoResults 
-		title='Hidden behind filters'
+		title='All items filtered'
 		>
-		Turn on <span class='inline-link' on:click={() => activeFilters.update(items => filters)}>all filters</span> to see items
+		<span class='inline-link' on:click={() => activeFilters.update(items => $filters)}>Toggle on  all filters</span> to see items
 	</NoResults>
 {/if}

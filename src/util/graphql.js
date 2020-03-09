@@ -9,8 +9,16 @@ import { setContext } from 'apollo-link-context';
 import { replace, location } from 'svelte-spa-router'
 
 let client = null
-let onGraphQLError
-let onNetworkError
+let onGraphQLError = () => {}
+let onNetworkError = () => {}
+
+const handleGraphQLError = err => {
+	let error = {
+		message: err.message,
+		code: err.extensions.code
+	}
+	onGraphQLError(error)
+}
 
 export const gql = ApolloGQL
 
@@ -21,13 +29,13 @@ export const configure = ({uri, token, ...props}) => {
 
 	const httpLink = createHttpLink({ uri: uri || "/graphql"});
 	
-	const errorLink = onError(({ networkError, graphQLErrors}) => {
+	const errorLink = onError(({ networkError, graphQLErrors }) => {
 		if(graphQLErrors){
-			//onGraphQLError && onGraphQLError(graphQLErrors[0])
+			handleGraphQLError(graphQLErrors[0])
 		}
 
-		if(networkError){
-			//onNetworkError && onNetworkError(networkError)
+		else if(networkError){
+			onNetworkError(networkError)
 		}
 	});
 
@@ -61,29 +69,20 @@ export const configure = ({uri, token, ...props}) => {
 	});
 }
 
-export const awaitQuery = (q, options={}) => {
-	return async () => {
-		let result = await client.query({ query: ApolloGQL`${q}`, ...options})
-		return Object.values(result.data)[0]
-	}
-};
-
 export const query = async (q, variables={}, options={}) => new Promise(async (resolve, reject) => {
 	try {
 		let result = await client.query({ 
 			query: ApolloGQL`${q}`, 
 			variables: variables, 
 			...options
-		}).catch(e => {
-			console.log(e.message)
 		})
+		// .catch(e => {
+		// 	onGraphQLError(e)
+		// 	reject(e)
+		// })
 
 		if(result.errors){
-			let error = {
-				message: result.errors[0].message,
-				code: result.errors[0].extensions.code
-			}
-			onGraphQLError && onGraphQLError(error)
+			handleGraphQLError(result.errors[0])
 			reject(error)
 		}
 
@@ -103,25 +102,26 @@ export const mutation = async (q, variables={}, options={}) => new Promise(async
 		})
 
 		if(result.errors){
-			let error = {
-				message: result.errors[0].message,
-				code: result.errors[0].extensions.code
-			}
-			onGraphQLError && onGraphQLError(error)
+			handleGraphQLError(result.errors[0])
 			reject(error)
 		}
 
 		resolve(Object.values(result.data)[0])
 	} 
 	catch(e) {
-		console.log(e)
+		reject(error)
 	}
 });
 
-export const queryOld = (q, options={}) => client.query({query: ApolloGQL`${q}`, ...options})
+export const checkConnection = () => new Promise(async (resolve, reject) => {
+	try {
+		await client
+			.query({query: ApolloGQL`query ping { ping }`})
+			.catch(e => reject())
 
-export default {
-	//configure: configureGraphQL,
-	query: query,
-	queryOld: queryOld
-}
+		resolve()
+	} 
+	catch(e) {
+		reject()
+	}
+})

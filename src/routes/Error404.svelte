@@ -20,9 +20,11 @@
 	}
 </style>
 
-<Centered>
-	<h1 class='mdc-typography--headline3'>404</h1>
-	<h2 class='mdc-typography--headline5'>Looks like we couldn't find that page!</h2>
-	<Icon class="material-icons icon">help</Icon>
+<Centered
+	icon='help'
+	title='404'
+	subtitle="Looks like we couldn't find that page!"
+	back={null}
+	>
 	<p class="mdc-typography--body1">Click here to go to the <a href={'/#'}>home page</a> or try and <a href={'/#/login'}>login</a></p>
 </Centered>

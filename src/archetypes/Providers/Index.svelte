@@ -27,11 +27,13 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: 'CREDENTIALS.ADD',
+			name: 'CREDENTIALS',
+			event: 'ADD',
 			callback: () => _fetchAll()
 		},
 		{
-			event: 'CREDENTIALS.DELETE',
+			name: 'CREDENTIALS',
+			event: 'DELETE',
 			callback: () => _fetchAll()
 		}
 	]}

@@ -68,7 +68,8 @@
 <Hotwire
 	subscriptions={[
 		{
-			event: `${_id}.NODESTATUS`,
+			name: _id,
+			event: `NODESTATUS`,
 			callback: ({nodes}) => {
 				onlineCount = nodes.online
 				pendingCount = nodes.pending
