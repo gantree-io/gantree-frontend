@@ -76,8 +76,6 @@
 						margin: 0 0.5em;
 					}
 				}
-				
-				
 			}
 
 			.right{
@@ -86,6 +84,10 @@
 				align-items: center;
 				justify-content: flex-end;
 				align-self: stretch;
+
+				:global(.info){
+					margin-right: 1em
+				}
 
 				.menu{
 					margin-right: 1em;
@@ -132,6 +134,10 @@
 			</span>
 
 			<span class="right">
+				<span class="info">
+					<slot name="info"/>
+				</span>
+				
 				{#if header.actions}
 					<div class='menu' bind:this={menuAnchor}>
 						<IconButton on:click={() => menu.setOpen(true)}>

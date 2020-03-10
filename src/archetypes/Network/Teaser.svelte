@@ -1,5 +1,5 @@
 <script>
-	import Paper, { Title } from '@smui/paper';
+	import Paper, { Title, Subtitle, Content  } from '@smui/paper';
 	import { Icon } from '@smui/common';
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
@@ -8,18 +8,31 @@
 	import Badge from '@components/Badge.svelte'
 	import NetworkDetail from './Detail.svelte'
 	import Hotwire from '@components/Hotwire.svelte'
+	import Pender from '@components/Pender.svelte'
 	import { toast } from '@components/Toaster.svelte'
 	import { dialog } from '@components/Dialog.svelte'
-	import Network, { deleteNetwork } from './store.js'
+	import Network, { fetchOneTeaser, deleteOne } from './store.js'
 
 	export let _id = null
-	export let name = null
-
+	
+	let name
+	let status
+	let nodeCount
 	let onlineCount = 0
 	let pendingCount = 0
 	let offlineCount = 0
 	let menu;
 	let menuAnchor;
+
+	const handleUpdate = props => {
+		console.log(props)
+		name = props.name
+		status = props.status
+		nodeCount = props.nodes.length
+	}
+	
+	// fetch network
+	Network.query(fetchOneTeaser, {_id: _id}).then(handleUpdate)
 </script>
 
 <style lang="scss">
@@ -33,12 +46,29 @@
 		transition: all 0.2s ease-in-out;
 		margin-bottom: 0.6em;
 
-		* :global(.smui-paper__title){
-			margin: 0;
+		.title{
 			display: flex;
-			align-items: center;
-		}
+			align-items: flex-end;
 
+			:global(.material-icons){
+				
+			}
+
+			:global(.smui-paper__title){
+				display: flex;
+				align-items: flex-end;
+				margin: 0;
+				line-height: 1em;
+			}
+
+			:global(.smui-paper__content){
+				font-size: 0.8em;
+				font-weight: 300;
+				line-height: 1em;
+				margin-left: 1em;
+			};
+		}
+		
 		* :global(.badge){
 			display: inline-flex;
 			margin-left: 0.5em;
@@ -62,6 +92,31 @@
 			background-color: var(--color-dark);
 			box-shadow: none
 		}
+
+		&[data-status='DEPLOYING']{
+			.title{
+				//:global(.smui-paper__title){ color: var(--color-status-warning) }
+				:global(.smui-paper__content){ color: var(--color-status-warning) }
+			}
+		}
+
+		&[data-status='ONLINE']{
+			.title{
+				//:global(.smui-paper__title){ color: var(--color-status-success) }
+				:global(.smui-paper__content){ color: var(--color-status-success) }
+			}
+		}
+
+		&[data-status='SHUTDOWN']{
+			filter: contrast(0.6);
+			pointer-events: none;
+			cursor: not-allowed;
+			box-shadow: none;
+			.title{
+				//:global(.smui-paper__title){ color: var(--color-status-error) }
+				:global(.smui-paper__content){ color: var(--color-status-error) }
+			}
+		}
 	}
 </style>
 
@@ -75,14 +130,29 @@
 				pendingCount = nodes.pending
 				offlineCount = nodes.offline
 			}
+		},
+		{
+			name: _id,
+			event: `UPDATE`,
+			callback: handleUpdate
 		}
 	]}
 	>
-	<Paper class='network-teaser' on:click={() => OpenDrawer(NetworkDetail, {_id: _id})} elevation="4">
-		<div>
-			<Title><Icon class="material-icons">blur_on</Icon>&nbsp;{name}</Title>
+	<Paper class='network-teaser' on:click={() => OpenDrawer(NetworkDetail, {_id: _id})} elevation="4" data-status={status}>
+		<div class='title'>
+			<Title>
+				<Icon class="material-icons">blur_on</Icon>&nbsp;
+				<Pender val={name}/>
+			</Title>
+			<Content>
+				{status}
+			</Content>
 		</div>
 		<div class='controls'>
+			<div class={`mdc-typography--caption`}>
+				<Pender val={nodeCount}/> node{nodeCount > 1 ? 's' : ''}
+			</div>
+			
 			<Badge value={onlineCount} success disabled={!onlineCount}/>
 			<Badge value={pendingCount} warning disabled={!pendingCount}/>
 			<Badge value={offlineCount} error disabled={!offlineCount}/>
@@ -112,14 +182,14 @@
 									title: "Confirm network deletion",
 									subtitle: 'Deleting this network will remove the network and all nodes. This cannot be undone',
 									confirmButton: 'Confirm Network Deletion',
-									onConfirm: () => Network.query(deleteNetwork, {_id: _id}).then(() => toast.success(`Network deleted`)),
+									onConfirm: () => Network.query(deleteOne, {_id: _id}).then(() => toast.success(`Network pending deletion`)),
 									cancelButton: 'Take me back!',
 									confirmWord: 'DELETE'
 								})
 							}}
 							>
 							<Graphic class="material-icons">delete</Graphic>
-							<Text>Delete</Text>
+							<Text>Delete Network</Text>
 						</Item>
 					</List>
 				</Menu>

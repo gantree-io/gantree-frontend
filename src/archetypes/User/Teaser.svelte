@@ -38,8 +38,7 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 0.6em;
-		margin-bottom: 0.6em;
-		padding: 14px 16px;
+		padding: 24px;
 
 		&[data-status='INVITATION_SENT']{
 			background-color: var(--color-dark-grey);
@@ -152,6 +151,10 @@
 						<List dense>
 							{#if !isTeamOwner}
 								{#if status === 'ACTIVE'}
+									<Item on:click={() => User.query(deactivate, {_id: _id}).then(() => toast.warning(`User deactivated`))}>
+										<Graphic class="material-icons">toggle_off</Graphic>
+										<Text>Deactivate</Text>
+									</Item>
 									<Item
 										on:click={e => {
 											e.preventDefault()
@@ -172,10 +175,6 @@
 										}}>
 										<Graphic class="material-icons">star</Graphic>
 										<Text>Make Team Owner</Text>
-									</Item>
-									<Item on:click={() => User.query(deactivate, {_id: _id}).then(() => toast.warning(`User deactivated`))}>
-										<Graphic class="material-icons">toggle_off</Graphic>
-										<Text>Deactivate</Text>
 									</Item>
 								{/if}
 

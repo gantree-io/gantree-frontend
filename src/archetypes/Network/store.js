@@ -13,12 +13,26 @@ export const fetchAll = `
 	}
 `;
 
+export const fetchOneTeaser = `
+	query network($_id: String!) {
+		network(_id: $_id) {
+			_id
+			name
+			status
+			nodes{
+				_id
+			}
+		}
+	}
+`;
+
 export const fetchOne = `
 	query network($_id: String!) {
 		network(_id: $_id) {
 			_id
 			name
 			chainspec
+			status
 			nodes{
 				_id
 				name
@@ -31,7 +45,7 @@ export const fetchOne = `
 	}
 `;
 
-export const deleteNetwork = `
+export const deleteOne = `
 	mutation deleteNetwork($_id: String!) {
 		deleteNetwork(_id: $_id)
 	}

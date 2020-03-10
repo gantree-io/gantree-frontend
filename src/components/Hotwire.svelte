@@ -20,7 +20,7 @@
 	let _socket
 
 	// connect to our socket endpoint
-	const connect = () => io(_url, {
+	const connect = () => socket(_url, {
 		reconnection: true,
 		reconnectionDelay: 1000,
 		reconnectionDelayMax : 2000,
@@ -40,39 +40,48 @@
 		}
 	})
 
-	const _subscribe = _subs => useSocket()
-		.then(_io => {
-			let _ids = []
-			_subs.forEach(_sub => {
-				const _id = uuid()
-				const _room = `${_team}.${_sub.name}`
+	const _subscribe = subs => useSocket()
+		.then(io => {
+			let idpool = []
+			subs.forEach(sub => {
+				if(!_team) return
 
-				// add to subscriptions pool
-				SUBSCRIPTIONS[_id] = {
-					room: _room,
-					callback: _sub.callback
-				}
+				const id = uuid()
+				const event = `${_team}.${sub.name}.${sub.event}`
+
+				// no event space? create event space
+				if(!SUBSCRIPTIONS[event]) { SUBSCRIPTIONS[event] = {} }
+
+				// add to callback to event
+				SUBSCRIPTIONS[event][id] = sub.callback
 
 				// join room
-				_io.emit('joinroom', _room)
+				io.emit('joinroom', event)
 			
-				// fire callback for all event subscriptions
-				_io.on(`${_sub.name}.${_sub.event}`, data => {
-					_.filter(Object.values(SUBSCRIPTIONS), { 'room': _room })
-						.map(s => s.callback(data))
-				})
-
-				_ids.push(_id)
+				// fire callbacks for all event subscriptions
+				io.on(event, data => Object.values(SUBSCRIPTIONS[event]).map(cb => cb(data)))
+				
+				// add event ID to pool
+				idpool.push(id)
 			})
 
-			return _ids
+			return idpool
 		})
 
 	const _unsubscribe = ids => useSocket()
-		.then(_io => {
-			ids.forEach(id => {
-				_io.emit('leaveroom', SUBSCRIPTIONS[id].room)
-				delete SUBSCRIPTIONS[id]
+		.then(io => {
+			//console.log(ids)
+			Object.keys(SUBSCRIPTIONS).map(event => {
+				Object.keys(SUBSCRIPTIONS[event]).map(id => {
+					if(ids.includes(id)){
+						delete SUBSCRIPTIONS[event][id]
+						
+						// trigger leave room if no longer any listeners
+						if(Object.keys(SUBSCRIPTIONS[event]).length <= 0){
+							io.emit('leaveroom', event)
+						}
+					}
+				})
 			})
 		})
 </script>
@@ -81,7 +90,7 @@
 	import { onMount, setContext, getContext } from 'svelte';
 	import uuid from 'uuid/v4'
 	import _ from 'lodash'
-	import io from 'socket.io-client';
+	import socket from 'socket.io-client';
 
 	export let subscriptions
 	

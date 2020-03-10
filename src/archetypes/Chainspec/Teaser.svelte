@@ -28,7 +28,7 @@
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
 		margin-bottom: 0.6em;
-		padding: 14px 16px;
+		padding: 24px;
 
 		* :global(.smui-paper__title){
 			margin: 0;

@@ -34,8 +34,7 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 0.6em;
-		margin-bottom: 0.6em;
-		padding: 14px 16px;
+		padding: 24px;
 
 		.title{
 			display: flex;

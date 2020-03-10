@@ -49,11 +49,6 @@
 			name: 'NETWORK',
 			event: 'DELETE',
 			callback: () => fetchNetworks()
-		},
-		{
-			name: 'NETWORK',
-			event: 'UPDATE',
-			callback: () => fetchNetworks()
 		}
 	]}
 	>
@@ -78,7 +73,7 @@
 				<Teaser {...network}/>
 			{:else}
 				<NoResults title='No networks available'>
-					Start by adding a <span class='inline-link' on:click={handleAddNetwork}>new network</span> now
+					Start by deploying a <span class='inline-link' on:click={handleAddNetwork}>new network</span> now
 				</NoResults>
 			{/each}
 		{/if}
