@@ -46,10 +46,10 @@
 	configureHotwire({
 		url: _env.SOCKETIO_URL,
 		onDisconnect: () => {
-			toast.warning(`Socket disconnected: You are no longer receving live updates from the server`)
+			toast.warning(`Hotwire disconnected: You are no longer receving live updates from the server`)
 		},
 		onReconnect: () => {
-			toast.success(`Socket connected: You are now receving live updates from the server`)
+			toast.success(`Hotwire connected: You are now receving live updates from the server`)
 		}
 	})
 	
