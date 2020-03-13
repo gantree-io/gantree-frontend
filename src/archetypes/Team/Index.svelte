@@ -5,7 +5,7 @@
 	import PanelLayout from '@layouts/Panel.svelte'
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
 	import Team, { fetchAll } from './store.js'
-	import AppStore from '@app/store.js'
+	import Account from '@archetypes/Account/store.js'
 	import Hotwire from '@components/Hotwire.svelte'
 
 	import UserTeaser from '@archetypes/User/Teaser.svelte'
@@ -28,7 +28,7 @@
 		_fetchAll()
 
 		// get the curent user
-		AppStore.subscribe(({user}) => currentUserID = user._id)
+		Account.subscribe(({user}) => currentUserID = user._id)
 	})
 </script>
 

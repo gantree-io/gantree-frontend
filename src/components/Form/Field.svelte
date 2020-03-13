@@ -67,8 +67,8 @@
 		.title{
 			font-size: 0.9em;
 			font-weight: 100;
-			display: flex;
-			align-items: center;
+			text-align: inherit;
+			display: block;
 
 			:global(.tooltip){
 				display: inline-block;
@@ -86,6 +86,7 @@
 			font-weight: 100;
 			display: block;
 			color: var(--color-mid-grey);
+			text-align: inherit;
 		}
 
 		:global(input),
@@ -94,6 +95,7 @@
 			margin: 0.2em 0;
 			display: block;
 			width: 100%;
+			text-align: inherit;
 
 			&:focus{
 				border-bottom: 1px solid var(--color-highlight);
@@ -137,7 +139,8 @@
 		input.type === 'text' || 
 		input.type === 'number' || 
 		input.type === 'url' ||
-		input.type === 'email'
+		input.type === 'email' ||
+		input.type === 'password'
 	}
 		<Text {...input} bind:value={value}/>
 	{:else if input.type === 'select'}

@@ -1,31 +1,46 @@
 <script>
-	import { push } from 'svelte-spa-router'
-	//import IconButton, { Icon } from '@smui/icon-button';
+	import { fade } from 'svelte/transition';
 	import Button, { Label, Icon } from '@smui/button';
+	import Gantree from '@assets/Gantree.svelte'
+	import NodeCanvas from '@components/NodeCanvas.svelte'
 
 	export let icon = null
 	export let title = null
 	export let subtitle = null
 	export let copy = null
-	export let back = {
-		text: null,
-		icon: 'home',
-		action: () => push('/')
-	}
+	export let back = null
+	export let maxWidth = '40rem'
 </script>
 
 <style lang="scss">
-	main{
+	.layout.-centered{
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		min-height: 100vh;
+		color: white;
 
-		:global(.mdc-button.back){
+		background-image: linear-gradient(
+			var(--color-dark) 0%, 
+			var(--color-dark-purple) 25%, 
+			var(--color-light-purple) 100%
+		);
+
+		> :global(.node-canvas){
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			z-index: 0;
+		}
+
+		> :global(.mdc-button.back){
 			position: absolute;
 			top: 0.5em;
 			left: 50%;
 			transform: translateX(-50%);
+			z-index: 1;
 
 			:global(.mdc-button__icon){
 				margin: 0;
@@ -35,45 +50,79 @@
 				}
 			}
 		}
+
+		> :global(.gantree){
+			position: absolute;
+			top: 0;
+			right: 0;
+			filter: invert(1);
+			mix-blend-mode: screen;
+			opacity: 0.15;
+			width: 40vw;
+			height: auto;
+			z-index: 1;
+		}
+
+		.content{
+			text-align: center;
+			margin: calc(-5vw - 5vh) auto 0;
+			max-width: 40rem;
+			width: 100%;
+			z-index: 1;
+
+			:global(.material-icons.title-icon){
+				font-size: 3em;
+				margin: 0.1em 0
+			}
+
+			>h1{
+				display: block;
+				margin: 0.2em 0;
+			}
+
+			>h2{
+				display: block;
+				margin: 0.3em 0;
+				font-weight: 300;
+			}
+
+			>p{
+				display: block;
+				margin: 1.2em 0;
+			}
+
+			.children{
+				margin-top: 3em
+			}
+		}
+
+		> :global(*[slot="header"]){
+			position: absolute;
+			top: 1em;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		
+		> :global(*[slot="footer"]){
+			position: absolute;
+			bottom: 1em;
+			left: 50%;
+			transform: translateX(-50%);
+		}
 	}
 
-	.content{
-		text-align: center;
-		margin: calc(-5vw - 10vh) auto 0;
-		max-width: 40rem;
-		width: 100%;
-
-		:global(.material-icons.title-icon){
-			font-size: 3em;
-			margin: 0.1em 0
-		}
-
-		>h1{
-			margin: 0.2em 0;
-		}
-
-		>h2{
-			margin: 0.3em 0;
-		}
-
-		>p{
-			margin: 1.4em 0;
-		}
-	}
 </style>
 
 <main class='layout -centered'>
-	{#if back}
-		<Button class='back' on:click={back.action}>
-			{#if back.icon}<Icon class="material-icons">{back.icon}</Icon>{/if}
-			{#if back.text}<Label>{back.text}</Label>{/if}
-		</Button>
-	{/if}
-	<div class="content">
+	<Gantree/>
+	<NodeCanvas/>
+	<slot name='header'/>
+	<div class="content" style={`max-width: ${maxWidth}`} transition:fade="{{delay: 0, duration: 150}}">
 		{#if icon}<Icon class="material-icons title-icon">{icon}</Icon>{/if}
 		{#if title}<h1 class='mdc-typography--headline3'>{title}</h1>{/if}
 		{#if subtitle}<h2 class='mdc-typography--headline5'>{subtitle}</h2>{/if}
 		{#if copy}<p class="mdc-typography--body1">{copy}</p>{/if}
-		<slot></slot>
+		<div class="children"><slot/></div>
 	</div>
+	<slot name='footer'/>
 </main>

@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte'
-	import AppStore, { UserStatus } from '@app/store'
+	import AccountStore, { AuthStatus } from './store'
 	import { Icon } from '@smui/common';
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
@@ -8,14 +8,16 @@
 
 	export let providers = []
 	
-	let _username
-	let _status
+	let username
+	let status
 	let menu;
 	let menuAnchor;
 
-	AppStore.subscribe(({user, userStatus})=> {
-		_username = user.name
-		_status = userStatus
+	AccountStore.subscribe(account => {
+		username = account.user.name
+		status = account.authStatus
+
+		console.log(status)
 	});
 </script>
 
@@ -34,11 +36,11 @@
 </style>
 
 <div class='account-menu'>
-	{#if _status === UserStatus.LOADING || _status === UserStatus.UNAUTHENTICAED}
+	{#if status === AuthStatus.LOADING || status === AuthStatus.UNAUTHENTICAED}
 		<Icon class="material-icons -animation-spin">autorenew</Icon>
-	{:else if _status === UserStatus.AUTHENTICATED}
+	{:else if status === AuthStatus.AUTHENTICATED}
 		<Icon class="material-icons">person</Icon>
-		<span>{_username}</span>
+		<span>{username}</span>
 
 		<div class='menu' bind:this={menuAnchor}>
 			<IconButton on:click={() => menu.setOpen(true)}>
@@ -58,7 +60,7 @@
 						<Graphic class="material-icons">person</Graphic>
 						<Text>My Team</Text>
 					</Item>
-					<Item on:click={() => AppStore.logout()}>
+					<Item on:click={() => AccountStore.logout()}>
 						<Graphic class="material-icons">power_settings_new</Graphic>
 						<Text>Logout</Text>
 					</Item>

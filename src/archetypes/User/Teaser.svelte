@@ -6,7 +6,7 @@
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
 	import User, { resendInvitation, activate, deactivate, deleteUser } from './store'
-	import App from '@app/store'
+	import Account from '@archetypes/Account/store'
 	import Team, { updateOwner } from '@archetypes/Team/store'
 	import Hotwire from '@components/Hotwire.svelte'
 	import { dialog } from '@components/Dialog.svelte'
@@ -24,7 +24,7 @@
 	let _you
 
 	onMount(async () => {
-		App.subscribe(({user}) => {
+		Account.subscribe(({user}) => {
 			_you = user._id === _id
 		})
 	})
@@ -112,7 +112,7 @@
 		}
 	]}
 	>
-	<Paper class='user-teaser' data-status={status} elevation="4">
+	<Paper class='user-teaser' data-status={status} >
 		<div class='title'>
 			<Icon class='material-icons'>person</Icon>
 			{#if name}<Title>{name}</Title>{/if}

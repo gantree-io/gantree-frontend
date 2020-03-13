@@ -1,33 +1,11 @@
 <script>
-	import { push, querystring } from 'svelte-spa-router'
+	import { push } from 'svelte-spa-router'
 	import { Icon } from '@smui/common';
-	import { toast } from '@components/Toaster.svelte'
 	import Centered from '@layouts/Centered.svelte'
-	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
-	import AppStore, { NetworkStatus, UserStatus } from '@app/store'
-	import { parse } from 'qs'
+	import AccountStore, { AuthStatus } from '@archetypes/Account/store'
 	
-	let redirect = parse($querystring).redirect || '/dashboard'
-
-	let _t = toast.loading('... authenticating')
-
-	AppStore.subscribe(({userStatus}) => {
-		switch (userStatus) {
-			case UserStatus.UNAUTHENTICATED:
-				_t.error('Authentication failed')
-				push('/')
-				break;
-			case UserStatus.LOADING:
-				// stay here while loading
-				break;
-			case UserStatus.AUTHENTICATED:
-				_t.success(`Logged in!`)
-				push(redirect)
-				break;
-			default:
-				// statements_def
-				break;
-		}
+	AccountStore.subscribe(({authStatus}) => {
+		if(authStatus === AuthStatus.UNAUTHENTICATED) push('/')
 	})
 </script>
 
@@ -50,5 +28,5 @@
 	<h1 class='mdc-typography--headline3'>Gantree</h1>
 	<h2 class='mdc-typography--headline5'>Authenticating</h2>
 	<Icon class="material-icons thumb -animation-pulse">fingerprint</Icon>
-	<p class="mdc-typography--body1">You will be redirected to <strong>{redirect}</strong> once authenticated</p>
+	<p class="mdc-typography--body1">You will be redirected to <strong></strong> once authenticated</p>
 </Centered>

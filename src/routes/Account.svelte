@@ -4,7 +4,8 @@
 	import Button, { Label, Icon } from '@smui/button';
 	import Centered from '@layouts/Centered.svelte'
 	import Form, { Field } from '@components/Form'
-	import App, { updateAccount } from '@app/store'
+	import AccountStore, { updateAccount } from '@archetypes/Account/store'
+
 	import { toast } from '@components/Toaster.svelte'
 	import { dialog } from '@components/Dialog.svelte'
 
@@ -17,7 +18,7 @@
 
 		 if(!hasErrors){
 		 	setLoading(true)
-		 	App.query(updateAccount, fields).then(data => {
+		 	AccountStore.query(updateAccount, fields).then(data => {
 				_t.success(`Details saved`)
 				setLoading(false)
 				//pop()
@@ -30,7 +31,7 @@
 	}
 	
 	onMount(async () => {
-		App.subscribe(({user}) => {
+		AccountStore.subscribe(({user}) => {
 			name = user.name
 			subscribed = user.subscribed
 		})
@@ -38,21 +39,21 @@
 </script>
 
 <style lang="scss">
-	:global(.layout.-centered){
-		:global(form){
+	/*:global(.layout.-centered){
+		> :global(form){
 			text-align: center;
 			margin-top: 4vw;
 			
-			:global(.title){
+			> :global(.title){
 				justify-content: center;
 				margin-bottom: 0.5em
 			}
 
-			:global(.form-button-group){
+			> :global(.form-button-group){
 				margin-top: 5vw
 			}
 		}
-	}
+	}*/
 	
 	:global(button.delete){
 		position: absolute;

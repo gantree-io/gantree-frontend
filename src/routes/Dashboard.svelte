@@ -8,8 +8,7 @@
  	import Button from '@smui/button';
 
  	import RandomQuote from '@components/RandomQuote.svelte'
- 	import UserAccountMenu from '@archetypes/User/AccountMenu.svelte'
- 	import AppStore, { AccountStatus } from '@app/store.js'
+ 	import AccountMenu from '@archetypes/Account/Menu.svelte'
 	
 	// routes
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
@@ -163,7 +162,7 @@
 	<Drawer>
 		<Header>
 			<Title>Gantree</Title>
-			<Subtitle>We've got some oil for that</Subtitle>
+			<Subtitle>A full service node infrastructure toolkit for Substrate chains</Subtitle>
 		</Header>
 		<Content>
 			<List>
@@ -179,7 +178,7 @@
 			<List class='bottom'>
 				<RandomQuote/>
 				<Separator nav />
-				<UserAccountMenu/>
+				<AccountMenu/>
 			</List>
 		</Content>
 	</Drawer>

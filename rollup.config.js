@@ -55,6 +55,7 @@ export default {
 		alias({
 			 entries: [
 			 	{ find: '@app', replacement: __dirname + '/src' },
+			 	{ find: '@assets', replacement: __dirname + '/src/assets' },
 			 	{ find: '@routes', replacement: __dirname + '/src/routes' },
 			 	{ find: '@archetypes', replacement: __dirname + '/src/archetypes' },
 			 	{ find: '@components', replacement: __dirname + '/src/components' },

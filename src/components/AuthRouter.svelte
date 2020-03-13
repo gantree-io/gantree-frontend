@@ -1,5 +1,5 @@
 <script context="module">
-	import { location as _location, push as _push } from 'svelte-spa-router'
+	import { location as _location, push as _push, querystring as _querystring } from 'svelte-spa-router'
 
 	let errorRoutes
 	let onRoute
@@ -24,6 +24,7 @@
 
 	export const location = _location
 	export const push = _push
+	export const querystring = _querystring
 </script>
 
 <script>

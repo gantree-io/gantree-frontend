@@ -1,10 +1,11 @@
 <script context="module">
 	let _url = "http://localhost:3000"
-	let _team
+	let _prefix
 	let handleDisconnect
 	let handleReconnect
 
-	export const configure = ({url, onDisconnect=()=>{}, onReconnect=()=>{}}) => {
+	export const configure = ({prefix='', url, onDisconnect=()=>{}, onReconnect=()=>{}}) => {
+		_prefix = prefix
 		_url = url
 		handleDisconnect = onDisconnect
 		handleReconnect = onReconnect
@@ -12,10 +13,6 @@
 
 	export const subscribe = (name, event, callback) => _subscribe([{name, event, callback}])
 
-	export const setTeam = team => {
-		_team = team
-	}
-	
 	const SUBSCRIPTIONS = {};
 	let _socket
 
@@ -44,10 +41,10 @@
 		.then(io => {
 			let idpool = []
 			subs.forEach(sub => {
-				if(!_team) return
+				if(!_prefix) return
 
 				const id = uuid()
-				const event = `${_team}.${sub.name}.${sub.event}`
+				const event = `${_prefix}.${sub.name}.${sub.event}`
 
 				// no event space? create event space
 				if(!SUBSCRIPTIONS[event]) { SUBSCRIPTIONS[event] = {} }

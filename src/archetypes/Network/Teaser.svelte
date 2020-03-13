@@ -25,7 +25,6 @@
 	let menuAnchor;
 
 	const handleUpdate = props => {
-		console.log(props)
 		name = props.name
 		status = props.status
 		nodeCount = props.nodes.length

@@ -2,10 +2,12 @@
 	import { get } from 'svelte/store';
 	import ApolloClient from "apollo-boost";
 	import _ from 'lodash'
+	import { parse } from 'qs'
 	import { configure as configureGraphQL } from '@util/graphql' 
-	import { configure as configureHotwire, subscribe as hotwireSubscribe, setTeam as hotwireSetTeam } from '@components/Hotwire.svelte' 
-	import AuthRouter, { configure as configureAuthRouter, triggerError, location, push } from '@components/AuthRouter.svelte'
-	import AppStore, { UserStatus, AccountStatus, NetworkStatus } from './store'
+	import { configure as configureHotwire, subscribe as hotwireSubscribe } from '@components/Hotwire.svelte' 
+	import AuthRouter, { configure as configureAuthRouter, triggerError, location, push, querystring } from '@components/AuthRouter.svelte'
+	import AccountStore, { AuthStatus, AccountStatus } from '@archetypes/Account/store'
+
 	
 	// ---> global components
 	import Drawer from '@components/Drawer.svelte'
@@ -19,37 +21,24 @@
 	import Dashboard from '@routes/Dashboard.svelte'
 	import Account from '@routes/Account.svelte'
 	import AccountSetup from '@routes/AccountSetup.svelte'
+	import AccountCreate from '@archetypes/Account/Create.svelte'
+	import AccountLogin from '@archetypes/Account/Login.svelte'
 	import Error404 from '@routes/Error404.svelte'
 	import Error503 from '@routes/Error503.svelte'
 
 	// configure graphql
 	configureGraphQL({
 		uri: _env.GRAPHQL_URL, 
-		token: () => _.get(get(AppStore), 'user.tokens.auth'),
-		onNetworkError: msg => {
-			triggerError(503)
-		},
+		token: () => _.get(get(AccountStore), 'user.tokens.auth'),
+		onNetworkError: msg => triggerError(503),
 		onGraphQLError: e => {
 			if(e.code === 'UNAUTHENTICATED'){
-				// if we're on the authenticate page then stop authenticating
 				if($location === '/authenticate'){
-					//AppStore.logout()
-					push(`/`)
+					/// hmmm
 				}else{
 					push(`/authenticate`)
 				}
 			}
-		}
-	})
-	
-	// configure hotwire
-	configureHotwire({
-		url: _env.SOCKETIO_URL,
-		onDisconnect: () => {
-			toast.warning(`Hotwire disconnected: You are no longer receving live updates from the server`)
-		},
-		onReconnect: () => {
-			toast.success(`Hotwire connected: You are now receving live updates from the server`)
 		}
 	})
 	
@@ -60,9 +49,11 @@
 			503: Error503
 		},
 		onPrivateRoute: ({location}) => {
-			AppStore.subscribe(({userStatus, accountStatus}) => {
+			AccountStore.subscribe(({authStatus, accountStatus}) => {
+				// if we're already on the authenticate path, do nothing
+				if($location === '/authenticate') {}
 				// not authenticated? push to auth page
-				if(userStatus !== UserStatus.AUTHENTICATED) push(`/authenticate?redirect=${$location}`)
+				else if(authStatus !== AuthStatus.AUTHENTICATED) push(`/authenticate?redirect=${$location}`)
 				// account not complete? push to account/setup page 
 				else if(accountStatus === AccountStatus.INCOMPLETE) push(`/account/setup`)
 			})
@@ -74,6 +65,8 @@
 		public: {
 			'/': Home,
 			'/authenticate': Authenticate,
+			'/login': AccountLogin,
+			'/create-account': AccountCreate
 		},
 		private: {
 			'/dashboard': Dashboard,
@@ -83,37 +76,45 @@
 		}
 	}
 
-	// handle login/logout
-	AppStore.onLogin((user) => {
-		// TODO set hotwire teamID.... (room prefix...?)
-		hotwireSetTeam(user.team._id)
 
-		// subscribe to updates on this user
-		hotwireSubscribe(user._id, `UPDATE`, _updateduser => {
-			console.log(_updateduser)
+	let _t
+	AccountStore.configure({
+		onAuthAttempt: () => {
+			_t = toast.loading('... authenticating')
+		},
+		onAuthSuccess: user => {
+			_t.success(`Logged in!`)
 
-			// update(props => ({
-			// 	...props,
-			// 	user: {
-			// 		...props.user,
-			// 		name: _updateduser.name,
-			// 		subscribed: _updateduser.subscribed
-			// 	},
-			// }))
-		})
+			// configure hotwire
+			configureHotwire({
+				prefix: user.team._id,
+				url: _env.SOCKETIO_URL,
+				onDisconnect: () => toast.warning(`Hotwire disconnected: You are no longer receiving live updates from the server`),
+				onReconnect: () => toast.success(`Hotwire reconnected: You are now receiving live updates from the server`)
+			})
 
-		
-
-
-		push(`/dashboard`)
+			// subscribe to updates on this user
+			hotwireSubscribe(user._id, `UPDATE`, ({name, subscribed}) => AccountStore.setUserPreferences(name, subscribed))
+			
+			// redirect
+			push(parse($querystring).redirect || '/dashboard')
+		},
+		onAuthFailure: () => {
+			push('/')
+			_t.error('Authentication failed!')
+		},
+		onLogout: () => {
+			toast.success(`Logged out!`)
+			push(`/`)
+		}
 	})
-	AppStore.onLogout(() => push(`/`))
 </script>
 
 <svelte:head>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Monda:wght@400&display=swap">
 </svelte:head>
 
 <style lang="scss">
@@ -123,12 +124,13 @@
 		--color-dark-grey: #31393D;
 		--color-mid-grey: #6d7679;
 		--color-grey: #b2b6b7;
-		--color-light-grey: #e1e8ea;
+		--color-light-grey: #cdceea;
 		--color-light: #f8f8f8;
 		--color-xlight: #fbfbfb;
 		
 		/* colours */
-		--color-highlight: #40b3ff;
+		/*--color-highlight: #40b3ff;*/
+		--color-highlight: #52cbff;
 		--color-mid-blue: #2196f3;
 		--color-light-blue: #8bc2d4;
 		--color-green: #4caf50;
@@ -136,6 +138,9 @@
 		--color-red: #f44336;
 		--color-blue: #40a8de;
 		--color-yellow: #fadb14;
+		--color-purple: #3D3B78;
+		--color-dark-purple: #232346;
+		--color-light-purple: #6D6BD9;
 		
 		/* status colors */
 		--color-status-success: var(--color-green);
@@ -160,7 +165,7 @@
 	}
 
 	:global(body){
-		background: var(--color-light);
+		background: var(--color-grey);
 		font-weight: 100;
 		:global(strong){ font-weight: 500 } 
 	}
@@ -213,6 +218,12 @@
 		:global(.smaller){
 			font-size: 0.9em
 		}
+	}
+
+	:global(.mdc-button.-minimal){
+		color: var(--color-light) !important;
+		font-weight: 100;
+		&:hover{ color: var(--color-highlight) !important; }
 	}
 </style>
 

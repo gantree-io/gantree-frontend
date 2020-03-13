@@ -32,10 +32,6 @@
 			subtitle: 'chainspec.json',
 			actions: [
 		 		{
-					text: 'Copy',
-					icon: 'file_copy'
-		 		},
-		 		{
 					text: 'Download',
 					icon: 'get_app',
 					callback: () => {

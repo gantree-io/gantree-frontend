@@ -5,25 +5,30 @@
 	import { toast } from '@components/Toaster.svelte'
 	import { Icon } from '@smui/common';
 	import { replace } from 'svelte-spa-router'
-	import App, { AccountStatus, setName } from '@app/store'
+	import Account, { AccountStatus, setName } from '@archetypes/Account/store'
 
-	const onSubmit = async ({fields, hasErrors, errors, setLoading}) => {
+	const handleSubmit = async ({fields, hasErrors, errors, setLoading}) => {
 		let _t = toast.loading(`Configuring your account...`)
 		if(!hasErrors){
 			setLoading(true)
-			App.query(setName, fields).then(data => {
-				App.setUserName(data.name)
-				_t.success(`Account configured. Welcome to Gantree!`)
-				setLoading(false)
-				replace('/dashboard')
-			})
+			Account.mutation(setName, fields)
+				.then(({name}) => {
+					Account.setUserName(name)
+					_t.success(`Account configured. Welcome to Gantree!`)
+					setLoading(false)
+					replace('/dashboard')
+				})
+				.catch(msg => {
+					setLoading(false)
+					_t.warning(msg)
+				})
 		}else{
 			_t.warning(`Some fields have errors`)
 		}
 	}
 
 	onMount(async () => {
-		App.subscribe(({accountStatus}) => {
+		Account.subscribe(({accountStatus}) => {
 			if(accountStatus === AccountStatus.COMPLETE){
 				replace('/dashboard')
 			}
@@ -64,8 +69,8 @@
 	<p class="mdc-typography--body1">Enter you name below to get started</p>
 
 	<Form 
-		onSubmit={onSubmit}
-		onCancel={() => App.logout()}
+		onSubmit={handleSubmit}
+		onCancel={() => Account.logout()}
 		buttons={{
 			submit: 'Continue',
 			cancel: 'Take me back'
@@ -78,7 +83,6 @@
 				id: 'name',
 				type: 'text',
 				placeholder: "joe blogs",
-				//style:'text-align:center'
 			}}
 		/>
 	</Form>
