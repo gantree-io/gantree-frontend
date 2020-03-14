@@ -83,7 +83,7 @@
 
 	i{
 		position: absolute;
-		background: var(--color-highlight);
+		background: var(--color-status-success);
 		animation-duration: 800ms;
 		animation-timing-function: linear;
 		animation-fill-mode: forwards;

@@ -69,6 +69,7 @@
 			font-weight: 100;
 			text-align: inherit;
 			display: block;
+			margin-bottom: 0.5em;
 
 			:global(.tooltip){
 				display: inline-block;
@@ -96,6 +97,12 @@
 			display: block;
 			width: 100%;
 			text-align: inherit;
+			padding: 0.7em 0.9em;
+			border: 1px solid rgba(0,0,0,0.1);
+			background-color: white;
+			outline: none;
+			font-weight: inherit;
+			font-size: 1em;
 
 			&:focus{
 				border-bottom: 1px solid var(--color-highlight);

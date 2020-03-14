@@ -1,7 +1,8 @@
 <script>
 	import { Icon } from '@smui/common';
 
-	export let icon = `feedback`
+	export let icon
+	export let graphic
 	export let title = `Looks like there's nothing here`
 	export let subtitle
 	export let copy
@@ -19,6 +20,14 @@
 			opacity: 0.4;
 		}
 
+		.graphic{
+			opacity: 0.6;
+			:global(svg){
+				max-width: 30rem;
+				height: auto 
+			}
+		}
+
 		> :global(.-disclaimer){
 			margin-top: 2em
 		}
@@ -34,6 +43,7 @@
 </style>
 
 <section class='no-results'>
+	{#if graphic}<div class="graphic"><svelte:component this={graphic} class={'aaaaa'}/></div>{/if}
 	{#if icon}<Icon class="material-icons">{icon}</Icon>{/if}
 	{#if title}<h1 class="mdc-typography--headline5">{title}</h1>{/if}
 	{#if subtitle}<h2 class="mdc-typography--subtitle1">{subtitle}</h2>{/if}

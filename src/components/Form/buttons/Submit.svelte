@@ -9,7 +9,7 @@
 
 <style lang="scss">
 	button.form-button.-submit{
-		background: var(--color-highlight);
+		background: var(--color-theme-highlight);
 		color: var(--color-light);
 	}
 </style>

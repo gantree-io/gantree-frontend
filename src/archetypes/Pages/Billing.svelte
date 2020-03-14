@@ -1,26 +1,16 @@
 <script>
 	import PanelLayout from '@layouts/Panel.svelte'
-	import Hotwire from '@components/Hotwire.svelte'
 </script>
 
-<style>
-	:global(h2){
-		margin: 2em 0 1em 0;
-	}
-
-	:global(h2:first-child){
-		margin-top: 0
-	}
-</style>
-
-<Hotwire>
-	<PanelLayout 
-		header={{
-			title: 'Billing',
-			icon: 'receipt',
-		}}
-		showBreadcrumbs
-		>
-		[todo billing]
-	</PanelLayout>
-</Hotwire>
+<PanelLayout 
+	header={{
+		title: 'Billing',
+		icon: 'receipt',
+	}}
+	showBreadcrumbs
+	>
+	<h2 class="mdc-typography--headline6">Excepteur sint occaecat</h2>
+	<p class="mdc-typography--body1 -content">
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
+	</p>
+</PanelLayout>

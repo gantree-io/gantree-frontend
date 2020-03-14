@@ -45,7 +45,7 @@
 			color: var(--color-light) !important;
 			font-weight: 100;
 			&:hover{
-				color: var(--color-highlight) !important;
+				color: var(--color-theme-highlight) !important;
 			}
 		}
 

@@ -52,7 +52,11 @@
 
 <style lang="scss">
 	:global(.mdc-typography--body1){
-		margin-top: 0
+		margin-top: 0;
+	}
+
+	:global(.layout-panel) > :global(.body) > :global(form) :global(.form-button-group){
+		display: flex;
 	}
 </style>
 

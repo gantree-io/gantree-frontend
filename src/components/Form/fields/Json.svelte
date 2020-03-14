@@ -18,7 +18,7 @@
 
 <style lang="scss">
 	input{
-		padding: 0.6em 0.6em;
+		padding: 0.8em 1em;
 		border: 1px solid rgba(0,0,0,0.1);
 		background: white;
 		outline: none;

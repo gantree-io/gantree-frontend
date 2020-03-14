@@ -19,47 +19,14 @@
 </script>
 
 <style lang="scss">
-	:global(.chainspec-teaser.smui-paper){
-		background-color: var(--color-dark-grey);
-		color: var(--color-light);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		cursor: pointer;
-		transition: all 0.2s ease-in-out;
-		margin-bottom: 0.6em;
-		padding: 24px;
-
-		* :global(.smui-paper__title){
-			margin: 0;
-			display: flex;
-			align-items: center;
-		}
-
-		* :global(.badge){
-			display: inline-flex;
-			margin-left: 1em;
-
-			:global(.value){
-				color: var(--color-dark)
-			}
-
-			:global(.label){
-				text-transform: uppercase;
-				color: var(--color-grey)
-			}
-		}
-
+	.chainspec-teaser{
 		.controls{
-			display: flex;
-			align-items: center;
-
 			.status{
 				display: flex;
 				align-items: center;
-				color: var(--color-mid-grey);
 
 				&[data-used="true"]{ color: var(--color-status-success) }
+				&[data-used="false"]{ color: var(--color-white); opacity: 0.7; }
 
 				:global(.material-icons){
 					font-size: 1.2em;
@@ -67,18 +34,15 @@
 				}
 			}
 		}
-
-		&:hover{
-			background-color: var(--color-dark);
-			box-shadow: none
-		}
 	}
 </style>
 
-<Paper class='chainspec-teaser' on:click={() => OpenDrawer(ChainspecDetail, {_id: _id})} elevation="4">
+<Paper class='chainspec-teaser' on:click={() => OpenDrawer(ChainspecDetail, {_id: _id})} elevation="0">
 	<div>
-		<Title><Icon class="material-icons">code</Icon>&nbsp;{name}</Title>
+		<Icon class="material-icons">code</Icon>
+		<Title>{name}</Title>
 	</div>
+	
 	<div class='controls'>
 		
 		<div class={`mdc-typography--caption status`} data-used={networkCount > 0}>

@@ -11,8 +11,7 @@
 		display: flex;
 		align-items: center;
 		padding: 0.3em 0.7em;
-		color: var(--color-grey);
-		//border: 1px solid var(--color-grey);
+		color: var(--color-theme-light);
 		border-radius: 0.5em;
 		font-size: 0.9em;
 		margin-right: 0.5em;
@@ -23,9 +22,9 @@
 			margin: 0 0.2em;
 		}
 
-		&[data-active="true"]{
-			color: var(--color-blue);
-			//border: 1px solid var(--color-blue);
+		&[data-active="false"]{
+			filter: saturate(0.2);
+			opacity: 0.5;
 		}
 
 		&:after{

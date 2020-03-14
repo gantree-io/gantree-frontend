@@ -4,7 +4,7 @@
 
 <style lang="scss">
 	button.form-button.-next{
-		background: var(--color-highlight);
+		background: var(--color-theme-highlight);
 		color: var(--color-light);
 	}
 </style>

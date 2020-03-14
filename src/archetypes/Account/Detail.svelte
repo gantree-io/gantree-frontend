@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { pop, push } from 'svelte-spa-router'
 	import Button, { Label, Icon } from '@smui/button';
-	import Centered from '@layouts/Centered.svelte'
+	import PanelLayout from '@layouts/Panel.svelte'
 	import Form, { Field } from '@components/Form'
 	import AccountStore, { updateAccount } from '@archetypes/Account/store'
 
@@ -39,27 +39,11 @@
 </script>
 
 <style lang="scss">
-	/*:global(.layout.-centered){
-		> :global(form){
-			text-align: center;
-			margin-top: 4vw;
-			
-			> :global(.title){
-				justify-content: center;
-				margin-bottom: 0.5em
-			}
-
-			> :global(.form-button-group){
-				margin-top: 5vw
-			}
-		}
-	}*/
-	
 	:global(button.delete){
 		position: absolute;
 		bottom: 0.5em;
-		left: 50%;
-		transform: translateX(-50%);
+		left: 0;
+		/*transform: translateX(-50%);*/
 		font-weight: 400;
 
 		:global(.mdc-button__label),
@@ -67,17 +51,26 @@
 			color: var(--color-status-error);
 		}
 	}
-	
 </style>
 
-<Centered
-	icon='fingerprint'
-	title='Your Account'
-	subtitle='Configure your account settings'
-	back={{
-		text: 'Back',
-		icon: 'arrow_back',
-		action: () => push('/dashboard')
+<PanelLayout 
+	header={{
+		title: 'Account Settings',
+		subtitle: 'Update your account',
+		actions: [
+	 		{
+				text: 'Delete my account',
+				icon: 'delete',
+				callback: () => dialog.warning({
+					title: "Delete your account",
+					subtitle: "You're about to delete your account. This cannot be undone.",
+					confirmButton: 'Confirm Delete',
+					onConfirm: () => toast.error(`Feature not yet enabled...`),
+					cancelButton: 'back',
+					confirmWord: 'DELETE'
+				})
+	 		}
+	 	]
 	}}
 	>
 	<Form 
@@ -109,21 +102,4 @@
 			}}
 		/>
 	</Form>
-
-	<Button 
-		class='delete'
-		dense
-		on:click={e => {
-			dialog.warning({
-				title: "Delete your account",
-				subtitle: "You're about to delete your account. This cannot be undone.",
-				confirmButton: 'Confirm Delete',
-				onConfirm: () => toast.error(`Feature not yet enabled...`),
-				cancelButton: 'back',
-			})
-		}}
-		>
-		<Icon class="material-icons">delete</Icon>
-		<Label>Delete my Account</Label>
-	</Button>
-</Centered>
+</PanelLayout>

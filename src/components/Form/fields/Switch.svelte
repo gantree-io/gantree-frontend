@@ -12,12 +12,12 @@
 <style lang="scss">
 	.switch{
 		display: inline-flex;
+		background: var(--color-light);
 
 		.off, .on{
 			cursor: pointer;
 			min-width: 4rem;
-			background: var(--color-light-grey);
-			color: var(--color-mid-grey);
+			color: rgba(0,0,0,0.5);
 			display: block;
 			padding: 0.7em 1em;
 			text-align: center;
@@ -28,8 +28,8 @@
 		
 		&:not([data-on='true']){
 			.off{
-				background: var(--color-highlight);
-				color: var(--color-light);
+				background: var(--color-theme-highlight);
+				color: var(--color-theme-white);
 				box-shadow: inset 0 0 0 rgba(0,0,0,0);
 			}
 		}
@@ -37,8 +37,8 @@
 
 		&[data-on='true']{
 			.on{
-				background: var(--color-highlight);
-				color: var(--color-light);
+				background: var(--color-theme-highlight);
+				color: var(--color-theme-white);
 				box-shadow: inset 0 0 0 rgba(0,0,0,0);
 			}
 		}

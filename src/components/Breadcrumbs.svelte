@@ -38,7 +38,7 @@
 		}
 
 		&:hover{
-			color: var(--color-highlight);
+			color: var(--color-theme-highlight);
 			opacity: 1;
 		}
 

@@ -11,15 +11,15 @@
 </script>
 
 <style lang="scss">
-	textarea{
-		padding: 0.6em 0.8em;
+	/*textarea{
+		padding: 0.8em 1em;
 		border: 1px solid rgba(0,0,0,0.1);
 		background: white;
 		outline: none;
 		font-weight: inherit;
 		resize: none;
 		font-size: 0.9em;
-	}
+	}*/
 </style>
 
 <textarea bind:value={value} {...$$props} spellcheck="false"/>

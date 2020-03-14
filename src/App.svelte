@@ -7,7 +7,6 @@
 	import { configure as configureHotwire, subscribe as hotwireSubscribe } from '@components/Hotwire.svelte' 
 	import AuthRouter, { configure as configureAuthRouter, triggerError, location, push, querystring } from '@components/AuthRouter.svelte'
 	import AccountStore, { AuthStatus, AccountStatus } from '@archetypes/Account/store'
-
 	
 	// ---> global components
 	import Drawer from '@components/Drawer.svelte'
@@ -17,10 +16,10 @@
 	
 	// ---> routes
 	import Home from '@routes/Home.svelte'
-	import Authenticate from '@routes/Authenticate.svelte'
 	import Dashboard from '@routes/Dashboard.svelte'
-	import Account from '@routes/Account.svelte'
-	import AccountSetup from '@routes/AccountSetup.svelte'
+	import AccountAuthenticate from '@archetypes/Account/Authenticate.svelte'
+	import AccountSetup from '@archetypes/Account/Setup.svelte'
+	import AccountDetail from '@archetypes/Account/Detail.svelte'
 	import AccountCreate from '@archetypes/Account/Create.svelte'
 	import AccountLogin from '@archetypes/Account/Login.svelte'
 	import Error404 from '@routes/Error404.svelte'
@@ -64,14 +63,14 @@
 	const routes = {
 		public: {
 			'/': Home,
-			'/authenticate': Authenticate,
+			'/authenticate': AccountAuthenticate,
 			'/login': AccountLogin,
 			'/create-account': AccountCreate
 		},
 		private: {
 			'/dashboard': Dashboard,
 			'/dashboard/*': Dashboard,
-			'/account': Account,
+			'/account': AccountDetail,
 			'/account/setup': AccountSetup,
 		}
 	}
@@ -119,18 +118,19 @@
 
 <style lang="scss">
 	:root {
-		/* greyscale colors */
-		--color-dark: #191919;
-		--color-dark-grey: #31393D;
-		--color-mid-grey: #6d7679;
-		--color-grey: #b2b6b7;
+
+		/* base */
+		--color-dark: #181729;
+		--color-light: #fbfbfb;
+
+		/* greyscale */
+		--color-xdark-grey: #181729;
+		--color-dark-grey: #252444;
+		--color-grey: #6d7679;
 		--color-light-grey: #cdceea;
-		--color-light: #f8f8f8;
-		--color-xlight: #fbfbfb;
+		--color-xlight-grey: #f1eef5;
 		
 		/* colours */
-		/*--color-highlight: #40b3ff;*/
-		--color-highlight: #52cbff;
 		--color-mid-blue: #2196f3;
 		--color-light-blue: #8bc2d4;
 		--color-green: #4caf50;
@@ -139,8 +139,19 @@
 		--color-blue: #40a8de;
 		--color-yellow: #fadb14;
 		--color-purple: #3D3B78;
-		--color-dark-purple: #232346;
-		--color-light-purple: #6D6BD9;
+
+		/* theme: https://coolors.co/0c0c19-1d1d3a-3d3b78-6d6bd9-7f7cff; */
+		--color-theme-black: #02021d;
+		--color-theme-xdark: #0C0C19;
+		--color-theme-dark: #1D1D3A;
+		--color-theme-mid: var(--color-purple);
+		--color-theme-light: #6D6BD9;
+		--color-theme-xlight: #7F7CFF;
+		--color-theme-white: #e9e9f5;
+		--color-theme-highlight: #dcb764;
+
+		/* highlights */
+		--color-highlight: var(--color-light-purple);
 		
 		/* status colors */
 		--color-status-success: var(--color-green);
@@ -161,13 +172,19 @@
 		:global(.mdc-typography--body1){
 			font-weight: 300;
 		}
-
 	}
 
 	:global(body){
-		background: var(--color-grey);
+		color: var(--color-dark);
+		background: var(--color-light);
+		font-family: 'Roboto', sans-serif;
 		font-weight: 100;
+		
 		:global(strong){ font-weight: 500 } 
+
+		:global(*){
+			box-sizing: border-box;
+		}
 	}
 
 	:global(.material-icons.-animation-spin){
@@ -209,21 +226,75 @@
 	}
 
 	:global(.inline-link){
-		color: var(--color-mid-blue);
+		color: var(--color-theme-light);
 		font-weight: 400;
 		cursor: pointer
 	}
 
 	:global(*[class^='mdc-typography']){
 		:global(.smaller){
-			font-size: 0.9em
+			font-size: var(--font-size-small);
+
 		}
 	}
 
-	:global(.mdc-button.-minimal){
-		color: var(--color-light) !important;
+	:global(body) :global(.mdc-button.-minimal){
+		color: var(--color-light);
 		font-weight: 100;
-		&:hover{ color: var(--color-highlight) !important; }
+		&:hover{ color: var(--color-dark) !important; }
+	}
+
+	:global(body) :global(.smui-paper){
+		background-color: var(--color-theme-dark) ;
+		color: var(--color-theme-white);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		cursor: pointer;
+		transition: all 0.2s ease-in-out;
+		margin-bottom: 0.6em;
+		padding: 1.6rem;
+		position: relative;
+
+		:global(> *){
+			display: flex;
+
+			&:first-child{
+				align-items: flex-end;
+
+				:global(.material-icons){
+					& + :global(.smui-paper__title){
+						margin: 0 0 0 0.5em;
+					}
+				}
+
+				:global(.smui-paper__title){
+					display: flex;
+					align-items: flex-end;
+					line-height: 1em;
+					margin: 0;
+				}
+
+				:global(.smui-paper__content){
+					font-size: var(--font-size-xsmall);
+					font-weight: 300;
+					line-height: 1em;
+					opacity: 0.9;
+					margin: 0 1em;
+					display: flex;
+					align-items: flex-end;
+				};
+			}
+
+			&:last-child{
+				align-items: center;
+			}
+		}
+
+		&:hover{
+			background-color: var(--color-theme-xdark);
+			box-shadow: none
+		}
 	}
 </style>
 

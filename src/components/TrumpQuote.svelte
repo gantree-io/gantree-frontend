@@ -1,17 +1,16 @@
 <script>
 	import { Icon } from '@smui/common';
 
-	//export let type;
-	//https://api.whatdoestrumpthink.com/api/v1/quotes/random
-	//https://api.kanye.rest/
-	
-	// let quote = new Promise((resolve, reject) => {
-	// 	fetch('https://api.whatdoestrumpthink.com/api/v1/quotes/random')
-	// 		.then(response => response.json())
-	// 		.then(({message}) => resolve(message))
-	// })
+	export let endpoint = 'https://api.whatdoestrumpthink.com/api/v1/quotes/random'
 
-	let quote = `I love the poorly educated.`
+	let quote = _env.MODE === 'production'
+		? new Promise((resolve, reject) => {
+			fetch(endpoint)
+				.then(response => response.json())
+				.then(({message}) => resolve(message))
+		})
+		: `I love the poorly educated.`
+
 </script>
 
 <style lang="scss">

@@ -32,57 +32,26 @@
 
 <style lang="scss">
 	:global(.user-teaser.smui-paper){
-		background-color: var(--color-dark);
-		color: var(--color-light);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 0.6em;
-		padding: 24px;
-
+		cursor: default;
 		&[data-status='INVITATION_SENT']{
-			background-color: var(--color-dark-grey);
+			background-color: var(--color-theme-mid);
+			filter: saturate(0.8);
 		}
 
 		&[data-status='INACTIVE']{
-			background-color: var(--color-mid-grey);
-		}
-
-		.title{
-			display: flex;
-			align-items: flex-end;
-
-			:global(.smui-paper__title){
-				margin: 0 0.3em;
-				line-height: 1em;
-			}
-
-			:global(.smui-paper__content){
-				font-size: 0.9em;
-				font-weight: 300;
-				line-height: 1em;
-				opacity: 0.8;
-				margin: 0 0.3em;
-				display: flex;
-				align-items: flex-end;
-			};
+			background-color: var(--color-theme-mid);
+			filter: saturate(0.3);
 		}
 
 		.controls{
-			display: flex;
-			align-items: center;
-
 			.status,
 			.owner{
 				display: flex;
 				align-items: center;
-
 				:global(.material-icons){
 					font-size: 1.2em;
 					margin-left: 0.3em
 				}
-
-				
 			}
 
 			.status{
@@ -93,7 +62,7 @@
 
 			.owner{
 				margin-right: 1em;
-				color: var(--color-yellow);
+				color: var(--color-theme-highlight);
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 <script>
+	import _ from 'lodash'
 	import Paper, { Title, Subtitle, Content  } from '@smui/paper';
 	import { Icon } from '@smui/common';
 	import Menu from '@smui/menu';
@@ -18,16 +19,23 @@
 	let name
 	let status
 	let nodeCount
+	let deployingCount = 0
 	let onlineCount = 0
-	let pendingCount = 0
-	let offlineCount = 0
+	let shutdownCount = 0
+	let errorCount = 0
 	let menu;
 	let menuAnchor;
 
 	const handleUpdate = props => {
+		console.log(props)
 		name = props.name
 		status = props.status
 		nodeCount = props.nodes.length
+
+		deployingCount = _.filter(props.nodes, {status: "DEPLOYING"}).length
+		onlineCount = _.filter(props.nodes, {status: "ONLINE"}).length
+		shutdownCount = _.filter(props.nodes, {status: "SHUTDOWN"}).length
+		errorCount = _.filter(props.nodes, {status: "ERROR"}).length
 	}
 	
 	// fetch network
@@ -36,38 +44,6 @@
 
 <style lang="scss">
 	:global(.network-teaser.smui-paper){
-		background-color: var(--color-dark-grey);
-		color: var(--color-light);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		cursor: pointer;
-		transition: all 0.2s ease-in-out;
-		margin-bottom: 0.6em;
-
-		.title{
-			display: flex;
-			align-items: flex-end;
-
-			:global(.material-icons){
-				
-			}
-
-			:global(.smui-paper__title){
-				display: flex;
-				align-items: flex-end;
-				margin: 0;
-				line-height: 1em;
-			}
-
-			:global(.smui-paper__content){
-				font-size: 0.8em;
-				font-weight: 300;
-				line-height: 1em;
-				margin-left: 1em;
-			};
-		}
-		
 		* :global(.badge){
 			display: inline-flex;
 			margin-left: 0.5em;
@@ -80,16 +56,6 @@
 				text-transform: uppercase;
 				color: var(--color-grey)
 			}
-		}
-
-		.controls{
-			display: flex;
-			align-items: center;
-		}
-
-		&:hover{
-			background-color: var(--color-dark);
-			box-shadow: none
 		}
 
 		&[data-status='DEPLOYING']{
@@ -125,9 +91,10 @@
 			name: _id,
 			event: `NODESTATUS`,
 			callback: ({nodes}) => {
-				onlineCount = nodes.online
-				pendingCount = nodes.pending
-				offlineCount = nodes.offline
+				deployingCount = nodes.DEPLOYING
+				onlineCount = nodes.ONLINE
+				shutdownCount = nodes.SHUTDOWN
+				errorCount = nodes.ERROR
 			}
 		},
 		{
@@ -137,7 +104,7 @@
 		}
 	]}
 	>
-	<Paper class='network-teaser' on:click={() => OpenDrawer(NetworkDetail, {_id: _id})} elevation="4" data-status={status}>
+	<Paper class='network-teaser' on:click={() => OpenDrawer(NetworkDetail, {_id: _id})} elevation="0" data-status={status}>
 		<div class='title'>
 			<Title>
 				<Icon class="material-icons">blur_on</Icon>&nbsp;
@@ -152,9 +119,10 @@
 				<Pender val={nodeCount}/> node{nodeCount > 1 ? 's' : ''}
 			</div>
 			
+			<Badge value={deployingCount} neutral disabled={!deployingCount}/>
 			<Badge value={onlineCount} success disabled={!onlineCount}/>
-			<Badge value={pendingCount} warning disabled={!pendingCount}/>
-			<Badge value={offlineCount} error disabled={!offlineCount}/>
+			<Badge value={shutdownCount} warning disabled={!shutdownCount}/>
+			<Badge value={errorCount} error disabled={!errorCount}/>
 
 			<div 
 				class='menu' 

@@ -148,7 +148,7 @@
 				input{
 					display: block;
 					width: 100%;
-					padding: 0.6em 0.8em;
+					padding: 0.7em 0.9em;
 					border: 1px solid rgba(0,0,0,0.1);
 					background: white;
 					outline: none;
@@ -156,7 +156,7 @@
 					margin: 0.3em 0 0 0;
 
 					&:focus{
-						border-bottom: 1px solid var(--color-highlight);
+						border-bottom: 1px solid var(--color-theme-highlight);
 					}
 
 					&::placeholder{

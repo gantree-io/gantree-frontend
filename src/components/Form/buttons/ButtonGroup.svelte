@@ -19,9 +19,6 @@
 	.form-button-group{
 		margin: 0;
 		margin-top: 3em;
-		//display: flex;
-		//align-items: center;
-		//justify-content: space-between;
 		text-align: inherit;
 	}
 </style>

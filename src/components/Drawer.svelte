@@ -96,7 +96,7 @@
 			position: absolute;
 			top: 0;
 			right: 0;
-			background: var(--color-light);
+			background: var(--color-theme-white);
 			width: 0;
 			height: 100vh;
 			padding:0;
@@ -110,10 +110,10 @@
 				position: absolute;
 				top: 0.8rem;
 				right: calc(100% - 2em);
-				color: var(--color-grey);
+				color: var(--color-theme-mid);
 				font-size: 1.5em;
 				padding: 0.4em 0.1em 0.3em 0.3em;
-				background: var(--color-light);
+				background: var(--color-theme-white);
 				border-radius: 0.1em 0em 0em 0.1em;
 				cursor: e-resize;
 				z-index: -1;

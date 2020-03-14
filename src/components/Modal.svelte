@@ -115,7 +115,7 @@
 				position: absolute;
 				bottom: calc(100% - 0.2em);
 				left: calc(100% - 0.2em);
-				color: var(--color-grey);
+				color: var(--color-theme-mid);
 				font-size: 2em;
 				padding: 0.2em;
 				cursor: alias;

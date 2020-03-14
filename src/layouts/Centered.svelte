@@ -21,9 +21,9 @@
 		color: white;
 
 		background-image: linear-gradient(
-			var(--color-dark) 0%, 
-			var(--color-dark-purple) 25%, 
-			var(--color-light-purple) 100%
+			var(--color-theme-xdark) 0%, 
+			var(--color-theme-dark) 25%, 
+			var(--color-theme-light) 100%
 		);
 
 		> :global(.node-canvas){

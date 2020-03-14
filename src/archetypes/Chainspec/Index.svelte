@@ -8,6 +8,7 @@
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import Chainspec, { fetchAll } from './store.js'
 	import NoResults from '@components/NoResults.svelte'
+	import CodeReview from '@assets/CodeReview.svelte'
 
   	let chainspecs
   	
@@ -57,9 +58,10 @@
 			{#each chainspecs as chainspec}
 				<ChainspecTeaser {...chainspec}/>
 			{:else}
-				<NoResults 
+				<NoResults
+					graphic={CodeReview}
 					title='You have no custom chainspecs'
-					disclaimer='A network can still be configured by using the default chainspec, available when creating a new network.'
+					disclaimer='Netwotks can still be configured using a default chainspec.'
 					>
 					Start by adding a <span class='inline-link' on:click={handleChainspecAdd}>new chainspec</span> now.<br/>
 				</NoResults>

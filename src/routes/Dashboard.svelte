@@ -6,8 +6,9 @@
  	import List, {Item, Text, Separator, Graphic} from '@smui/list';
  	import { Icon } from '@smui/common';
  	import Button from '@smui/button';
+ 	import GantreeLogo from '@assets/GantreeLogo.svelte'
 
- 	import RandomQuote from '@components/RandomQuote.svelte'
+ 	import TrumpQuote from '@components/TrumpQuote.svelte'
  	import AccountMenu from '@archetypes/Account/Menu.svelte'
 	
 	// routes
@@ -84,8 +85,16 @@
 		> :global(.mdc-drawer) {
 			min-height: 100vh;
 			position: relative;
-			filter: invert(90%);
 			overflow: visible;
+			background-color: var(--color-theme-dark);
+
+			> :global(.mdc-drawer__header){
+				padding: 24px 16px 16px 16px;
+			}
+
+			:global(.mdc-list-divider){
+				border-bottom-color: rgba(255,255,255,.1);
+			}
 
 			> :global(.mdc-drawer__content > .mdc-list){
 				&.bottom{
@@ -120,40 +129,18 @@
 					right: 0.4em;
 				}
 			}
-		}
 
-		> :global(.mdc-drawer-app-content ) {
-			width: 100%;
-		}
-	}
-
-	.dashboard-header,
-	.dashboard-inner{
-		padding: 1.6em;
-	}
-
-	.dashboard-header{
-		background: var(--color-dark-grey);
-		color: var(--color-light);
-		position: relative;
-
-		h1{
-			display: flex;
-			align-items: center;
-			margin: 0;
-			padding: 0.3em 0 0;
-			line-height: 1em;
-
-			> :global(.material-icons) {
-				margin-right: 0.2em;
-				font-size: inherit;
+			/* theme */
+			:global(.mdc-list-item > *),
+			:global(.mdc-drawer__header > *),
+			:global(.quote),
+			:global(.account-menu){
+				color: var(--color-theme-white);
 			}
 		}
 
-		.extra{
-			position: absolute;
-			bottom: 1.4em;
-			right: 1.4em;
+		> :global(.mdc-drawer-app-content) {
+			width: 100%;
 		}
 	}
 </style>
@@ -161,12 +148,11 @@
 <main>
 	<Drawer>
 		<Header>
-			<Title>Gantree</Title>
-			<Subtitle>A full service node infrastructure toolkit for Substrate chains</Subtitle>
+			<GantreeLogo/>
 		</Header>
 		<Content>
+			<Separator nav />
 			<List>
-				<Separator nav />
 				{#each tabs as tab}
 					<Item href={tab.href||'#'}>
 						<Graphic class="material-icons">{tab.icon}</Graphic>
@@ -176,7 +162,7 @@
 				{/each}
 			</List>
 			<List class='bottom'>
-				<RandomQuote/>
+				<TrumpQuote/>
 				<Separator nav />
 				<AccountMenu/>
 			</List>

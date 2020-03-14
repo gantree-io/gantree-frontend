@@ -27,25 +27,25 @@
 
 	// need to define props/colors based on status
 	const statusOptions = {
+		DEPLOYING: {
+			icon: 'settings',
+			color: 'notification'
+		},
 		ONLINE: {
 			icon: 'offline_bolt',
 			color: 'success'
 		},
-		OFFLINE: {
-			icon: 'error',
-			color: 'error'
-		},
-		PENDING: {
-			icon: 'settings',
-			color: 'warning'
-		},
 		SHUTDOWN: {
 			icon: 'settings',
 			color: 'neutral'
+		},
+		ERROR: {
+			icon: 'error',
+			color: 'error'
 		}
 	}
 
-	let statusProps = statusOptions['PENDING']
+	let statusProps = statusOptions['DEPLOYING']
 
 	const updateNodeProps = props => {
 		name = props.name;
@@ -84,44 +84,9 @@
 	}
 
 	:global(.node-teaser.smui-paper){
-		background-color: var(--color-dark);
-		color: var(--color-light);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		transition: all 0.2s ease-in-out;
-		margin-bottom: 0.6em;
 		border-left: 4px solid var(--color-status-neutral);	
 
-		.title{
-			display: flex;
-			align-items: flex-end;
-
-			:global(.material-icons){
-				font-size: 1.6em;
-				margin: 0 0.2em;
-			}
-
-			:global(.smui-paper__title){
-				margin: 0 0.3em;
-				line-height: 1em;
-			}
-
-			:global(.smui-paper__content){
-				font-size: 0.9em;
-				font-weight: 300;
-				line-height: 1em;
-				opacity: 0.8;
-				margin: 0 0.3em;
-				display: flex;
-				align-items: flex-end;
-			};
-		}
-		
 		.controls{
-			display: flex;
-			align-items: center;
-
 			.info {
 				margin-right: 1em;
 				
@@ -150,15 +115,26 @@
 
 		/* status colours */
 		&[data-status='online']{}
-		&[data-status='pending']{ 
+		&[data-status='deploying'],
+		&[data-status='shutdown']{ 
 			>.title :global(.material-icons.status){
 				opacity: 0.6;
 				filter: saturate(40%);
+				animation-name: spin;
+				animation-duration: 3000ms;
 				animation-timing-function: linear;
+				animation-fill-mode: forwards;
+				animation-iteration-count: infinite
 			}
 		}
-		&[data-status='offline']{}
-		&[data-status='shutdown']{}
+		&[data-status='shutdown']{
+			opacity: 0.8;
+			filter: saturate(70%);
+			pointer-events: none;
+			cursor: not-allowed;
+		}
+		&[data-status='error']{}
+		
 	}
 </style>
 
@@ -170,7 +146,7 @@
 			callback: updateNodeProps
 		}
 	]}>
-	<Paper class='node-teaser' data-status={status.toLowerCase()} style={`border-left-color: var(--color-status-${statusProps.color})`} elevation="4">
+	<Paper class='node-teaser' data-status={status.toLowerCase()} style={`border-left-color: var(--color-status-${statusProps.color})`} elevation="0">
 		<div class='title'>
 			<Icon class={`material-icons status`} style={`color: var(--color-status-${statusProps.color})`}>{statusProps.icon}</Icon>
 			{#if name}<Title>{name}</Title>{/if}
@@ -178,7 +154,9 @@
 				<Icon class={`material-icons`}>
 					{validator ? 'insert_chart_outlined' : 'insert_chart'}
 				</Icon>
-				{validator ? 'Validator' : 'Full Node'}
+				<span>
+					{validator ? 'Validator' : 'Full Node'}
+				</span>
 			</Content>
 		</div>
 

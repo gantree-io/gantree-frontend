@@ -4,6 +4,7 @@
 	export let success = null
 	export let warning = null
 	export let error = null
+	export let neutral = null
 	export let disabled = null
 </script>
 
@@ -17,7 +18,7 @@
 			width: 1.4em;
 			height: 1.4em;
 			line-height: 1.4em;
-			background: var(--color-status-neutral);
+			background: var(--color-grey);
 			display: inline-block;
 			vertical-align: middle;
 			text-align: center;
@@ -33,16 +34,16 @@
 		&.success .value{ background: var(--color-status-success) }
 		&.warning .value{ background: var(--color-status-warning) }
 		&.error .value{ background: var(--color-status-error) }
+		&.neutral .value{ background: var(--color-status-notification) }
 		&.disabled {
 			pointer-events: none;
 			opacity: 0.5;
-			filter: saturate(0);
-			.value{ background: var(--color-status-neutral) }
+			filter: saturate(40%);
 		}
 	}
 </style>
 
-<span class='badge' class:success class:warning class:error class:disabled>
+<span class='badge' class:success class:warning class:error class:neutral class:disabled>
 	<span class="value">{value}</span>
 	{#if label}<span class="label">{label}</span>{/if}
 </span>

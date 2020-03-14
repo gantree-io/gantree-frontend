@@ -1,4 +1,5 @@
 <script>
+ 	import { fade } from 'svelte/transition';
  	import _ from 'lodash'
 
  	import Drawer, {AppContent, Content, Header, Title, Subtitle} from '@smui/drawer';
@@ -19,7 +20,7 @@
 
 <style lang="scss">
 	.layout-panel{
-		background: var(--color-light);
+		background: var(--color-theme-white);
 		overflow: hidden;
 		width: auto;
 		height: auto;
@@ -30,7 +31,7 @@
 		max-height: 100vh;
 
 		>.header{
-			border-bottom: 1px solid var(--color-light-grey);
+			border-bottom: 1px solid rgba(0,0,0,0.05);
 			position: relative;
 			display: flex;
 			align-items: center;
@@ -42,7 +43,7 @@
 
 				:global(.breadcrumbs){
 					margin: 0 0 0.5em 0.4em;
-					color: var(--color-dark);
+					color: var(--color-theme-xdark);
 				}
 
 				.title{
@@ -109,7 +110,7 @@
 	}
 </style>
 
-<section class='layout-panel'>
+<section class='layout-panel' transition:fade="{{delay: 0, duration: 150}}">
 	{#if header}
 		<header class="header">
 			<span class="left">

@@ -6,6 +6,7 @@
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import NoResults from '@components/NoResults.svelte'
+	import NotFound from '@assets/NotFound.svelte'
 
 	const filters = writable([])
 	const activeFilters = writable([])
@@ -39,6 +40,7 @@
 <slot/>
 {#if $activeFilters.length <= 0}
 	<NoResults 
+		graphic={NotFound}
 		title='All items filtered'
 		>
 		<span class='inline-link' on:click={() => activeFilters.update(items => $filters)}>Toggle on  all filters</span> to see items

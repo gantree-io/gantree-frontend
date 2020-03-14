@@ -21,6 +21,7 @@ export const fetchOneTeaser = `
 			status
 			nodes{
 				_id
+				status
 			}
 		}
 	}

@@ -28,30 +28,13 @@
 
 <style lang="scss">
 	:global(.provider-teaser.smui-paper){
-		background-color: var(--color-grey);
-		color: var(--color-light);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 0.6em;
-		padding: 24px;
-
+		
 		.title{
-			display: flex;
-			align-items: flex-end;
-
-			:global(.material-icons){
-				&.key{
-					margin-left: -0.1em;
-					width: 0.5em;
-					overflow: hidden;
-					direction: rtl;
-				}
-			}
-
-			:global(.smui-paper__title){
-				margin: 0 0.3em;
-				line-height: 1em;
+			:global(.material-icons.key){
+				margin-left: -0.1em;
+				width: 0.5em;
+				overflow: hidden;
+				direction: rtl;
 			}
 
 			:global(.smui-paper__content){
@@ -75,6 +58,7 @@
 				color: var(--color-mid-grey);
 
 				&[data-used="true"]{ color: var(--color-status-success) }
+				&[data-used="false"]{ color: var(--color-white); opacity: 0.7; }
 
 				:global(.material-icons){
 					font-size: 1.2em;
@@ -84,8 +68,6 @@
 		}
 
 		&[data-active='true']{
-			background-color: var(--color-dark);
-
 			.title{
 				:global(.material-icons){
 					color: var(--color-status-success);
@@ -94,7 +76,7 @@
 		}
 
 		&[data-active='false']{
-			background-color: #555;
+			background-color: var(--color-theme-mid);
 			filter: saturate(0.3);
 
 			.title{
@@ -108,7 +90,7 @@
 	}
 </style>
 
-<Paper class='provider-teaser' data-active={!!_id} elevation={_id ? 4 : 0}>
+<Paper class='provider-teaser' data-active={!!_id} elevation="0">
 	<div class='title'>
 		<Icon class='material-icons'>{!!_id ? 'check_circle' : 'cancel'}</Icon>
 		<Icon class='material-icons key'>vpn_key</Icon>

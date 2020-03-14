@@ -5,6 +5,8 @@
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
+	import { open as OpenDrawer } from '@components/Drawer.svelte';
+	import AccountDetail from './Detail.svelte'
 
 	export let providers = []
 	
@@ -16,8 +18,6 @@
 	AccountStore.subscribe(account => {
 		username = account.user.name
 		status = account.authStatus
-
-		console.log(status)
 	});
 </script>
 
@@ -25,12 +25,30 @@
 	.account-menu{
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		padding: 0.5em 1em;
+		position: relative;
 
-		>*{
-			margin: 0 1em;
-			line-height: 1em;
-			white-space: nowrap
+		>span{
+			display: flex;
+			align-items: center;
+			white-space: nowrap;
+			max-width: 80%;
+			overflow: hidden;
+
+			>span{
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			> :global(.material-icons){
+				margin-right: 0.5em;
+			}
+		}
+
+		:global(.mdc-list-item > *){
+			color: var(--color-theme-dark)
 		}
 	}
 </style>
@@ -39,8 +57,10 @@
 	{#if status === AuthStatus.LOADING || status === AuthStatus.UNAUTHENTICAED}
 		<Icon class="material-icons -animation-spin">autorenew</Icon>
 	{:else if status === AuthStatus.AUTHENTICATED}
-		<Icon class="material-icons">person</Icon>
-		<span>{username}</span>
+		<span>
+			<Icon class="material-icons">person</Icon>
+			<span>{username}</span>
+		</span>
 
 		<div class='menu' bind:this={menuAnchor}>
 			<IconButton on:click={() => menu.setOpen(true)}>
@@ -52,12 +72,12 @@
 				anchorCorner="BOTTOM_LEFT"
 				>
 				<List dense>
-					<Item href='#/account'>
+					<Item on:click={() => OpenDrawer(AccountDetail)} >
 						<Graphic class="material-icons">person</Graphic>
 						<Text>My Account</Text>
 					</Item>
 					<Item href='#/dashboard/team'>
-						<Graphic class="material-icons">person</Graphic>
+						<Graphic class="material-icons">people</Graphic>
 						<Text>My Team</Text>
 					</Item>
 					<Item on:click={() => AccountStore.logout()}>
