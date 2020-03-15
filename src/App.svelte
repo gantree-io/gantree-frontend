@@ -6,7 +6,7 @@
 	import { configure as configureGraphQL } from '@util/graphql' 
 	import { configure as configureHotwire, subscribe as hotwireSubscribe } from '@components/Hotwire.svelte' 
 	import AuthRouter, { configure as configureAuthRouter, triggerError, location, push, querystring } from '@components/AuthRouter.svelte'
-	import AccountStore, { AuthStatus, AccountStatus } from '@archetypes/Account/store'
+	import Account, { AuthStatus, AccountStatus } from '@archetypes/Account/store'
 	
 	// ---> global components
 	import Drawer from '@components/Drawer.svelte'
@@ -28,7 +28,7 @@
 	// configure graphql
 	configureGraphQL({
 		uri: _env.GRAPHQL_URL, 
-		token: () => _.get(get(AccountStore), 'user.tokens.auth'),
+		token: () => _.get(get(Account), 'user.tokens.auth'),
 		onNetworkError: msg => triggerError(503),
 		onGraphQLError: e => {
 			if(e.code === 'UNAUTHENTICATED'){
@@ -48,7 +48,7 @@
 			503: Error503
 		},
 		onPrivateRoute: ({location}) => {
-			AccountStore.subscribe(({authStatus, accountStatus}) => {
+			Account.subscribe(({authStatus, accountStatus}) => {
 				// if we're already on the authenticate path, do nothing
 				if($location === '/authenticate') {}
 				// not authenticated? push to auth page
@@ -77,7 +77,7 @@
 
 
 	let _t
-	AccountStore.configure({
+	Account.configure({
 		onAuthAttempt: () => {
 			_t = toast.loading('... authenticating')
 		},
@@ -93,7 +93,7 @@
 			})
 
 			// subscribe to updates on this user
-			hotwireSubscribe(user._id, `UPDATE`, ({name, subscribed}) => AccountStore.setUserPreferences(name, subscribed))
+			hotwireSubscribe(user._id, `UPDATE`, ({name, subscribed}) => Account.setUserPreferences(name, subscribed))
 			
 			// redirect
 			push(parse($querystring).redirect || '/dashboard')
@@ -102,7 +102,7 @@
 			push('/')
 			_t.error('Authentication failed!')
 		},
-		onLogout: () => {
+		onSignout: () => {
 			toast.success(`Logged out!`)
 			push(`/`)
 		}
@@ -211,89 +211,104 @@
 		100% {opacity: 1}
 	}
 
-	:global(.material-icons.-animation-pulse){
-		animation-name: pulse;
-		animation-duration: 1000ms;
-		animation-iteration-count: infinite;
-		animation-timing-function: ease;
-	}
+	
 
-	:global(.material-icons.-animation-spin){
-		animation-name: spin;
-		animation-duration: 3000ms;
-		animation-iteration-count: infinite;
-		animation-timing-function: ease;
-	}
-
-	:global(.inline-link){
-		color: var(--color-theme-light);
-		font-weight: 400;
-		cursor: pointer
-	}
-
-	:global(*[class^='mdc-typography']){
-		:global(.smaller){
-			font-size: var(--font-size-small);
-
+	/* scoped to body for heirarchy*/
+	:global(body) {
+		:global(.mdc-button.-minimal),
+		:global(.mdc-button.mdc-button--dense){
+			color: var(--color-light);
+			font-weight: 100;
+			&:hover{
+				color: var(--color-theme-highlight) !important;
+			}
 		}
-	}
 
-	:global(body) :global(.mdc-button.-minimal){
-		color: var(--color-light);
-		font-weight: 100;
-		&:hover{ color: var(--color-dark) !important; }
-	}
-
-	:global(body) :global(.smui-paper){
-		background-color: var(--color-theme-dark) ;
-		color: var(--color-theme-white);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		cursor: pointer;
-		transition: all 0.2s ease-in-out;
-		margin-bottom: 0.6em;
-		padding: 1.6rem;
-		position: relative;
-
-		:global(> *){
+		:global(.smui-paper){
+			background-color: var(--color-theme-dark) ;
+			color: var(--color-theme-white);
 			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			cursor: pointer;
+			transition: all 0.2s ease-in-out;
+			margin-bottom: 0.6em;
+			padding: 1.6rem;
+			position: relative;
 
-			&:first-child{
-				align-items: flex-end;
+			:global(> *){
+				display: flex;
 
-				:global(.material-icons){
-					& + :global(.smui-paper__title){
-						margin: 0 0 0 0.5em;
+				&:first-child{
+					align-items: flex-end;
+
+					:global(.material-icons){
+						& + :global(.smui-paper__title){
+							margin: 0 0 0 0.5em;
+						}
 					}
+
+					:global(.smui-paper__title){
+						display: flex;
+						align-items: flex-end;
+						line-height: 1em;
+						margin: 0;
+					}
+
+					:global(.smui-paper__content){
+						font-size: var(--font-size-xsmall);
+						font-weight: 300;
+						line-height: 1em;
+						opacity: 0.9;
+						margin: 0 1em;
+						display: flex;
+						align-items: flex-end;
+					};
 				}
 
-				:global(.smui-paper__title){
-					display: flex;
-					align-items: flex-end;
-					line-height: 1em;
-					margin: 0;
+				&:last-child{
+					align-items: center;
 				}
-
-				:global(.smui-paper__content){
-					font-size: var(--font-size-xsmall);
-					font-weight: 300;
-					line-height: 1em;
-					opacity: 0.9;
-					margin: 0 1em;
-					display: flex;
-					align-items: flex-end;
-				};
 			}
 
-			&:last-child{
-				align-items: center;
+			&:hover{
+				background-color: var(--color-theme-xdark);
+				box-shadow: none
 			}
 		}
 
-		&:hover{
-			background-color: var(--color-theme-xdark);
-			box-shadow: none
+		:global(.material-icons.-animation-pulse){
+			animation-name: pulse;
+			animation-duration: 1000ms;
+			animation-iteration-count: infinite;
+			animation-timing-function: ease;
+		}
+
+		:global(.material-icons.-animation-spin){
+			animation-name: spin;
+			animation-duration: 3000ms;
+			animation-iteration-count: infinite;
+			animation-timing-function: ease;
+		}
+
+		:global(.material-icons.-loading){
+			animation-name: spin;
+			animation-duration: 1500ms;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+		}
+
+		:global(.inline-link){
+			color: var(--color-theme-light);
+			font-weight: 400;
+			cursor: pointer
+		}
+
+		:global(*[class^='mdc-typography']){
+			:global(.smaller){
+				font-size: var(--font-size-small);
+
+			}
 		}
 	}
 </style>

@@ -2,9 +2,30 @@
 	import LoginButtons from '@archetypes/Account/LoginButtons.svelte';
 	import Centered from '@layouts/Centered.svelte'
 	import GantreeLogo from '@assets/GantreeLogo.svelte'
+	import AccountMenu from '@archetypes/Account/Menu.svelte'
 </script>
 
 <style lang="scss">
+	
+	:global(.layout.-centered) {
+		:global(.children) > :global(.gantree-logo){
+			font-size: 4.7em;
+		}
+
+		> :global(*[slot="header"]){
+			justify-content: flex-end !important;
+			:global(.account-menu){
+				font-size: 0.9em;
+				opacity: 0.7;
+				transition: opacity 0.15s;
+
+				&:hover{
+					opacity: 0.9;
+				}
+			}
+		}
+	}
+
 	.gantree-logo{
 		margin: 0;
 		line-height: 1em;
@@ -15,9 +36,7 @@
 		text-shadow: -2px 2px 0 var(--color-purple);
 	}
 
-	:global(.layout.-centered) :global(.children) > :global(.gantree-logo){
-		font-size: 4.7em;
-	}
+	
 
 	h2{
 		margin: 0.3em auto 0;
@@ -66,6 +85,10 @@
 </style>
 
 <Centered>
+	<span slot='header'>
+		<AccountMenu/>
+	</span>
+	
 	<GantreeLogo/>
 	<h2 class="mdc-typography--headline6">A full service node infrastructure toolkit for Substrate-based chains</h2>
 	<p class="mdc-typography--body1 -content">

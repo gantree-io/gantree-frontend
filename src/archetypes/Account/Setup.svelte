@@ -70,7 +70,7 @@
 
 	<Form 
 		onSubmit={handleSubmit}
-		onCancel={() => Account.logout()}
+		onCancel={() => Account.signout()}
 		buttons={{
 			submit: 'Continue',
 			cancel: 'Take me back'

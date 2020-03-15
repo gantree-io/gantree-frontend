@@ -4,7 +4,7 @@
 </script>
 
 <style lang="scss">
-	:global(.material-icons.-animation-spin){
+	:global(.material-icons.-autorenew){
 		opacity: 0.3;
 		font-size: 1em;
 		display: inline-block;
@@ -13,5 +13,5 @@
 </style>
 
 {#if val} {val}
-{:else} <Icon class="material-icons -animation-spin">autorenew</Icon> 
+{:else} <Icon class="material-icons -animation-spin -autorenew">autorenew</Icon> 
 {/if}

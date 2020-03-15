@@ -8,7 +8,6 @@
 	export let title = null
 	export let subtitle = null
 	export let copy = null
-	export let back = null
 	export let maxWidth = '40rem'
 </script>
 
@@ -19,6 +18,7 @@
 		justify-content: center;
 		min-height: 100vh;
 		color: white;
+
 
 		background-image: linear-gradient(
 			var(--color-theme-xdark) 0%, 
@@ -60,7 +60,7 @@
 			opacity: 0.15;
 			width: 40vw;
 			height: auto;
-			z-index: 1;
+			//z-index: 1;
 		}
 
 		.content{
@@ -68,7 +68,7 @@
 			margin: calc(-5vw - 5vh) auto 0;
 			max-width: 40rem;
 			width: 100%;
-			z-index: 1;
+			//z-index: 1;
 
 			:global(.material-icons.title-icon){
 				font-size: 3em;
@@ -98,9 +98,12 @@
 
 		> :global(*[slot="header"]){
 			position: absolute;
-			top: 1em;
-			left: 50%;
-			transform: translateX(-50%);
+			top: 0;
+			left: 0;
+			width: 100%;
+			padding: 1em;
+			justify-content: center;
+			display: flex;
 		}
 		
 		> :global(*[slot="footer"]){

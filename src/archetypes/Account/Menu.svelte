@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte'
-	import AccountStore, { AuthStatus } from './store'
+	import Account, { AuthStatus } from './store'
 	import { Icon } from '@smui/common';
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
@@ -15,7 +15,7 @@
 	let menu;
 	let menuAnchor;
 
-	AccountStore.subscribe(account => {
+	Account.subscribe(account => {
 		username = account.user.name
 		status = account.authStatus
 	});
@@ -40,15 +40,22 @@
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
+				margin: 0 0.5em;
 			}
 
 			> :global(.material-icons){
-				margin-right: 0.5em;
+				//margin-right: 0.5em;
 			}
 		}
 
 		:global(.mdc-list-item > *){
 			color: var(--color-theme-dark)
+		}
+
+		:global(.mdc-icon-button){
+			width: 36px;
+			height: 36px;
+			padding: 6px;
 		}
 	}
 </style>
@@ -57,7 +64,7 @@
 	{#if status === AuthStatus.LOADING || status === AuthStatus.UNAUTHENTICAED}
 		<Icon class="material-icons -animation-spin">autorenew</Icon>
 	{:else if status === AuthStatus.AUTHENTICATED}
-		<span>
+		<span class='user'>
 			<Icon class="material-icons">person</Icon>
 			<span>{username}</span>
 		</span>
@@ -80,7 +87,7 @@
 						<Graphic class="material-icons">people</Graphic>
 						<Text>My Team</Text>
 					</Item>
-					<Item on:click={() => AccountStore.logout()}>
+					<Item on:click={() => Account.signout()}>
 						<Graphic class="material-icons">power_settings_new</Graphic>
 						<Text>Logout</Text>
 					</Item>

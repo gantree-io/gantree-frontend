@@ -90,6 +90,7 @@ export default {
 		}),
 		commonjs({
 			include: /node_modules/,
+			sourceMap: false,
 			namedExports: {
 				'prop-types': [
 					'array',

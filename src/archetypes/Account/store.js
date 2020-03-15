@@ -8,7 +8,7 @@ import _ from 'lodash'
 let authAttemptCallback = () => {}
 let authSuccessCallback = () => {}
 let authFailureCallback = () => {}
-let logoutCallback = () => {}
+let signoutCallback = () => {}
 
 // the user auth status
 export const AuthStatus = {
@@ -104,14 +104,14 @@ export default (() => {
 		})
 	}
 
-	const _handleLogoutApp = redirect => {
+	const _handleSignout = redirect => {
+		firebase.auth().signOut()
 		set({
 			...defaultProps,
 			authStatus: AuthStatus.UNAUTHENTICATED,
 			accountStatus: AccountStatus.UNKNOWN
 		})
-		firebase.auth().signOut()
-		logoutCallback()
+		signoutCallback(redirect)
 	}
 
 	const _createFirebaseAccount = ({email, password}) => new Promise((resolve, reject) => {
@@ -121,7 +121,7 @@ export default (() => {
 			.catch(e => reject(e.message));
 	});
 
-	const _loginFirebaseAccount = ({email, password}) => new Promise((resolve, reject) => {
+	const _signinFirebaseAccount = ({email, password}) => new Promise((resolve, reject) => {
 		firebase.auth()
 			.signInWithEmailAndPassword(email, password)
 			.then(user => resolve())
@@ -171,21 +171,21 @@ export default (() => {
 		
 	return {
 		subscribe,
-		configure: ({onAuthAttempt=()=>{}, onAuthSuccess=()=>{}, onAuthFailure=()=>{}, onLogout=()=>{}}) => {
+		configure: ({onAuthAttempt=()=>{}, onAuthSuccess=()=>{}, onAuthFailure=()=>{}, onSignout=()=>{}}) => {
 			authAttemptCallback = onAuthAttempt
 			authSuccessCallback = onAuthSuccess
 			authFailureCallback = onAuthFailure
-			logoutCallback = onLogout
+			signoutCallback = onSignout
 		},
 		firebase: writable({
 			firebase: firebase,
 			ui: new firebaseui.auth.AuthUI(firebase.auth(), () => {})
 		}),
 		create: _createFirebaseAccount,
-		login: _loginFirebaseAccount,
+		signin: _signinFirebaseAccount,
 		setUserName: _setUsername,
 		setUserPreferences: _setUserPreferences,
-		logout: redirect => _handleLogoutApp(redirect),
+		signout: redirect => _handleSignout(redirect),
 		myself: () => defaultProps.user,
 		query: query,
 		mutation: mutation,
