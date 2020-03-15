@@ -3,7 +3,7 @@
 	import Centered from '@layouts/Centered.svelte'
 	import Form, { Field, validate } from '@components/Form'
 	import { toast } from '@components/Toaster.svelte'
-	import Account from '@archetypes/Account/store'
+	import Account, { AuthStatus } from '@archetypes/Account/store'
 	import Button, { Label } from '@smui/button';
 	import GantreeLogo from '@assets/GantreeLogo.svelte'
 
@@ -24,6 +24,11 @@
 		 	_t.warning(`Some fields have errors`)
 		 }
 	}
+
+	// if authenticated, push to dashboard
+	Account.subscribe(({authStatus}) => {
+		if(authStatus === AuthStatus.AUTHENTICATED) push('/dashboard')
+	})
 </script>
 
 <Centered

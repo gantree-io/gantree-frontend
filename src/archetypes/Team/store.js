@@ -26,6 +26,12 @@ export const updateOwner = `
 	}
 `
 
+export const updateName = `
+	mutation updateName($name: String!){
+		updateName(name: $name)
+	}
+`
+
 export default {
 	query,
 	mutation

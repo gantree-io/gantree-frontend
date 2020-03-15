@@ -256,7 +256,7 @@
 					}
 
 					:global(.smui-paper__content){
-						font-size: var(--font-size-xsmall);
+						font-size: var(--font-size-small);
 						font-weight: 300;
 						line-height: 1em;
 						opacity: 0.9;

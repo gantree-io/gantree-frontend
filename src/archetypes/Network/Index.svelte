@@ -24,7 +24,7 @@
 				title: "No provider credentials",
 				subtitle: 'Before adding a new network you\'ll need to configure some credentials on the providers page.',
 				confirmButton: 'Add credentials',
-				onConfirm: () => push('#/dashboard/keys'),
+				onConfirm: () => push('/dashboard/providers'),
 				cancelButton: `I'm good`,
 			})
 		}else{

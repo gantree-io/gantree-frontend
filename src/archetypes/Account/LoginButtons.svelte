@@ -15,10 +15,7 @@
 		username = account.user.name
 		authStatus = account.authStatus
 
-		
-
 		if(authStatus === AuthStatus.UNAUTHENTICATED){
-
 			setTimeout(() => {
 				if(document.getElementById("firebaseui-auth-container")){
 					Account.firebase.subscribe(({firebase, ui, uiConfig}) => {
@@ -37,7 +34,6 @@
 			}, 300)
 		}
 	});
-
 </script>
 
 <style lang="scss">

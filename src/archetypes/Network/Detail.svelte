@@ -20,9 +20,9 @@
 		nodes = data.nodes
 
 		if(data.chainspec === 'new'){
-			chainspecName = '[TODO: new]'
+			chainspecName = 'New Chainspec'
 		}else if(data.chainspec === 'default'){
-			chainspecName = '[TODO: default]'
+			chainspecName = 'Default Chainspec'
 		}else{
 			Chainspec.query(fetchOneChainspec, {_id: data.chainspec}).then(_chainspec => {
 				chainspecName = _chainspec.name

@@ -97,11 +97,6 @@
 	// ie: 3rd parties cannot subscribe to updates to updates on objects which don't belong
 	// to them - we can make this unique with the team._id and check serverside
 	// before subscribing 
-	//
-	// TODO: we need to hash the event with the team ID so events are unique
-	// to a team - ie: the same members on the team will receive the same updates 
-	// when subbed to the same event
-	// Include the TEAM ID if one exists
 	onMount( () => {
 		let localIDs = []
 		_subscribe(subscriptions).then(_localIDs => localIDs = _localIDs)

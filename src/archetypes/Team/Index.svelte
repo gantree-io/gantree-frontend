@@ -4,12 +4,14 @@
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
 	import PanelLayout from '@layouts/Panel.svelte'
 	import { open as openModal, close as closeModal } from '@components/Modal.svelte'
-	import Team, { fetchAll } from './store.js'
+	import Team, { fetchAll, updateName } from './store.js'
 	import Account from '@archetypes/Account/store.js'
 	import Hotwire from '@components/Hotwire.svelte'
+	import { toast } from '@components/Toaster.svelte'
 
 	import UserTeaser from '@archetypes/User/Teaser.svelte'
 	import UserAdd from '@archetypes/User/Add.svelte'
+	import EditableText from '@components/EditableText.svelte'
 	
 	let team
 	let teamOwnerID
@@ -64,7 +66,7 @@
 	<PanelLayout 
 		header={{
 			title: 'Team',
-			subtitle: _.get(team, 'name'),
+			//subtitle: _.get(team, 'name'),
 			icon: 'people',
 			actions: [
 		 		{
@@ -81,6 +83,22 @@
 		}}
 		showBreadcrumbs
 		>
+		
+		<span slot='subtitle'>
+			// <EditableText 
+				text={_.get(team, 'name')}
+				on:change={({detail}) => {
+					let {text, setLoading} = detail
+					setLoading(true)
+					Team.mutation(updateName, {name: text})
+						.then(() => {
+							setLoading(false)
+							toast.success('Team name updated')
+						})
+				}}
+			/>
+		</span>
+
 		{#if !_.get(team, 'users')}
 			<GraphQLProgress/>
 		{:else}

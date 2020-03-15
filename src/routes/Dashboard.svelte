@@ -148,7 +148,7 @@
 <main>
 	<Drawer>
 		<Header>
-			<GantreeLogo/>
+			<GantreeLogo on:click={() => push('/')}/>
 		</Header>
 		<Content>
 			<Separator nav />

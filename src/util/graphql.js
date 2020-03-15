@@ -1,5 +1,4 @@
 //https://www.apollographql.com/docs/react/v3.0-beta/api/core/ApolloClient/
-// TODO: pending request mddleware.
 import ApolloClient from "apollo-client";
 import { gql as ApolloGQL } from 'apollo-boost';
 import { createHttpLink } from "apollo-link-http";
@@ -76,20 +75,16 @@ export const query = async (q, variables={}, options={}) => new Promise(async (r
 			variables: variables, 
 			...options
 		})
-		// .catch(e => {
-		// 	onGraphQLError(e)
-		// 	reject(e)
-		// })
 
 		if(result.errors){
 			handleGraphQLError(result.errors[0])
-			reject(error)
+			reject(result.errors[0].message)
 		}
 
 		resolve(Object.values(result.data)[0])
 	} 
 	catch(e) {
-		//console.log(e.message)
+		reject(e.message)
 	}
 });
 
@@ -103,13 +98,13 @@ export const mutation = async (q, variables={}, options={}) => new Promise(async
 
 		if(result.errors){
 			handleGraphQLError(result.errors[0])
-			reject(error)
+			reject(result.errors[0].message)
 		}
 
 		resolve(Object.values(result.data)[0])
 	} 
 	catch(e) {
-		reject(error)
+		reject(e.message)
 	}
 });
 

@@ -103,7 +103,6 @@
 			width: 90vw;
 			height: auto;
 			max-width: 40rem;
-			//max-height: 30rem;
 			padding: 0;
 			opacity: 1;
 			transition: all 0.15s ease-out;
@@ -115,7 +114,7 @@
 				position: absolute;
 				bottom: calc(100% - 0.2em);
 				left: calc(100% - 0.2em);
-				color: var(--color-theme-mid);
+				color: var(--color-theme-white);
 				font-size: 2em;
 				padding: 0.2em;
 				cursor: alias;
@@ -128,6 +127,7 @@
 				overflow: hidden;
 			}
 		}
+
 		&[data-status="CLOSING"],
 		&[data-status="CLOSED"]{
 			pointer-events: none;

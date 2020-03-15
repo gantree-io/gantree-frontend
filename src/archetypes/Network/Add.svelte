@@ -184,7 +184,6 @@
 					input={{
 						id: 'binary_url',
 						type: 'url',
-						value: 'https://github.com/substrate-developer-hub/substrate-node-template', // TODO: REMOVE
 						placeholder: "https://github.com/myaccount/myrepo",
 					}}
 				/>
@@ -196,7 +195,6 @@
 					input={{
 						id: 'binary_name',
 						type: 'text',
-						value: 'node-template', // TODO: REMOVE
 						placeholder: "Test Network",
 					}}
 				/>

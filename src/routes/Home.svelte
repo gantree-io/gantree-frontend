@@ -7,12 +7,12 @@
 
 <style lang="scss">
 	
-	:global(.layout.-centered) {
+	:global(.layout.-centered.home) {
 		:global(.children) > :global(.gantree-logo){
 			font-size: 4.7em;
 		}
 
-		> :global(*[slot="header"]){
+		:global(*[slot="header"]){
 			justify-content: flex-end !important;
 			:global(.account-menu){
 				font-size: 0.9em;
@@ -23,6 +23,10 @@
 					opacity: 0.9;
 				}
 			}
+		}
+
+		:global(*[slot="footer"][class*='mdc-typography'] > a){
+			color: var(--color-light-grey);
 		}
 	}
 
@@ -67,24 +71,16 @@
 		&:after{ bottom: -1.5em }
 	}
 
-	p.-login{
-
-	}
-
 	:global(.user-login-buttons){
 		margin-top: 3rem;
 	}
 
-	:global(.mdc-typography--caption.-credit){
-		position: absolute;
-		bottom: 1em;
-		left: 50%;
-		transform: translateX(-50%);
-
+	.-credit{
+		opacity: 0.8;
 	}
 </style>
 
-<Centered>
+<Centered class={'home'}>
 	<span slot='header'>
 		<AccountMenu/>
 	</span>
@@ -97,9 +93,14 @@
 	<LoginButtons 
 		providers={['Google', 'Twitter']} 
 		email={{
-			signin: 'LOG IN',
+			signin: 'LOG IN WITH EMAIL',
 			signup: 'CREATE ACCOUNT'
 		}}
 	/>
-	<span class="mdc-typography--caption -credit">Powered By FLEX / Web 3 Foundation / Polkadot | @2020 Flexdapps, All Rights Reserved | Privacy & Cookies</span>
+
+	<span slot='footer' class="mdc-typography--body2 -credit">
+		Powered By&nbsp;<a href="https://flexdapps.com/" target='_blank' rel="noopener noreferrer">FLEXDAPPS</a>
+		&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a href="https://www.notion.so/flexdapps/Get-In-Touch-a4e8c3461eed4cbe835b3e2f98ea0c69" target='_blank' rel="noopener noreferrer">Get in touch</a>
+	</span>
 </Centered>

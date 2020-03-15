@@ -159,7 +159,7 @@
 								{/if}
 
 								{#if status === 'INACTIVE'}
-									<Item on:click={() => User.query(activate, {_id: _id}).then(() => toast.success(`User activated`))}>
+									<Item on:click={() => User.mutation(activate, {_id: _id}).then(() => toast.success(`User activated`))}>
 										<Graphic class="material-icons">toggle_on</Graphic>
 										<Text>Activate</Text>
 									</Item>
@@ -173,7 +173,11 @@
 											title: "Delete user",
 											subtitle: 'This account will be removed and will no longer have access to Gantree.',
 											confirmButton: 'Confirm Delete',
-											onConfirm: () => User.query(deleteUser, {_id: _id}).then(() => toast.success(`User deleted`)),
+											onConfirm: () => {
+												User.mutation(deleteUser, {_id: _id})
+													.then(() => toast.success(`User deleted`))
+													.catch(msg => toast.error(msg))
+												},
 											cancelButton: 'Take me back!',
 										})
 									}}

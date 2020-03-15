@@ -1,7 +1,6 @@
 <script>
 	import { fade } from 'svelte/transition';
 	import Button, { Label, Icon } from '@smui/button';
-	import Gantree from '@assets/Gantree.svelte'
 	import NodeCanvas from '@components/NodeCanvas.svelte'
 
 	export let icon = null
@@ -96,9 +95,9 @@
 			}
 		}
 
-		> :global(*[slot="header"]){
+		:global(*[slot="header"]),
+		:global(*[slot="footer"]){
 			position: absolute;
-			top: 0;
 			left: 0;
 			width: 100%;
 			padding: 1em;
@@ -106,18 +105,12 @@
 			display: flex;
 		}
 		
-		> :global(*[slot="footer"]){
-			position: absolute;
-			bottom: 1em;
-			left: 50%;
-			transform: translateX(-50%);
-		}
+		:global(*[slot="header"]){ top: 0 }
+		:global(*[slot="footer"]){ bottom: 0 }
 	}
-
 </style>
 
-<main class='layout -centered'>
-	<Gantree/>
+<main class={`layout -centered ${$$props.class||''}`}>
 	<NodeCanvas/>
 	<slot name='header'/>
 	<div class="content" style={`max-width: ${maxWidth}`} transition:fade="{{delay: 0, duration: 150}}">

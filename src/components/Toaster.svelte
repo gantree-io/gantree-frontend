@@ -13,6 +13,12 @@
 		LOADING: 'LOADING',
 	}
 
+	const _timer = (id, duration) => setTimeout(() => {
+		items[id].state = 'HIDE'
+		set(items)
+		setTimeout(() => _remove(id), 200)
+	}, duration)
+
 	const _remove = id => {
 		delete items[id]
 		set(items)
@@ -23,11 +29,7 @@
 			clearTimeout(items[id].closetimeout)
 			items[id].type = type
 			items[id].text = text
-			items[id].closetimeout = setTimeout(() => {
-				items[id].state = 'HIDE'
-				set(items)
-				setTimeout(() => _remove(id), 200)
-			}, duration)
+			items[id].closetimeout = _timer(id, duration)
 			set(items)
 		}
 	}
@@ -46,11 +48,7 @@
 		// set to in
 		setTimeout(() => {
 			items[id].state = 'SHOW'
-			items[id].closetimeout = setTimeout(() => {
-				items[id].state = 'HIDE'
-				set(items)
-				setTimeout(() => _remove(id), 200)
-			}, duration)
+			items[id].closetimeout = _timer(id, duration)
 			set(items)
 		}, 10)
 
@@ -85,10 +83,6 @@
  	subscribe(data => {
  		_items = data
  	});
-
- 	onDestroy(() => {
- 		console.log(111, 222, _items)
- 	})
 </script>
 
 <style lang="scss">
@@ -100,13 +94,14 @@
 		.slice{
 			position: relative;
 			display: flex;
-			align-items: center;
+			align-items: flex-start;
 			margin-bottom: 0.3em;
 			background: var(--color-dark);
 			color: var(--color-light);
-			padding: 0.7em 1.3em;
+			padding: 0.9em;
 			border-radius: 0.2em;
-			width: 12rem;
+			width: 16rem;
+			max-width: 80vw;
 			overflow: hidden;
 			max-height: 10rem;
 			opacity: 1;

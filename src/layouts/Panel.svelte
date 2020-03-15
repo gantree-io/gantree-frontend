@@ -16,6 +16,8 @@
 
 	let menu;
  	let menuAnchor;
+
+ 	let hasHeaderSlot = !!_.get(arguments, '[1].$$slots.subtitle', false)
 </script>
 
 <style lang="scss">
@@ -71,10 +73,21 @@
 						>:global(.material-icons.-animation-spin){ opacity: 0.2 }
 					}
 
-					p{
+					:global(.mdc-typography--body2.-subtitle){
 						font-weight: 100;
 						opacity: 0.8;
 						margin: 0 0.5em;
+						display: block;
+						//white-space: nowrap;
+						//overflow: hidden;
+						//text-overflow: ellipsis;
+
+						:global(*[slot="subtitle"]){
+							display: block;
+							//white-space: nowrap;
+							//overflow: hidden;
+							//text-overflow: ellipsis;
+						}
 					}
 				}
 			}
@@ -126,9 +139,15 @@
 							<Icon class="material-icons -animation-spin">autorenew</Icon>
 						{/if}
 					</h1>
+
 					{#if header.subtitle}
-						<p class="mdc-typography--body2">
-							// {header.subtitle}
+						<p class="mdc-typography--body2 -subtitle">// {header.subtitle}</p>
+					{/if}
+					
+					<!-- Can also insert subtitle by slot -->
+					{#if hasHeaderSlot}
+						<p class="mdc-typography--body2 -subtitle">
+							<slot name="subtitle"/>
 						</p>
 					{/if}
 				</div>
