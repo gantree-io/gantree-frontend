@@ -85,7 +85,7 @@
 			|
 			<Button 
 				dense 
-				on:click={() => push('/create-account')}>
+				on:click={() => push('/account/create')}>
 				<Label>{email.signup}</Label>
 			</Button>
 		{/if}

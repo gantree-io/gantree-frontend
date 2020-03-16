@@ -24,6 +24,7 @@ export const AuthStatus = {
 export const AccountStatus = {
 	UNKNOWN: 'UNKNOWN',
 	INCOMPLETE: 'INCOMPLETE',
+	UNVERIFIED: 'UNVERIFIED',
 	COMPLETE: 'COMPLETE',
 }
 
@@ -39,10 +40,21 @@ export const fetchUserByToken = `
 				_id
 				name
 			}
+			verificationCode
+			status
 			tokens{
 				auth
 				refresh
 			}
+		}
+	}
+`;
+
+export const verifyAccount = `
+	query verifyAccount($verificationCode: Int!) {
+		verifyAccount(verificationCode: $verificationCode) {
+			verificationCode
+			status
 		}
 	}
 `;
@@ -74,7 +86,10 @@ export default (() => {
 
 	// can be extended later to add more checks
 	const _determineAccountStatus = user => {
-		return user.name ? AccountStatus.COMPLETE : AccountStatus.INCOMPLETE
+		let status = AccountStatus.COMPLETE
+		if(!user.name) status = AccountStatus.INCOMPLETE
+		if(user.status === 'UNVERIFIED') status = AccountStatus.UNVERIFIED
+		return status
 	}
 	
 	const _handleLoginApp = firebaseUser => {
@@ -126,6 +141,24 @@ export default (() => {
 			.signInWithEmailAndPassword(email, password)
 			.then(user => resolve())
 			.catch(e => reject(e.message));
+	});
+
+	const _verifyAccount = ({verificationCode}) => new Promise((resolve, reject) => {
+		query(verifyAccount, {verificationCode: verificationCode}).then(user => {
+			update(props => ({
+				...props,
+				user: {
+					...props.user,
+					verificationCode: user.verificationCode,
+					status: user.status
+				},
+				accountStatus: _determineAccountStatus(user)
+			}))
+
+			resolve(user)
+		}).catch(e => {
+			reject(e)
+		})
 	});
 
 	const _setUsername = name => {
@@ -183,6 +216,7 @@ export default (() => {
 		}),
 		create: _createFirebaseAccount,
 		signin: _signinFirebaseAccount,
+		verify: _verifyAccount,
 		setUserName: _setUsername,
 		setUserPreferences: _setUserPreferences,
 		signout: redirect => _handleSignout(redirect),

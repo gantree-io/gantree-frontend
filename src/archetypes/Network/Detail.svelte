@@ -50,10 +50,7 @@
 		{
 			name: _id,
 			event: 'UPDATE',
-			callback: data => {
-				console.log(data)
-				fetch(data)
-			}
+			callback: data => fetch(data)
 		}
 	]}
 	>

@@ -14,7 +14,7 @@
 		 	Account.signin(fields)
 			 	.then(msg => {
 			 		setLoading(false)
-			 		//_t.success(msg)
+			 		_t.success(msg)
 			 	})
 			 	.catch(msg => {
 			 		setLoading(false)
@@ -76,7 +76,7 @@
 			class={'-minimal signin'} 
 			color="secondary" 
 			dense 
-			on:click={() => push('/create-account')}>
+			on:click={() => push('/account/create')}>
 			<Label>Don't have have an account?</Label>
 		</Button>
 	</span>	

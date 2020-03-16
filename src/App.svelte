@@ -21,6 +21,7 @@
 	import AccountSetup from '@archetypes/Account/Setup.svelte'
 	import AccountDetail from '@archetypes/Account/Detail.svelte'
 	import AccountCreate from '@archetypes/Account/Create.svelte'
+	import AccountVerify from '@archetypes/Account/Verify.svelte'
 	import AccountLogin from '@archetypes/Account/Login.svelte'
 	import Error404 from '@routes/Error404.svelte'
 	import Error503 from '@routes/Error503.svelte'
@@ -48,13 +49,16 @@
 			503: Error503
 		},
 		onPrivateRoute: ({location}) => {
-			Account.subscribe(({authStatus, accountStatus}) => {
+			Account.subscribe(({user, authStatus, accountStatus}) => {
 				// if we're already on the authenticate path, do nothing
 				if($location === '/authenticate') {}
 				// not authenticated? push to auth page
 				else if(authStatus !== AuthStatus.AUTHENTICATED) push(`/authenticate?redirect=${$location}`)
+				// account unverified
+				else if(user.status === AccountStatus.UNVERIFIED) push(`/account/verify`)
 				// account not complete? push to account/setup page 
 				else if(accountStatus === AccountStatus.INCOMPLETE) push(`/account/setup`)
+				
 			})
 		}
 	})
@@ -65,13 +69,15 @@
 			'/': Home,
 			'/authenticate': AccountAuthenticate,
 			'/login': AccountLogin,
-			'/create-account': AccountCreate
+			'/account/create': AccountCreate,
+			'/account/verify': AccountVerify,
 		},
 		private: {
 			'/dashboard': Dashboard,
 			'/dashboard/*': Dashboard,
 			'/account': AccountDetail,
 			'/account/setup': AccountSetup,
+
 		}
 	}
 

@@ -12,4 +12,5 @@ export default {
 	lt: (value, test) => test < value,
 	lte: (value, test) => test <= value,
 	ssh_key: value => !ssh_key.test(value),
+	length: (value, length) => value.toString().length !== length
 };
