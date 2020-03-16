@@ -22,7 +22,7 @@
     "apollo-link-context": "^1.0.19",
     "dotenv": "^8.2.0",
     "firebase": "^7.8.2",
-    "firebaseui": "^4.4.0",
+    "firebaseui": "https://github.com/flex-dapps/firebaseui-web",
     "fs": "^0.0.1-security",
     "graphql": "^14.6.0",
     "lodash": "^4.17.15",
