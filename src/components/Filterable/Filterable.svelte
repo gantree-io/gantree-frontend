@@ -39,7 +39,7 @@
 
 <slot/>
 {#if $activeFilters.length <= 0}
-	<NoResults 
+	<NoResults
 		graphic={NotFound}
 		title='All items filtered'
 		>

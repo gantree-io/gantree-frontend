@@ -37,12 +37,12 @@
 	copy='Start using Gantree now'
 	maxWidth={'30rem'}
 	>
-	
+
 	<span slot='header'>
 		<GantreeLogo on:click={() => push('/')}/>
 	</span>
 
-	<Form 
+	<Form
 		onSubmit={handleSubmit}
 		buttons={{
 			submit: 'Create account',
@@ -72,12 +72,12 @@
 	</Form>
 
 	<span slot='footer'>
-		<Button 
-			class={'-minimal signin'} 
-			color="secondary" 
-			dense 
+		<Button
+			class={'-minimal signin'}
+			color="secondary"
+			dense
 			on:click={() => push('/login')}>
 			<Label>I already have an account</Label>
 		</Button>
-	</span>	
+	</span>
 </Centered>

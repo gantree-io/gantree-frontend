@@ -1,12 +1,12 @@
 <script context="module">
 	import { writable } from 'svelte/store';
-	import md5 from 'md5'
+	// import md5 from 'md5'
 
 	const { set, subscribe } = writable(null);
 
 	export const open = (component, props) => set({
-		component: component, 
-		props: props||{}, 
+		component: component,
+		props: props||{},
 	})
 	export const close = () => set(null)
 </script>
@@ -32,7 +32,7 @@
 			status = 'CLOSED'
 		}, transitionSpeed * 1000)
 	})
-	
+
 	// handle modal open
 	const handleOpen = (data => {
 		component = data.component
@@ -41,7 +41,7 @@
 		status = 'OPEN'
 		document.addEventListener("keydown", handleKeyDown);
 	})
-	
+
 	// watch for ESC key press & close
 	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 

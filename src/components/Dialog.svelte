@@ -1,6 +1,6 @@
 <script context="module">
 	import { writable } from 'svelte/store';
-	import md5 from 'md5'
+	// import md5 from 'md5'
 
 	const { subscribe, set } = writable(null);
 	const types = {
@@ -18,7 +18,7 @@
 	const _open = (type, props) => {
 		set({...props, type: type})
 	}
-	
+
 	const _dialog = props => _open(types.NEUTRAL, props)
 	_dialog.success = props => _open(types.SUCCESS, props)
 	_dialog.warning = props => _open(types.WARNING, props)
@@ -171,34 +171,34 @@
 				align-items: center;
 				justify-content: space-between;
 
-				& > :global(.confirm){ 
+				& > :global(.confirm){
 					cursor: pointer;
 					color: var(--color-light);
 				}
 			}
 
-			&[data-type='SUCCESS']{ 
+			&[data-type='SUCCESS']{
 				header h1{ color: var(--color-status-success) }
 				footer > :global(.confirm:not([disabled])){ background-color: var(--color-status-success) }
 			}
-			&[data-type='WARNING']{ 
+			&[data-type='WARNING']{
 				header h1{ color: var(--color-status-warning) }
 				footer > :global(.confirm:not([disabled])){ background-color: var(--color-status-warning) }
 			}
-			&[data-type='ERROR']{ 
+			&[data-type='ERROR']{
 				header h1{ color: var(--color-status-error) }
 				footer > :global(.confirm:not([disabled])){ background-color: var(--color-status-error) }
 			}
-			&[data-type='NOTIFICATION']{ 
+			&[data-type='NOTIFICATION']{
 				header h1{ color: var(--color-status-notification) }
 				footer > :global(.confirm:not([disabled])){ background-color: var(--color-status-notification) }
 			}
-			&[data-type='NEUTRAL']{ 
+			&[data-type='NEUTRAL']{
 				header h1{ color: var(--color-status-neutral) }
 				footer > :global(.confirm:not([disabled])){ background-color: var(--color-status-neutral); color: var(--color-dark) }
 			}
 		}
-		
+
 		&[data-status="CLOSING"],
 		&[data-status="CLOSED"]{
 			pointer-events: none;

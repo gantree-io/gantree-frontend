@@ -20,13 +20,13 @@
 	let chainspecOptions
 	Chainspec.query(fetchAllChainspecs).then(chainspecs => {
 		let options = {
-			default: 'Default Chainspec',
-			new: 'Build New Chainspec'
+			new: 'Build New Chainspec',
+			default: 'Default Chainspec'
 		}
 		chainspecs.forEach(chainspec => options[chainspec._id] = chainspec.name)
 		chainspecOptions = options
 	})
-	
+
 	// we want all available providers
 	let providerOptions
 	Providers.query(fetchAllProviders).then(providers => {
@@ -37,9 +37,11 @@
 
 	// handle network deployment
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
+		console.log({fields, hasErrors, errors, setLoading})
 		if(!hasErrors){
 			setLoading(true)
 			Network.query(addNetwork, fields).then(data => {
+				console.log({data})
 				toast.success(`Deploying new network: ${data.name}. Check the status on the networks page`)
 				onSuccess(data)
 				setLoading(false)
@@ -48,6 +50,16 @@
 			toast.warning(`Some fields have errors`)
 		}
 	}
+
+	let binPresets = [{
+		value: 'polkadot-0.7.22',
+		url: 'https://github.com/paritytech/polkadot/releases/download/v0.7.22/polkadot',
+		name: 'Kusama'
+	}, {
+		value: 'edgeware-3.0.1',
+		url: 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/edgeware-3.0.1-CompiledByFlex',
+		name: 'Edgeware'
+	}]
 </script>
 
 <style lang="scss">
@@ -60,7 +72,7 @@
 	}
 </style>
 
-<PanelLayout 
+<PanelLayout
 	header={{
 		title: 'Deploy Network',
 		subtitle: subtitle
@@ -70,7 +82,7 @@
 	{#if !chainspecOptions || !providerOptions}
 		<GraphQLProgress/>
 	{:else}
-		<Form 
+		<Form
 			onSubmit={handleDeploy}
 			onCancel={onCancel}
 			onStep={({title, index}) => {
@@ -78,10 +90,14 @@
 			}}
 			onChange={({fields}) => {
 				_fields = fields
+				if (_fields.preset_bin !== false && _fields.preset_bin !== undefined) {
+					_fields.binary_url = binPresets[_fields.preset_bin].url
+					_fields.binary_name = binPresets[_fields.preset_bin].value
+				}
 			}}
 			>
 
-			<Step 
+			<Step
 				title='Name & Provider'
 				buttons={{
 					next: 'Next: Nodes'
@@ -94,7 +110,7 @@
 					input={{
 						id: 'name',
 						type: 'text',
-						//value: 'testing', // TESTING
+						value: 'nt', // TESTING
 						placeholder: "Test Network",
 					}}
 				/>
@@ -109,12 +125,12 @@
 					input={{
 						id: 'provider',
 						type: 'select',
-						options: providerOptions,
+						options: providerOptions
 					}}
 				/>
 			</Step>
 
-			<Step 
+			<Step
 				title='Nodes'
 				buttons={{
 					back: 'Back',
@@ -135,7 +151,7 @@
 						id: 'count',
 						type: 'number',
 						placeholder: 'Enter a number',
-						value: 1,
+						value: 2,
 						max: 10,
 						min: 1
 					}}
@@ -148,7 +164,8 @@
 						id: 'validators',
 						type: 'switch',
 						off: 'No',
-						on: 'Yes'
+						on: 'Yes',
+						value: true
 					}}
 				/>
 
@@ -167,17 +184,16 @@
 				/>
 			</Step>
 
-			<Step 
-				title='Binary & Chainspec' 
+			<Step
+				title='Binary'
 				buttons={{
 					back: 'Back',
 					next: 'Next: Confirm & Deploy'
 				}}
 				>
 				<Field
-					title='Binary Repo URL'
-					subtitle='Paraplant will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory, and the binary should be output to ./target/release/substrate'
-					required
+					title='Binary Repository URL'
+					subtitle='Paraplant will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory.'
 					validation={{
 						'Must be a valid URL': validate.url
 					}}
@@ -185,35 +201,52 @@
 						id: 'binary_url',
 						type: 'url',
 						placeholder: "https://github.com/myaccount/myrepo",
+						value: _fields.binary_url === undefined ? 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/node-template' : _fields.binary_url,
+						disabled: _fields.preset_bin !== false
 					}}
 				/>
 
 				<Field
 					title='Binary name'
-					subtitle='Must match the binary name specified in the repo cargo.toml file'
+					subtitle="Must match the binary name specified in the repository's cargo.toml file"
 					required
 					input={{
 						id: 'binary_name',
 						type: 'text',
 						placeholder: "Test Network",
+						value: _fields.binary_name === undefined ? 'node-template' : _fields.binary_name,
+						disabled: _fields.preset_bin !== false
 					}}
 				/>
-				
+
+				<Field
+					title="Presets"
+					subtitle="Or, choose one of these quick presets"
+					input={{
+						id: 'preset_bin',
+						type: 'radio',
+						options: binPresets
+					}}
+				/>
 			</Step>
 
-			<Step 
-				title='Confirm' 
+			<Step
+				title='Confirm'
 				buttons={{
 					back: 'Back',
 					submit: 'Deploy'
 				}}
 				>
 				<p class='mdc-typography--body1'>
-					You are about to deploy a new network called <strong>{_fields.name}</strong> consisting of <strong>{_fields.count} {_fields.validators ? 'Validator' : ''} Node{_fields.count > 1 ? 's' : ''}</strong> on <strong>{providerOptions[_fields.provider]}</strong> using the <strong>{chainspecOptions[_fields.chainspec]}</strong> chainspec.
+					You are about to deploy a new network called <strong>{_fields.name}</strong> consisting of <strong>{_fields.count} {_fields.validators ? 'Validator' : ''} Node{_fields.count > 1 ? 's' : ''}</strong> on <strong>{providerOptions[_fields.provider]}</strong>.
 				</p>
 
 				<p class='mdc-typography--body1'>
-					The Git repo you will be using to complie this network is <strong>{_fields.binary_url}</strong> and the binary name is defined as <strong>{_fields.binary_name}</strong>. 
+					{#if _fields.preset_bin === false}
+						The Git repo you will be using to complie this network is <strong>{_fields.binary_url}</strong> and the binary name is defined as <strong>{_fields.binary_name}</strong>.
+					{:else}
+						You are deploying onto the existing {binPresets[_fields.preset_bin].name} network.
+					{/if}
 				</p>
 			</Step>
 		</Form>

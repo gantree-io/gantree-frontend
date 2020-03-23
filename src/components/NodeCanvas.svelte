@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	
+
 	let id = Math.floor(Math.random() * 100000000000)
 	let wWidth = window.innerWidth
 	let wHeight = window.innerHeight
@@ -38,7 +38,7 @@
 			currentRow ++
 		}
 	}
-	
+
 	const randomPix = () => {
 		pixX = (Math.floor((Math.random() * xCount)) * (blocksize + gap))
 		let pixYRow = Math.floor(Math.random() * (50 - 1 + 1)) + 1
@@ -46,8 +46,8 @@
 		pixSize = blocksize - (pixYRow * dissipation)
 		animationTick = animationTick === 1 ? 2 : 1
 	}
-	
-	
+
+
 	onMount(() => {
 		const canvas = document.querySelector(`canvas[data-id='${id}']`)
 		buildNodes(canvas.getContext("2d"))
@@ -87,7 +87,7 @@
 		animation-duration: 800ms;
 		animation-timing-function: linear;
 		animation-fill-mode: forwards;
-	
+
 		&[data-tick="1"]{ animation-name: tick1 }
 
 		&[data-tick="2"]{ animation-name: tick2 }

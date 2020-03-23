@@ -7,7 +7,7 @@
 
 	export let providers = []
 	export let email
-	
+
 	let username
 	let authStatus
 
@@ -62,14 +62,14 @@
 		<Icon class="material-icons -loading">autorenew</Icon>
 	{:else if authStatus === AuthStatus.AUTHENTICATED}
 		<p class="mdc-typography--caption">logged in as {username}</p>
-		<Button 
-			dense 
+		<Button
+			dense
 			on:click={() => push('/dashboard')}>
 			<Label>Visit Your Dashboard</Label>
 		</Button>
 		|
-		<Button 
-			dense 
+		<Button
+			dense
 			on:click={() => Account.signout('/')}>
 			<Label>Logout</Label>
 		</Button>
@@ -77,14 +77,14 @@
 		<span class="mdc-typography--caption">Access your dashboard</span>
 		<div id='firebaseui-auth-container' data-status={authStatus}/>
 		{#if email}
-			<Button 
-				dense 
+			<Button
+				dense
 				on:click={() => push('/login')}>
 				<Label>{email.signin}</Label>
 			</Button>
 			|
-			<Button 
-				dense 
+			<Button
+				dense
 				on:click={() => push('/account/create')}>
 				<Label>{email.signup}</Label>
 			</Button>

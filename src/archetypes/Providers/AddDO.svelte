@@ -31,16 +31,16 @@
 	}
 </style>
 
-<PanelLayout 
+<PanelLayout
 	header={{
 		title: 'Digital Ocean Credentials',
 	}}
 	>
 	<p class="mdc-typography--body1">
-		Paraplant requires your Digital Ocean Token with <strong>read + write access</strong>. 
+		Paraplant requires your Digital Ocean Token with <strong>read + write access</strong>.
 		<a href='https://google.com' target="_blank" nofollow noreferrer>Click here for instructions on how to retrieve this</a>.
 	</p>
-	<Form 
+	<Form
 		onSubmit={onSubmit}
 		onCancel={onCancel}
 		buttons={{
@@ -55,7 +55,7 @@
 				'Must be 64 characters': t => t.length !== 64
 			}}
 			input={{
-				id: 'digitalocean_token',
+				id: 'do_api_token',
 				type: 'textarea',
 				placeholder: `// Paste your 64 character Digital Ocean Token here`,
 				rows: 3

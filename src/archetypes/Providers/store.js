@@ -21,8 +21,8 @@ export const count = `
 
 // mutations
 export const addDO = `
-	mutation addProviderDO($digitalocean_token: String!) {
-		addProviderDO(digitalocean_token: $digitalocean_token){
+	mutation addProviderDO($do_api_token: String!) {
+		addProviderDO(do_api_token: $do_api_token){
 			_id
 		}
 	}

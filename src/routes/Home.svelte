@@ -6,7 +6,7 @@
 </script>
 
 <style lang="scss">
-	
+
 	:global(.layout.-centered.home) {
 		:global(.children) > :global(.gantree-logo){
 			font-size: 4.7em;
@@ -40,7 +40,7 @@
 		text-shadow: -2px 2px 0 var(--color-purple);
 	}
 
-	
+
 
 	h2{
 		margin: 0.3em auto 0;
@@ -84,14 +84,14 @@
 	<span slot='header'>
 		<AccountMenu/>
 	</span>
-	
+
 	<GantreeLogo/>
 	<h2 class="mdc-typography--headline6">A full service node infrastructure toolkit for Substrate-based chains</h2>
 	<p class="mdc-typography--body1 -content">
 		Deploying and maintaining  blockchains is difficult. We firmly believe that you shouldn't need to be a DevOps professional in order to develop blockchains Gantree can lighten the load on developers, allowing you to focus on building while we do the heavy lifting of managing your infrastructure.
 	</p>
-	<LoginButtons 
-		providers={['Google', 'Twitter']} 
+	<LoginButtons
+		providers={['Google', 'Twitter']}
 		email={{
 			signin: 'LOG IN WITH EMAIL',
 			signup: 'CREATE ACCOUNT'

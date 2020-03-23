@@ -1,12 +1,12 @@
 <script context="module">
 	import { writable } from 'svelte/store';
-	import md5 from 'md5'
+	// import md5 from 'md5'
 
 	const { set, subscribe } = writable(null);
 
 	export const open = (component, props) => set({
-		component: component, 
-		props: props||{}, 
+		component: component,
+		props: props||{},
 	})
 	export const close = () => set(null)
 </script>
@@ -30,7 +30,7 @@
 			typeof cb === "function" && cb()
 		}, transitionSpeed * 1000)
 	})
-	
+
 	// handle drawer open
 	const handleOpen = (data => {
 		component = data.component
@@ -38,11 +38,11 @@
 		isOpen = true
 		document.addEventListener("keydown", handleKeyDown);
 	})
-	
+
 	// watch for ESC key press & close
 	const handleKeyDown = e => e.keyCode === 27 && handleClose()
 
-	
+
 
 	//subscribe to incoming requests
 	subscribe(data => {
@@ -105,7 +105,7 @@
 			display:flex;
 			flex-direction: column;
 			z-index: 2;
-		
+
 			:global(.close){
 				position: absolute;
 				top: 0.8rem;

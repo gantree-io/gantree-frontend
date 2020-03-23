@@ -43,7 +43,7 @@
 		<GantreeLogo on:click={() => push('/')}/>
 	</span>
 
-	<Form 
+	<Form
 		onSubmit={handleSubmit}
 		buttons={{
 			submit: 'Verify Account',

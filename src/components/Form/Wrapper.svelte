@@ -7,13 +7,13 @@
 	import { writable } from 'svelte/store';
 	import { form } from 'svelte-forms';
 	import ButtonGroup from './buttons/ButtonGroup.svelte';
-	
+
 	export let buttons = {}
 	export let onSubmit = () => {}
 	export let onChange = () => {}
 	export let onCancel = () => {}
 	export let onStep = () => {}
-	
+
 
 	const initialValues = {}
 	const fields = {}
@@ -36,26 +36,26 @@
 
 		PubSub.publish('FORM.STEP', steps.ids[steps.current]);
 	}
-	
+
 	// valiudate a field based on required and validation props
 	const validateField = id => {
 		delete errors[id]
-		
+
 		let rules = validation[id]
-		
+
 		Object.keys(rules).map(msg => {
 		 	if(rules[msg](fields[id])){
 		 		errors[id] = msg
 		 	}
 		})
-		
+
 		// make sure field contains someting is it's required
 		if(
 			required.includes(id) &&
 			fields[id] !== false &&
 			(
-				typeof fields[id] === 'undefined' || 
-				fields[id] === '' || 
+				typeof fields[id] === 'undefined' ||
+				fields[id] === '' ||
 				!fields[id]
 			)
 		){
@@ -64,7 +64,7 @@
 
 		return errors[id] || []
 	}
-	
+
 	const formatFieldData = id => {
 		return [
 			{
@@ -73,7 +73,7 @@
 				error: errors[id]
 			},
 			value => updateField(id, value)
-		] 
+		]
 	}
 
 	const updateField = (id, value) => {
@@ -89,7 +89,7 @@
 		}
 
 		handleChange()
-		
+
 		return formatFieldData(id)
 	}
 
@@ -125,7 +125,7 @@
 			steps.current = steps.current <= 0
 				? 0
 				: steps.current - 1
-			
+
 			updateStep()
 		},
 		currentStep: steps.current
@@ -144,7 +144,9 @@
 		onChange(response)
 	}
 
-	const handleSubmit = () => {
+	const handleSubmit = (e) => {
+		console.log({ e })
+		e.preventDefault()
 		Object.keys(fields).forEach( id => {
 			touched.push(id)
 			validateField(id)
@@ -187,7 +189,7 @@
 	}
 </style>
 
-<form  
+<form
 	on:submit={handleSubmit}
 	data-has-errors={Object.keys(errors).length > 0}
 	autocomplete="off"

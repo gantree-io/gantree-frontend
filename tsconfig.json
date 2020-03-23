@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es2017",
+    "module": "ES2015",
+    "outDir": "build",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noEmitOnError": false,
+    "pretty": true,
+    "forceConsistentCasingInFileNames": true,
+    "noErrorTruncation": false,
+    "noImplicitReturns": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true,
+    "suppressExcessPropertyErrors": true
+  },
+  "typeRoots": [
+    "./node_modules/@types"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

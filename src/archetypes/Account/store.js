@@ -18,7 +18,7 @@ export const AuthStatus = {
 	AUTHENTICATED: 'AUTHENTICATED'
 }
 
-// user account status is used to determine if 
+// user account status is used to determine if
 // the users' account is complete enough to continue
 // to dashboard, or be intercepted by a create account page
 export const AccountStatus = {
@@ -81,7 +81,7 @@ export default (() => {
 		authStatus: AuthStatus.INITIALISED,
 		accountStatus: AccountStatus.UNKNOWN
 	}
-	
+
 	const { set, update, subscribe } = writable(defaultProps);
 
 	// can be extended later to add more checks
@@ -91,7 +91,7 @@ export default (() => {
 		if(user.status === 'UNVERIFIED') status = AccountStatus.UNVERIFIED
 		return status
 	}
-	
+
 	const _handleLoginApp = firebaseUser => {
 		authAttemptCallback()
 
@@ -201,7 +201,7 @@ export default (() => {
 				authStatus: AuthStatus.UNAUTHENTICATED,
 			}))
 	})
-		
+
 	return {
 		subscribe,
 		configure: ({onAuthAttempt=()=>{}, onAuthSuccess=()=>{}, onAuthFailure=()=>{}, onSignout=()=>{}}) => {

@@ -24,7 +24,7 @@
 		 	_t.warning(`Some fields have errors`)
 		 }
 	}
-	
+
 	// if authenticated, push to dashboard
 	Account.subscribe(({authStatus}) => {
 		if(authStatus === AuthStatus.AUTHENTICATED) push('/dashboard')
@@ -37,12 +37,12 @@
 	copy='Enter your Gantree Username and Password'
 	maxWidth={'30rem'}
 	>
-	
+
 	<span slot='header'>
 		<GantreeLogo on:click={() => push('/')}/>
 	</span>
 
-	<Form 
+	<Form
 		onSubmit={handleSubmit}
 		buttons={{
 			submit: 'Login',
@@ -72,12 +72,12 @@
 	</Form>
 
 	<span slot='footer'>
-		<Button 
-			class={'-minimal signin'} 
-			color="secondary" 
-			dense 
+		<Button
+			class={'-minimal signin'}
+			color="secondary"
+			dense
 			on:click={() => push('/account/create')}>
 			<Label>Don't have have an account?</Label>
 		</Button>
-	</span>	
+	</span>
 </Centered>

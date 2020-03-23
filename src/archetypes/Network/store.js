@@ -19,6 +19,7 @@ export const fetchOneTeaser = `
 			_id
 			name
 			status
+			chainspec
 			nodes{
 				_id
 				status

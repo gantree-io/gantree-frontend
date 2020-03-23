@@ -1,6 +1,6 @@
 <script>
 	import { afterUpdate } from 'svelte'
-	import AuthRouter from '@components/AuthRouter.svelte' 
+	import AuthRouter from '@components/AuthRouter.svelte'
  	import _ from 'lodash'
  	import Drawer, {AppContent, Content, Header, Title, Subtitle} from '@smui/drawer';
  	import List, {Item, Text, Separator, Graphic} from '@smui/list';
@@ -10,7 +10,7 @@
 
  	import TrumpQuote from '@components/TrumpQuote.svelte'
  	import AccountMenu from '@archetypes/Account/Menu.svelte'
-	
+
 	// routes
 	import NetworkIndex from '@archetypes/Network/Index.svelte'
 	import ChainspecIndex from '@archetypes/Chainspec/Index.svelte'
@@ -18,9 +18,9 @@
 	import TeamIndex from '@archetypes/Team/Index.svelte'
 	import BillingPage from '@archetypes/Pages/Billing.svelte'
 	import DocsPage from '@archetypes/Pages/Docs.svelte'
- 	
+
  	let active = {}
-	
+
 	const routes = {
 		private: {
 			'/': NetworkIndex,
@@ -38,11 +38,11 @@
 			icon: 'blur_on',
 			href: '#/dashboard'
 		},
-		{
-			name: 'Chainspecs',
-			icon: 'code',
-			href: '#/dashboard/chainspecs',
-		},
+		// {
+		// 	name: 'Chainspecs',
+		// 	icon: 'code',
+		// 	href: '#/dashboard/chainspecs',
+		// },
 		{
 			name: 'Providers',
 			icon: 'vpn_key',
@@ -53,11 +53,11 @@
 			icon: 'people',
 			href: '#/dashboard/team'
 		},
-		{
-			name: 'Billing',
-			icon: 'receipt',
-			href: '#/dashboard/billing'
-		},
+		// {
+		// 	name: 'Billing',
+		// 	icon: 'receipt',
+		// 	href: '#/dashboard/billing'
+		// },
 		{
 			name: 'Docs',
 			icon: 'menu_book',
@@ -81,7 +81,7 @@
 		overflow: hidden;
 		z-index: 0;
 		justify-content: stretch;
-	
+
 		> :global(.mdc-drawer) {
 			min-height: 100vh;
 			position: relative;

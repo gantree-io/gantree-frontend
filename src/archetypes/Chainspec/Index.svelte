@@ -11,16 +11,16 @@
 	import CodeReview from '@assets/CodeReview.svelte'
 
   	let chainspecs
-  	
+
   	const _fetchAll = () => Chainspec
   		.query(fetchAll, {withCount: true})
   		.then(_chainspecs => chainspecs = _chainspecs)
-  	
-  	const handleChainspecAdd = () => openModal(ChainspecAdd, { 
+
+  	const handleChainspecAdd = () => openModal(ChainspecAdd, {
   		onSuccess: () => closeModal() ,
-  		onCancel: () => closeModal() 
+  		onCancel: () => closeModal()
   	})
-  	
+
   	onMount(() => _fetchAll())
 </script>
 
@@ -38,7 +38,7 @@
 		}
 	]}
 	>
-	<PanelLayout 
+	<PanelLayout
 		header={{
 			title: 'Chainspecs',
 			icon: 'settings',

@@ -11,7 +11,9 @@ import autoPreprocess from 'svelte-preprocess'
 import svg from 'rollup-plugin-svg-import';
 import dotenv from 'dotenv';
 import css from "rollup-plugin-css-only";
-
+import typescript from "rollup-plugin-typescript2"
+// import json from "rollup-plugin-json"
+// import globals from "rollup-plugin-node-globals"
 //TODO: get https://sveltematerialui.com/demo/ working
 
 const production = !process.env.ROLLUP_WATCH;
@@ -44,29 +46,32 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		// json(),
 		builtins(),
-		
+		// globals(),
 		replace({
 			_env: JSON.stringify(dotenv.config().parsed),
 		}),
-		
+
 		svg({ stringify: true }),
-		
+
+
 		alias({
-			 entries: [
-			 	{ find: '@app', replacement: __dirname + '/src' },
-			 	{ find: '@assets', replacement: __dirname + '/src/assets' },
-			 	{ find: '@routes', replacement: __dirname + '/src/routes' },
-			 	{ find: '@archetypes', replacement: __dirname + '/src/archetypes' },
-			 	{ find: '@components', replacement: __dirname + '/src/components' },
-			 	{ find: '@layouts', replacement: __dirname + '/src/layouts' },
-			 	{ find: '@icons', replacement: __dirname + '/src/icons' },
-			 	{ find: '@util', replacement: __dirname + '/src/util' },
-			 ]
+			entries: [
+				{ find: '@app', replacement: __dirname + '/src' },
+				{ find: '@assets', replacement: __dirname + '/src/assets' },
+				{ find: '@routes', replacement: __dirname + '/src/routes' },
+				{ find: '@archetypes', replacement: __dirname + '/src/archetypes' },
+				{ find: '@components', replacement: __dirname + '/src/components' },
+				{ find: '@layouts', replacement: __dirname + '/src/layouts' },
+				{ find: '@icons', replacement: __dirname + '/src/icons' },
+				{ find: '@util', replacement: __dirname + '/src/util' },
+				{ find: '@dotstats', replacement: __dirname + '/src/util/dotstats/common/src/index.ts' },
+			]
 		}),
 
 		css({ output: "public/build/extra.css" }),
-		
+
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
@@ -76,8 +81,9 @@ export default {
 			css: css => {
 				css.write('public/build/bundle.css');
 			},
-			
+
 		}),
+
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
@@ -90,6 +96,7 @@ export default {
 		}),
 		commonjs({
 			include: /node_modules/,
+			ignoreGlobal: true,
 			sourceMap: false,
 			namedExports: {
 				'prop-types': [
@@ -111,10 +118,10 @@ export default {
 					'oneOfType',
 					'shape',
 					'exact',
-				],
+				]
 			},
 		}),
-		
+
 		postcss(postcssOptions()),
 
 		// In dev mode, call `npm run start` once
@@ -127,7 +134,8 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		typescript(),
 	],
 	watch: {
 		clearScreen: false

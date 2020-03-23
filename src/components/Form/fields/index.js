@@ -4,6 +4,7 @@ import Select from "./Select.svelte";
 import File from "./File.svelte";
 import Json from "./Json.svelte";
 import Switch from "./Switch.svelte";
+import Radio from './Radio.svelte'
 
 export {
 	Text,
@@ -11,5 +12,6 @@ export {
 	Select,
 	File,
 	Json,
-	Switch
+	Switch,
+	Radio
 };

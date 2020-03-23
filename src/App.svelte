@@ -3,17 +3,17 @@
 	import ApolloClient from "apollo-boost";
 	import _ from 'lodash'
 	import { parse } from 'qs'
-	import { configure as configureGraphQL } from '@util/graphql' 
-	import { configure as configureHotwire, subscribe as hotwireSubscribe } from '@components/Hotwire.svelte' 
+	import { configure as configureGraphQL } from '@util/graphql'
+	import { configure as configureHotwire, subscribe as hotwireSubscribe } from '@components/Hotwire.svelte'
 	import AuthRouter, { configure as configureAuthRouter, triggerError, location, push, querystring } from '@components/AuthRouter.svelte'
 	import Account, { AuthStatus, AccountStatus } from '@archetypes/Account/store'
-	
+
 	// ---> global components
 	import Drawer from '@components/Drawer.svelte'
 	import Modal from '@components/Modal.svelte'
 	import Toaster, { toast } from '@components/Toaster.svelte'
 	import Dialog from '@components/Dialog.svelte'
-	
+
 	// ---> routes
 	import Home from '@routes/Home.svelte'
 	import Dashboard from '@routes/Dashboard.svelte'
@@ -28,7 +28,7 @@
 
 	// configure graphql
 	configureGraphQL({
-		uri: _env.GRAPHQL_URL, 
+		uri: _env.GRAPHQL_URL,
 		token: () => _.get(get(Account), 'user.tokens.auth'),
 		onNetworkError: msg => triggerError(503),
 		onGraphQLError: e => {
@@ -41,7 +41,7 @@
 			}
 		}
 	})
-	
+
 	// configure the router
 	configureAuthRouter({
 		errorRoutes: {
@@ -56,13 +56,13 @@
 				else if(authStatus !== AuthStatus.AUTHENTICATED) push(`/authenticate?redirect=${$location}`)
 				// account unverified
 				else if(user.status === AccountStatus.UNVERIFIED) push(`/account/verify`)
-				// account not complete? push to account/setup page 
+				// account not complete? push to account/setup page
 				else if(accountStatus === AccountStatus.INCOMPLETE) push(`/account/setup`)
-				
+
 			})
 		}
 	})
-	
+
 	// configure routes
 	const routes = {
 		public: {
@@ -100,7 +100,7 @@
 
 			// subscribe to updates on this user
 			hotwireSubscribe(user._id, `UPDATE`, ({name, subscribed}) => Account.setUserPreferences(name, subscribed))
-			
+
 			// redirect
 			push(parse($querystring).redirect || '/dashboard')
 		},
@@ -135,7 +135,7 @@
 		--color-grey: #6d7679;
 		--color-light-grey: #cdceea;
 		--color-xlight-grey: #f1eef5;
-		
+
 		/* colours */
 		--color-mid-blue: #2196f3;
 		--color-light-blue: #8bc2d4;
@@ -158,14 +158,14 @@
 
 		/* highlights */
 		--color-highlight: var(--color-light-purple);
-		
+
 		/* status colors */
 		--color-status-success: var(--color-green);
 		--color-status-warning: var(--color-orange);
 		--color-status-error: var(--color-red);
 		--color-status-notification: var(--color-mid-blue);
 		--color-status-neutral: var(--color-light-grey);
-		
+
 		/* font sizes */
 		--font-size-xxlarge: 3.1rem;
 		--font-size-xlarge: 2.2rem;
@@ -185,8 +185,8 @@
 		background: var(--color-light);
 		font-family: 'Roboto', sans-serif;
 		font-weight: 100;
-		
-		:global(strong){ font-weight: 500 } 
+
+		:global(strong){ font-weight: 500 }
 
 		:global(*){
 			box-sizing: border-box;
@@ -199,7 +199,7 @@
 		animation-iteration-count: infinite;
 		animation-timing-function: linear;
 	}
-	
+
 	:global(.mdc-list .mdc-list-item__graphic),
 	:global(.mdc-list.mdc-list--dense .mdc-list-item__graphic){
 		margin-right: 0.8em;
@@ -217,7 +217,7 @@
 		100% {opacity: 1}
 	}
 
-	
+
 
 	/* scoped to body for heirarchy*/
 	:global(body) {

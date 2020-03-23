@@ -13,7 +13,7 @@
 
 	import NoResults from '@components/NoResults.svelte'
 	import NotFound from '@assets/NotFound.svelte'
-	
+
  	let networks
  	let chainspecCount = 0
 
@@ -31,7 +31,7 @@
 			openModal(Add, {onSuccess: () => closeModal()})
 		}
 	}
-	
+
 	onMount(() => {
 		fetchNetworks()
 		Providers.query(count).then(_count => {
@@ -54,9 +54,9 @@
 		}
 	]}
 	>
-	<PanelLayout 
+	<PanelLayout
 		header={{
-			title: 'Neworks',
+			title: 'Networks',
 			icon: 'blur_on',
 			actions: [
 		 		{

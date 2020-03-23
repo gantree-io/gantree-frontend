@@ -13,7 +13,7 @@
 	let status
 	let chainspecName
 	let nodes
-	
+
 	const fetch = () => Network.query(fetchOne, {_id: _id}).then(data => {
 		title = data.name
 		status = data.status
@@ -39,7 +39,8 @@
 	}
 
 	.mdc-typography--caption.-status{
-		&[data-status='DEPLOYING']{ color: var(--color-status-warning) }
+		&[data-status='DEPLOYING']{ color: var(--color-white) }
+		&[data-status='CONFIGURING']{ color: var(--color-status-warning) }
 		&[data-status='ONLINE']{ color: var(--color-status-success) }
 		&[data-status='SHUTDOWN']{ color: var(--color-status-error) }
 	}
@@ -54,7 +55,7 @@
 		}
 	]}
 	>
-	<PanelLayout 
+	<PanelLayout
 		header={{
 			title: title,
 			subtitle: chainspecName && `Chainspec: ${chainspecName}`,
@@ -81,9 +82,9 @@
 						<Text>Full Nodes</Text>
 					</Option>
 				</Filters>
-				
+
 				{#each nodes as node}
-					<FilterItem key={node.validator ? 'validator' : 'full'}>	
+					<FilterItem key={node.validator ? 'validator' : 'full'}>
 						<Node {...node}/>
 					</FilterItem>
 				{/each}

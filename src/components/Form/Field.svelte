@@ -4,15 +4,15 @@
 	import { Icon } from '@smui/common';
 	import Tooltip from '@components/Tooltip.svelte'
 	import { FIELDS } from './Wrapper.svelte';
-	import { Text, Textarea, Select, File, Json, Switch } from './fields';
-	
+	import { Text, Textarea, Select, File, Json, Switch, Radio } from './fields';
+
 	export let title;
 	export let subtitle = null;
 	export let help = null;
 	export let required = false;
 	export let validation = {};
 	export let input;
-	
+
 	// determine the default value
 	let value = input.value
 	switch (input.type) {
@@ -26,6 +26,7 @@
 			value = input.value || input.options && Object.keys(input.options).length ? Object.keys(input.options)[0] : null
 			break;
 		case 'switch':
+		case 'radio':
 			value = input.value || false
 			break;
 		case 'json':
@@ -43,7 +44,7 @@
 	$: {
 		[field] = setValue(value)
 	}
-	
+
 	// ask for the validate on mount
 	onMount(() => {
 		PubSub.subscribe('FORM.VALIDATE', () => {
@@ -140,11 +141,11 @@
 			<Icon class="material-icons">info</Icon>
 		</Tooltip>
 	</span>
-	
-	
-	{#if 
-		input.type === 'text' || 
-		input.type === 'number' || 
+
+
+	{#if
+		input.type === 'text' ||
+		input.type === 'number' ||
 		input.type === 'url' ||
 		input.type === 'email' ||
 		input.type === 'password'
@@ -160,10 +161,12 @@
 		<Switch {...input} bind:value={value}/>
 	{:else if input.type === 'textarea'}
 		<Textarea {...input} bind:value={value}/>
+	{:else if input.type === 'radio'}
+		<Radio {...input} bind:value={value}/>
 	{/if}
 
 	{#if subtitle}<span class="subtitle">{subtitle}</span>{/if}
-	
+
 	{#if field.error}
 		<span class="error">{field.error}</span>
 	{/if}
