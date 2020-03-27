@@ -241,6 +241,11 @@
 			margin-bottom: 0.6em;
 			padding: 1.6rem;
 			position: relative;
+			z-index: 1;
+
+			&:hover{
+				z-index: 2;
+			}
 
 			:global(> *){
 				display: flex;
@@ -269,6 +274,11 @@
 						margin: 0 1em;
 						display: flex;
 						align-items: flex-end;
+
+						> :global(*){
+							line-height: 1em;
+							margin-right: 0.4rem
+						}
 					};
 				}
 

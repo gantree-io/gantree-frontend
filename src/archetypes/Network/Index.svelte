@@ -72,7 +72,7 @@
 			<GraphQLProgress/>
 		{:else}
 			{#each networks as network}
-				<Teaser {...network}/>
+				<Teaser _id={network._id}/>
 			{:else}
 				<NoResults
 					graphic={NotFound}
