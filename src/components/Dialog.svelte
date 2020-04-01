@@ -36,10 +36,10 @@
 
  	let item = null
  	let status = 'CLOSED'
- 	const transitionSpeed = 0.2
  	let confirmWord = ''
  	let confirmWordValue = ''
  	let disabled = false
+	const transitionSpeed = 0.2
 
  	const isValid = (a, b) => {
  		if(!a){
@@ -73,6 +73,9 @@
  			setTimeout(() => {
  				item = null
  				status = 'CLOSED'
+ 				confirmWord = ''
+ 				confirmWordValue = ''
+ 				disabled = false
  			}, transitionSpeed * 1000)
  		}
  	});
@@ -171,9 +174,14 @@
 				align-items: center;
 				justify-content: space-between;
 
+				& > :global(.cancel){
+					cursor: pointer;
+					color: var(--color-theme-dark);
+				}
+
 				& > :global(.confirm){
 					cursor: pointer;
-					color: var(--color-light);
+					color: var(--color-theme-white);
 				}
 			}
 

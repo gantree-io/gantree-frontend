@@ -2,13 +2,10 @@
 	export let onChange = () => {}
 	export let value = ''
 
-	console.log($$props)
-
 	$: {
 		if($$props.type === 'number'){
 			value = parseInt(value)
 		}
-		console.log($$props.disabled)
 		onChange(value)
 	}
 </script>
