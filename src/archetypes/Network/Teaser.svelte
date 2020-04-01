@@ -71,22 +71,19 @@
 
 		&[data-status='DEPLOYING']{
 			.title{
-				//:global(.smui-paper__title){ color: var(--color-status-warning) }
-				:global(.smui-paper__content){ color: var(--color-white) }
+				:global(.smui-paper__content > .status){ color: var(--color-white) }
 			}
 		}
 
 		&[data-status='CONFIGURING']{
 			.title{
-				//:global(.smui-paper__title){ color: var(--color-status-warning) }
-				:global(.smui-paper__content){ color: var(--color-status-warning) }
+				:global(.smui-paper__content > .status){ color: var(--color-status-warning) }
 			}
 		}
 
 		&[data-status='ONLINE']{
 			.title{
-				//:global(.smui-paper__title){ color: var(--color-status-success) }
-				:global(.smui-paper__content){ color: var(--color-status-success) }
+				:global(.smui-paper__content > .status){ color: var(--color-status-success) }
 			}
 		}
 
@@ -97,11 +94,11 @@
 			cursor: not-allowed;
 			box-shadow: none;
 		}
+
 		&[data-status='SHUTDOWN'],
 		&[data-status='ERROR']{
 			.title{
-				//:global(.smui-paper__title){ color: var(--color-status-error) }
-				:global(.smui-paper__content){ color: var(--color-status-error) }
+				:global(.smui-paper__content > .status){ color: var(--color-status-error) }
 			}
 		}
 	}
@@ -133,10 +130,11 @@
 				<Pender val={name}/>
 			</Title>
 			<Content>
-				{status}
+				<span class="status">{status}</span>
+				<div class="mdc-typography--caption">{chainspecName}</div>
 			</Content>
 		</div>
-		<div class="mdc-typography--caption">{chainspecName}</div>
+
 		<div class='controls'>
 			<div class={`mdc-typography--caption`}>
 				<Pender val={nodeCount}/> node{nodeCount > 1 ? 's' : ''}

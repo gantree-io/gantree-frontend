@@ -1,23 +1,23 @@
 <script>
 	import { onMount } from 'svelte';
 	import { writable, get } from 'svelte/store'
+	import copy from 'copy-to-clipboard'
 	import _ from 'lodash'
+	import moment from 'moment'
 	import Paper, { Title, Subtitle, Content } from '@smui/paper';
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
-	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
+	import Badge from '@components/Badge.svelte'
 	import Hotwire from '@components/Hotwire.svelte'
 	import Tooltip from '@components/Tooltip.svelte'
-	import moment from 'moment'
-	import copy from 'copy-to-clipboard'
-	import { FeedMessage } from '@dotstats'
-	const { Actions } = FeedMessage
-	// import { WsProvider } from '@polkadot/api';
-
-	const utf8decoder = new TextDecoder('utf-8');
-
+	import Expanda from '@components/Expanda.svelte'
+	import Elapsed from '@components/Elapsed.svelte'
+	import NodeStats from './Stats.svelte'
+	import Telemetry from '@util/telemetry'
+	import { Status } from './store'
+		
 	export let _id;
 	export let name;
 	export let ip;
@@ -25,43 +25,15 @@
 	export let status;
 	export let validator;
 
-	let cpu = writable([])
-	let mem = writable([])
-	let chartstamps = writable([])
-
-
-	let block = 0
-	let updated = moment().format("HH:mm:ss")
-	let tick = 0
+	let updated = moment()
+	let tick = false
 	let menu;
 	let menuAnchor;
 	let copied = false
-
-	// need to define props/colors based on status
-	const statusOptions = {
-		DEPLOYING: {
-			icon: 'settings',
-			color: 'notification'
-		},
-		CONFIGURING: {
-			icon: 'settings',
-			color: 'warning'
-		},
-		ONLINE: {
-			icon: 'offline_bolt',
-			color: 'success'
-		},
-		SHUTDOWN: {
-			icon: 'settings',
-			color: 'neutral'
-		},
-		ERROR: {
-			icon: 'error',
-			color: 'error'
-		}
-	}
-
-	let statusProps = statusOptions['DEPLOYING']
+	let statusProps = Status['DEPLOYING']
+	let telemetry
+	let BlockNumber
+	let NodeData
 
 	const updateNodeProps = props => {
 		name = props.name;
@@ -69,8 +41,7 @@
 		provider = props.provider;
 		status = props.status;
 		validator = props.validator;
-
-		statusProps = statusOptions[props.status]
+		statusProps = Status[props.status]
 	}
 
 	const copyIp = () => {
@@ -79,139 +50,20 @@
 		setTimeout(() => copied = false, 1500)
 	}
 
-	onMount(async () => {
-		statusProps = statusOptions[status]
+	onMount(() => {
+		statusProps = Status[status]
+		
+		telemetry = new Telemetry(ip)
+		telemetry.listen('FinalizedBlock', data => {
+			BlockNumber = data.BlockNumber
+			updated = moment()
+			tick = !tick
+		})
 
-		const ws = new WebSocket(`ws://${ip}:8000/feed`)
-		ws.onopen = (e, d) => {
-			// need to find the name of the network, might be something we have to
-			// claw from ansible?
-			ws.send(`subscribe:Local Testnet`);
-		}
+		telemetry.listen('AddedNode', data => NodeData = data)
 
-		ws.onmessage = (msg) => {
-			const reader = new FileReader();
-			reader.addEventListener('loadend', () => {
-				// reader.result contains the contents of blob as a typed array
-				const str = ab2str(reader.result)
-				const d = FeedMessage.deserialize(str)
-				parseMessages(d)
-			});
-			reader.readAsArrayBuffer(msg.data);
-		}
-
-		return () => ws.close()
+		return () => telemetry.close()
 	})
-
-	// will want to factor this out into a telemetry page at some stage
-	function parseMessages(msgs) {
-		for (let msg of msgs) {
-			switch (msg.action) {
-				case Actions.FinalizedBlock: {
-					const [id, height, hash] = msg.payload;
-					block = height
-					updated = moment().format("HH:mm:ss")
-					tick = tick === 0 ? 1 : 0 // tick allows for animation on data change
-					break
-				}
-				case Actions.FeedVersion: {
-					break
-				}
-
-				case Actions.BestBlock: {
-					break
-				}
-
-				case Actions.BestFinalized: {
-					break
-				}
-
-				case Actions.AddedNode: {
-					break
-				}
-
-				case Actions.RemovedNode: {
-					break
-				}
-
-				case Actions.LocatedNode: {
-					break
-				}
-
-				case Actions.ImportedBlock: {
-					break
-				}
-
-				case Actions.FinalizedBlock: {
-					break
-				}
-
-				case Actions.NodeStats: {
-					break
-				}
-
-				case Actions.NodeHardware: {
-					// const [id, nodeHardware] = msg.payload;
-					// let [memory, cpuuse, , , timestamps] = nodeHardware;
-					break
-				}
-				case Actions.TimeSync: {
-					break
-				}
-
-				case Actions.AddedChain: {
-					break
-				}
-
-				case Actions.RemovedChain: {
-					break
-				}
-
-				case Actions.SubscribedTo: {
-					break
-				}
-
-				case Actions.UnsubscribedFrom: {
-					break
-				}
-
-				case Actions.Pong: {
-					break
-				}
-
-				case Actions.AfgFinalized: {
-					break
-				}
-
-				case Actions.AfgReceivedPrevote: {
-					break
-				}
-
-				case Actions.AfgReceivedPrecommit: {
-					break
-				}
-
-				case Actions.AfgAuthoritySet: {
-					break
-				}
-
-				case Actions.StaleNode: {
-					break
-				}
-
-				case Actions.NodeIO: {
-					break
-				}
-
-				default:
-					console.log('No Case Match')
-			}
-		}
-	}
-
-	function ab2str(buf) {
-		return String.fromCharCode.apply(null, new Uint8Array(buf));
-	}
 </script>
 
 <style lang="scss">
@@ -227,31 +79,52 @@
 
 	:global(.node-teaser.smui-paper){
 		border-left: 4px solid var(--color-status-neutral);
+		cursor: auto;
+		flex-wrap: wrap;
 
 		.controls{
 			.info {
 				margin-right: 1em;
 
-				> span{
-					display: block;
-					text-align: right;
+				> span.-block,
+				> span.-updated{
+					display: flex;
+					justify-content: flex-end;
+					align-items: center;
 					line-height: 1.3em;
 					font-weight: 100;
 				}
 
-				&[data-tick="0"] > span.-updated{
-					animation-name: tick0;
+				:global(.material-icons.-loading){
+					font-size: 1em;
+					opacity: 0.5;
+				}
+				
+				/* animation */
+				&[data-tick="true"] > span.-updated,
+				&[data-tick="false"] > span.-updated{
 					animation-duration: 10000ms;
 					animation-timing-function: linear;
 					animation-fill-mode: forwards;
 				}
+				&[data-tick="true"] > span.-updated{ animation-name: tick0 }
+				&[data-tick="false"] > span.-updated{ animation-name: tick1 }
+				
+				/* just the tip color */
+				> :global(.tooltip > .tip){ background: var(--color-theme-mid) }
+				> :global(.tooltip > .tip:after){ border-top-color: var(--color-theme-mid) }
+			}
+		}
 
-				&[data-tick="1"] > span.-updated{
-					animation-name: tick1;
-					animation-duration: 10000ms;
-					animation-timing-function: linear;
-					animation-fill-mode: forwards;
-				}
+		> :global(.expanda.-telemetry){
+			width: 100%;
+			
+			:global(.trigger){
+				font-size: var(--font-size-xsmall);
+				opacity: 0.5;
+				text-transform: uppercase;
+				height: 0;
+				transform: translateY(0.7em);
 			}
 		}
 
@@ -305,11 +178,22 @@
 
 		<div class='controls'>
 			<div class="info" data-tick={tick}>
-				<Tooltip text={copied ? 'Copied' : 'Click to copy'} class="info">
+				<Tooltip text={copied ? 'Copied' : 'Click to copy'} position={'top'}>
 					<span class="mdc-typography--caption -ip" on:click={copyIp}>IP: {ip} ({provider})</span>
 				</Tooltip>
-				<span class="mdc-typography--caption -block">Current Block: {block || 'Not yet started'}</span>
-				<span class="mdc-typography--caption -updated">Last Updated: {updated}</span>
+				<span class="mdc-typography--caption -block">
+					Current Block:
+					{#if BlockNumber}
+						{BlockNumber}
+					{:else}
+						<Icon class={`material-icons -loading`}>autorenew</Icon>
+					{/if}
+				</span>
+				<span class="mdc-typography--caption -updated">
+					Last Updated: <Elapsed anchor={updated}/>
+				</span>
+				
+				<!-- <span class="mdc-typography--caption -updated">Last Updated: {updated}</span> -->
 			</div>
 
 			<div class='menu' bind:this={menuAnchor}>
@@ -330,5 +214,13 @@
 				</Menu>
 			</div>
 		</div>
+		
+		<Expanda 
+			class='-telemetry' 
+			openTrigger={{text: 'Show telemetry', icon: 'expand_more'}}
+			closeTrigger={{text: 'Hide telemetry', icon: 'expand_less'}}
+			>
+			<NodeStats ip={ip}/>
+		</Expanda>
 	</Paper>
 </Hotwire>

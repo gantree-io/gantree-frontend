@@ -222,7 +222,7 @@ export function serialize(messages: Array<Message>): Data {
  * Deserialize data to an array of `Message`s.
  */
 export function deserialize(data: Data): Array<Message> {
-  console.log({data})
+  //console.log({data})
   const json = parse(data);
 
   if (!Array.isArray(json) || json.length === 0 || json.length % 2 !== 0) {
