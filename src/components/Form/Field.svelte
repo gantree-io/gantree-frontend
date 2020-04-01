@@ -4,7 +4,7 @@
 	import { Icon } from '@smui/common';
 	import Tooltip from '@components/Tooltip.svelte'
 	import { FIELDS } from './Wrapper.svelte';
-	import { Text, Textarea, Select, File, Json, Switch, Radio, Keyval } from './fields';
+	import { Text, Textarea, Select, File, Json, Switch, Radio, Pills } from './fields';
 
 	export let title;
 	export let subtitle = null;
@@ -35,7 +35,7 @@
 		case 'file':
 			value = input.value || null
 			break;
-		case 'keyval':
+		case 'pills':
 			value = input.value || []
 			break;
 		default:
@@ -99,7 +99,7 @@
 		:global(input),
 		:global(select),
 		:global(textarea),
-		:global(.keyval){
+		:global(.pills){
 			margin: 0.2em 0;
 			display: block;
 			width: 100%;
@@ -124,7 +124,7 @@
 			margin: 0.2em 0;
 		}
 
-		:global(.keyval){
+		:global(.pills){
 			display: flex;
 			padding: 0.7em 0.9em 0.5em;
 		}
@@ -178,8 +178,8 @@
 		<Textarea {...input} bind:value={value}/>
 	{:else if input.type === 'radio'}
 		<Radio {...input} bind:value={value}/>
-	{:else if input.type === 'keyval'}
-		<Keyval {...input} bind:value={value}/>
+	{:else if input.type === 'pills'}
+		<Pills {...input} bind:value={value}/>
 	{/if}
 
 	{#if subtitle}<span class="subtitle">{subtitle}</span>{/if}

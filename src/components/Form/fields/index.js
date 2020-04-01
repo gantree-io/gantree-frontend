@@ -5,7 +5,7 @@ import File from "./File.svelte";
 import Json from "./Json.svelte";
 import Switch from "./Switch.svelte";
 import Radio from './Radio.svelte'
-import Keyval from './Keyval.svelte'
+import Pills from './Pills.svelte'
 
 export {
 	Text,
@@ -15,5 +15,5 @@ export {
 	Json,
 	Switch,
 	Radio,
-	Keyval
+	Pills
 };

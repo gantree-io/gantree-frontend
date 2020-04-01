@@ -38,11 +38,9 @@
 
 	// handle network deployment
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
-		//console.log({fields, hasErrors, errors, setLoading})
 		if(!hasErrors){
 			setLoading(true)
 			Network.query(addNetwork, fields).then(data => {
-				//console.log({data})
 				toast.success(`Deploying new network: ${data.name}. Check the status on the networks page`)
 				onSuccess(data)
 				setLoading(false)
@@ -250,7 +248,7 @@
 					help="Binary options will be added to the binary at compile time"
 					input={{
 						id: 'binary_opts',
-						type: 'keyval',
+						type: 'pills',
 					}}
 				/>
 			</Step>
