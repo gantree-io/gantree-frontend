@@ -6,11 +6,11 @@
 	import Providers, { fetchAll } from './store.js'
 	import Hotwire from '@components/Hotwire.svelte'
 	import Teaser from './Teaser.svelte'
-	
+
 	let providers
 
 	const _fetchAll = () => Providers.query(fetchAll, {withCount: true}).then(_providers => providers = _providers)
-	
+
 	onMount(() => _fetchAll())
 </script>
 
@@ -39,7 +39,7 @@
 	]}
 	>
 
-	<PanelLayout 
+	<PanelLayout
 		header={{
 			title: 'Providers',
 			//subtitle: _.get(team, 'name'),
@@ -53,7 +53,7 @@
 		{:else}
 			<Teaser provider="DO" name='Digital Ocean' {..._.find(providers, {provider: 'DO'})}/>
 			<Teaser provider="AWS" name='Amazon Web Services' {..._.find(providers, {provider: 'AWS'})}/>
-			<Teaser provider="GCP" name='Google Cloud Services' {..._.find(providers, {provider: 'GCP'})}/>
+			<Teaser provider="GCP" name='Google Cloud Platform' {..._.find(providers, {provider: 'GCP'})}/>
 		{/if}
 	</PanelLayout>
 </Hotwire>

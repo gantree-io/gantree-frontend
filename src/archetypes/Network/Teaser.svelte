@@ -97,7 +97,8 @@
 			cursor: not-allowed;
 			box-shadow: none;
 		}
-		&[data-status='SHUTDOWN']{
+		&[data-status='SHUTDOWN'],
+		&[data-status='ERROR']{
 			.title{
 				//:global(.smui-paper__title){ color: var(--color-status-error) }
 				:global(.smui-paper__content){ color: var(--color-status-error) }

@@ -43,6 +43,7 @@
 		&[data-status='CONFIGURING']{ color: var(--color-status-warning) }
 		&[data-status='ONLINE']{ color: var(--color-status-success) }
 		&[data-status='SHUTDOWN']{ color: var(--color-status-error) }
+		&[data-status='ERROR']{ color: var(--color-status-error) }
 	}
 </style>
 

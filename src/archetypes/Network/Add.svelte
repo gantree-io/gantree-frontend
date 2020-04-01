@@ -117,7 +117,8 @@
 
 				<Field
 					title='Which Provider?'
-					help='You can deploy more nodes using another provider once this network has been created'
+					help='In the future you will be able to select multiple providers'
+					subtitle={providerOptions[_fields.provider] === 'Google Cloud Platform' ? 'Note that you must create a project named "gantree-dashboard" for these credentials to work' : ''}
 					required
 					validation={{
 						//'Provider is required': validate.required

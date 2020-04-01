@@ -33,16 +33,21 @@
 	}
 </style>
 
-<PanelLayout 
+<PanelLayout
 	header={{
 		title: 'Google Cloud Credentials',
 	}}
 	>
 	<p class="mdc-typography--body1">
 		Paraplant requires your Google Cloud Credentials with <strong>write access to compute and network resources</strong>.
-		<a href='https://google.com' target="_blank" nofollow noreferrer>Click here for instructions on how to retrieve this</a>.
 	</p>
-	<Form 
+	<p class="mdc-typography--body1">
+		<strong>Note that you must create a project named "gantree-dashboard" for these credentials to work.</strong>
+	</p>
+	<p class="mdc-typography--body1">
+		<a href='https://support.google.com/a/answer/7378726?hl=en' target="_blank" nofollow noreferrer>Click here for instructions on how to retrieve your credentials file</a>.
+	</p>
+	<Form
 		onSubmit={onSubmit}
 		onCancel={onCancel}
 		buttons={{
