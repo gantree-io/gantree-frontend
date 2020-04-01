@@ -169,6 +169,11 @@
 		display: flex;
 		flex-direction: column;
 
+		:global(.form-field){
+			margin-bottom: 1.5em;
+			width: 100%;
+		}
+
 		:global(.form-button-group){
 			justify-content: space-between;
 		}

@@ -6,7 +6,12 @@
 	export let value;
 
 	const { initField } = getContext(FIELDS);
-	initField(id, value)
+	let [field, setValue] = initField(id, value)
+
+	$: {
+		value = value
+		setValue(value)
+	}
 </script>
 
 <input type="hidden" id={id} value={value}/>

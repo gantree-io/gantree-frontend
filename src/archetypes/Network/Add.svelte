@@ -1,8 +1,9 @@
 <script>
-	import { form } from 'svelte-forms';
+	import { form } from 'svelte-forms'
+	import _ from 'lodash'
 	import { mutation } from '@util/graphql'
 	import PanelLayout from '@layouts/Panel.svelte'
-	import Form, { Step, Field, validate } from '@components/Form'
+	import Form, { Step, Field, Hidden, validate } from '@components/Form'
 	import Chainspec, { fetchAll as fetchAllChainspecs } from '@archetypes/Chainspec/store'
 	import Providers, { fetchAll as fetchAllProviders } from '@archetypes/Providers/store'
 	import { toast } from '@components/Toaster.svelte'
@@ -37,11 +38,9 @@
 
 	// handle network deployment
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
-		console.log({fields, hasErrors, errors, setLoading})
 		if(!hasErrors){
 			setLoading(true)
 			Network.query(addNetwork, fields).then(data => {
-				console.log({data})
 				toast.success(`Deploying new network: ${data.name}. Check the status on the networks page`)
 				onSuccess(data)
 				setLoading(false)
@@ -51,15 +50,26 @@
 		}
 	}
 
-	let binPresets = [{
-		value: 'polkadot-0.7.22',
-		url: 'https://github.com/paritytech/polkadot/releases/download/v0.7.22/polkadot',
-		name: 'Kusama'
-	}, {
-		value: 'edgeware-3.0.1',
-		url: 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/edgeware-3.0.1-CompiledByFlex',
-		name: 'Edgeware'
-	}]
+	let binPresets = [
+		{
+			name: 'Custom',
+			value: 'custom',
+			binary_name: 'Test Network',
+			binary_url: 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/node-template'
+		}, 
+		{
+			name: 'Kusama',
+			value: 'kusama',
+			binary_name: 'polkadot-0.7.22',
+			binary_url: 'https://github.com/paritytech/polkadot/releases/download/v0.7.22/polkadot',
+		}, 
+		{
+			name: 'Edgeware',
+			value: 'edgeware',
+			binary_name: 'edgeware-3.0.1',
+			binary_url: 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/edgeware-3.0.1-CompiledByFlex',
+		}
+	]
 </script>
 
 <style lang="scss">
@@ -90,10 +100,6 @@
 			}}
 			onChange={({fields}) => {
 				_fields = fields
-				if (_fields.preset_bin !== false && _fields.preset_bin !== undefined) {
-					_fields.binary_url = binPresets[_fields.preset_bin].url
-					_fields.binary_name = binPresets[_fields.preset_bin].value
-				}
 			}}
 			>
 
@@ -192,41 +198,58 @@
 					next: 'Next: Confirm & Deploy'
 				}}
 				>
-				<Field
-					title='Binary Repository URL'
-					subtitle='Paraplant will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory.'
-					validation={{
-						'Must be a valid URL': validate.url
-					}}
-					input={{
-						id: 'binary_url',
-						type: 'url',
-						placeholder: "https://github.com/myaccount/myrepo",
-						value: _fields.binary_url === undefined ? 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/node-template' : _fields.binary_url,
-						disabled: _fields.preset_bin !== false
-					}}
-				/>
 
 				<Field
-					title='Binary name'
-					subtitle="Must match the binary name specified in the repository's cargo.toml file"
-					required
-					input={{
-						id: 'binary_name',
-						type: 'text',
-						placeholder: "Test Network",
-						value: _fields.binary_name === undefined ? 'node-template' : _fields.binary_name,
-						disabled: _fields.preset_bin !== false
-					}}
-				/>
-
-				<Field
-					title="Presets"
-					subtitle="Or, choose one of these quick presets"
+					title="Binary Options"
 					input={{
 						id: 'preset_bin',
 						type: 'radio',
 						options: binPresets
+					}}
+				/>
+
+				{#if _fields.preset_bin === 'custom'}
+					<Field
+						title='Binary Repository URL'
+						help='Paraplant will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory.'
+						validation={{
+							'Must be a valid URL': validate.url
+						}}
+						input={{
+							id: 'binary_url',
+							type: 'url',
+							placeholder: "https://github.com/myaccount/myrepo",
+							value: 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/node-template',
+						}}
+					/>
+
+					<Field
+						title='Binary name'
+						help="Must match the binary name specified in the repository's cargo.toml file"
+						required
+						input={{
+							id: 'binary_name',
+							type: 'text',
+							placeholder: "Test Network",
+							value: 'node-template',
+						}}
+					/>
+
+				{:else}
+					<Hidden id='binary_url' value={_.get(_.find(binPresets, {value: _.get(_fields, 'preset_bin', null)}, {}), 'binary_url', null)}/>
+					<Hidden id='binary_name' value={_.get(_.find(binPresets, {value: _.get(_fields, 'preset_bin', null)}, {}), 'binary_name', null)}/>
+					<p class='mdc-typography--body2' style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title={_fields.binary_url}>
+						<strong>Binary URL: </strong> {_fields.binary_url}<br/>
+						<strong>Binary Name: </strong> {_fields.binary_name}
+					</p>
+				{/if}
+
+				<Field						
+					title={`Binary optons (${_.get(_fields, 'binary_opts', []).length})`}
+					help="Binary options will be added to the binary at compile time"
+					input={{
+						id: 'binary_opts',
+						type: 'pills',
 					}}
 				/>
 			</Step>
@@ -243,12 +266,14 @@
 				</p>
 
 				<p class='mdc-typography--body1'>
-					{#if _fields.preset_bin === false}
-						The Git repo you will be using to complie this network is <strong>{_fields.binary_url}</strong> and the binary name is defined as <strong>{_fields.binary_name}</strong>.
-					{:else}
-						You are deploying onto the existing {binPresets[_fields.preset_bin].name} network.
-					{/if}
+					The Git repo you will be using to complie this network is <strong>{_fields.binary_url}</strong> and the binary name is defined as <strong>{_fields.binary_name}</strong>.
 				</p>
+
+				{#if _.get(_fields, 'binary_opts', []).length}
+					<p class='mdc-typography--body1'>
+						You have defined <strong>{_.get(_fields, 'binary_opts', []).length}</strong> custom binary options.
+					</p>
+				{/if}
 			</Step>
 		</Form>
 	{/if}

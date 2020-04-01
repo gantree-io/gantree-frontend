@@ -5,6 +5,7 @@ import File from "./File.svelte";
 import Json from "./Json.svelte";
 import Switch from "./Switch.svelte";
 import Radio from './Radio.svelte'
+import Pills from './Pills.svelte'
 
 export {
 	Text,
@@ -13,5 +14,6 @@ export {
 	File,
 	Json,
 	Switch,
-	Radio
+	Radio,
+	Pills
 };

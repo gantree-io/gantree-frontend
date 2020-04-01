@@ -25,7 +25,7 @@
 				subtitle: 'Before adding a new network you\'ll need to configure some credentials on the providers page.',
 				confirmButton: 'Add credentials',
 				onConfirm: () => push('/dashboard/providers'),
-				cancelButton: `I'm good`,
+				cancelButton: `No Thanks`,
 			})
 		}else{
 			openModal(Add, {onSuccess: () => closeModal()})
@@ -36,8 +36,15 @@
 		fetchNetworks()
 		Providers.query(count).then(_count => {
 			chainspecCount = _count
+
+			// ------ TESTING ------------------<<
+			handleAddNetwork()
+			// ------ TESTING ------------------<<
 		})
 	})
+
+
+
 </script>
 
 <Hotwire

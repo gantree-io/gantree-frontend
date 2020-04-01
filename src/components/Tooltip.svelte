@@ -52,7 +52,8 @@
 					right: 100%;
 					border-top: 0.5em solid transparent;
 					border-bottom: 0.5em solid transparent; 
-					border-right:0.5em solid rgba(0,0,0,0.8); 
+					border-right:0.5em solid rgba(0,0,0,0.8);
+					transform: translateY(-50%);
 				}
 			}
 		}

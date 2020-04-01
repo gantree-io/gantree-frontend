@@ -4,7 +4,7 @@
 	import { Icon } from '@smui/common';
 	import Tooltip from '@components/Tooltip.svelte'
 	import { FIELDS } from './Wrapper.svelte';
-	import { Text, Textarea, Select, File, Json, Switch, Radio } from './fields';
+	import { Text, Textarea, Select, File, Json, Switch, Radio, Pills } from './fields';
 
 	export let title;
 	export let subtitle = null;
@@ -26,12 +26,17 @@
 			value = input.value || input.options && Object.keys(input.options).length ? Object.keys(input.options)[0] : null
 			break;
 		case 'switch':
-		case 'radio':
 			value = input.value || false
+			break;
+		case 'radio':
+			value = input.value || undefined
 			break;
 		case 'json':
 		case 'file':
 			value = input.value || null
+			break;
+		case 'pills':
+			value = input.value || []
 			break;
 		default:
 			value = input.value || ''
@@ -59,18 +64,17 @@
 
 <style lang="scss">
 	.form-field{
-		margin-bottom: 2em;
 		display: block;
 		font-weight: 100;
 		position: relative;
-		width: 100%;
 
 		.title{
 			font-size: 0.9em;
 			font-weight: 100;
 			text-align: inherit;
-			display: block;
-			margin-bottom: 0.5em;
+			margin: 0 0.4rem 0.2rem 0.4rem;
+			display: flex;
+			align-items: center;
 
 			:global(.tooltip){
 				display: inline-block;
@@ -87,13 +91,15 @@
 			font-size: 12px;
 			font-weight: 100;
 			display: block;
-			color: var(--color-mid-grey);
+			color: var(--color-grey, #777);
 			text-align: inherit;
+			margin: 0 0.4rem;
 		}
 
 		:global(input),
 		:global(select),
-		:global(textarea){
+		:global(textarea),
+		:global(.pills){
 			margin: 0.2em 0;
 			display: block;
 			width: 100%;
@@ -108,10 +114,19 @@
 			&:focus{
 				border-bottom: 1px solid var(--color-highlight);
 			}
+
+			&:disabled{
+				cursor: not-allowed
+			}
 		}
 
 		:global(.switch){
 			margin: 0.2em 0;
+		}
+
+		:global(.pills){
+			display: flex;
+			padding: 0.7em 0.9em 0.5em;
 		}
 
 		:global(::placeholder){
@@ -163,6 +178,8 @@
 		<Textarea {...input} bind:value={value}/>
 	{:else if input.type === 'radio'}
 		<Radio {...input} bind:value={value}/>
+	{:else if input.type === 'pills'}
+		<Pills {...input} bind:value={value}/>
 	{/if}
 
 	{#if subtitle}<span class="subtitle">{subtitle}</span>{/if}
