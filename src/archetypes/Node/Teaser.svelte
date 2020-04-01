@@ -1,22 +1,23 @@
 <script>
 	import { onMount } from 'svelte';
 	import { writable, get } from 'svelte/store'
+	import copy from 'copy-to-clipboard'
 	import _ from 'lodash'
+	import moment from 'moment'
 	import Paper, { Title, Subtitle, Content } from '@smui/paper';
 	import Menu from '@smui/menu';
 	import List, {Item, Text, Separator, Graphic} from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
-	import Badge from '@components/Badge.svelte'
 	import { Icon } from '@smui/common';
+	import Badge from '@components/Badge.svelte'
 	import Hotwire from '@components/Hotwire.svelte'
 	import Tooltip from '@components/Tooltip.svelte'
 	import Expanda from '@components/Expanda.svelte'
+	import Elapsed from '@components/Elapsed.svelte'
 	import NodeStats from './Stats.svelte'
-	import moment from 'moment'
 	import Telemetry from '@util/telemetry'
 	import { Status } from './store'
-	import copy from 'copy-to-clipboard'
-	
+		
 	export let _id;
 	export let name;
 	export let ip;
@@ -24,7 +25,7 @@
 	export let status;
 	export let validator;
 
-	let updated = moment().format("HH:mm:ss")
+	let updated = moment()
 	let tick = false
 	let menu;
 	let menuAnchor;
@@ -55,7 +56,7 @@
 		telemetry = new Telemetry(ip)
 		telemetry.listen('FinalizedBlock', data => {
 			BlockNumber = data.BlockNumber
-			updated = moment().format("HH:mm:ss")
+			updated = moment()
 			tick = !tick
 		})
 
@@ -188,7 +189,11 @@
 						<Icon class={`material-icons -loading`}>autorenew</Icon>
 					{/if}
 				</span>
-				<span class="mdc-typography--caption -updated">Last Updated: {updated}</span>
+				<span class="mdc-typography--caption -updated">
+					Last Updated: <Elapsed anchor={updated}/>
+				</span>
+				
+				<!-- <span class="mdc-typography--caption -updated">Last Updated: {updated}</span> -->
 			</div>
 
 			<div class='menu' bind:this={menuAnchor}>

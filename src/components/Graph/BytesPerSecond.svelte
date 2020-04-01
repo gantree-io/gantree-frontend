@@ -8,7 +8,7 @@
 
 	let data
    
-   const options = {
+	const options = {
 		title: {
 			display: false,
 		},
