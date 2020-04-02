@@ -36,15 +36,8 @@
 		fetchNetworks()
 		Providers.query(count).then(_count => {
 			chainspecCount = _count
-
-			// ------ TESTING ------------------<<
-			handleAddNetwork()
-			// ------ TESTING ------------------<<
 		})
 	})
-
-
-
 </script>
 
 <Hotwire
