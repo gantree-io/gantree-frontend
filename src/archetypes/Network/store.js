@@ -54,8 +54,8 @@ export const deleteOne = `
 `;
 
 export const addNetwork = `
-	mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $binary_url: String!, $binary_name: String!, $chainspec: String! ) {
-		addNetwork(name: $name, count: $count, validators: $validators, provider: $provider, binary_url: $binary_url, binary_name: $binary_name, chainspec: $chainspec) {
+	mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $binary_url: String!, $binary_name: String!, $binary_opts: [String], $chainspec: String! ) {
+		addNetwork(name: $name, count: $count, validators: $validators, provider: $provider, binary_url: $binary_url, binary_name: $binary_name, binary_opts: $binary_opts, chainspec: $chainspec) {
 			_id
 			name
 		}

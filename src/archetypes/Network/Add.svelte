@@ -38,6 +38,7 @@
 
 	// handle network deployment
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
+		console.log({fields})
 		if(!hasErrors){
 			setLoading(true)
 			Network.query(addNetwork, fields).then(data => {
@@ -56,13 +57,13 @@
 			value: 'custom',
 			binary_name: 'Test Network',
 			binary_url: 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/node-template'
-		}, 
+		},
 		{
 			name: 'Kusama',
 			value: 'kusama',
 			binary_name: 'polkadot-0.7.22',
 			binary_url: 'https://github.com/paritytech/polkadot/releases/download/v0.7.22/polkadot',
-		}, 
+		},
 		{
 			name: 'Edgeware',
 			value: 'edgeware',
@@ -116,7 +117,7 @@
 					input={{
 						id: 'name',
 						type: 'text',
-						value: 'nt', // TESTING
+						// value: 'nt', // TESTING
 						placeholder: "Test Network",
 					}}
 				/>
@@ -244,7 +245,7 @@
 					</p>
 				{/if}
 
-				<Field						
+				<Field
 					title={`Binary optons (${_.get(_fields, 'binary_opts', []).length})`}
 					help="Binary options will be added to the binary at compile time"
 					input={{

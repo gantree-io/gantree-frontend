@@ -17,7 +17,7 @@
 	import NodeStats from './Stats.svelte'
 	import Telemetry from '@util/telemetry'
 	import { Status } from './store'
-		
+
 	export let _id;
 	export let name;
 	export let ip;
@@ -52,8 +52,11 @@
 
 	onMount(() => {
 		statusProps = Status[status]
-		
+
 		telemetry = new Telemetry(ip)
+		telemetry.listen('AddedChain', ({ ChainLabel }) => {
+			telemetry.subscribe(ChainLabel)
+		})
 		telemetry.listen('FinalizedBlock', data => {
 			BlockNumber = data.BlockNumber
 			updated = moment()
@@ -99,7 +102,7 @@
 					font-size: 1em;
 					opacity: 0.5;
 				}
-				
+
 				/* animation */
 				&[data-tick="true"] > span.-updated,
 				&[data-tick="false"] > span.-updated{
@@ -109,7 +112,7 @@
 				}
 				&[data-tick="true"] > span.-updated{ animation-name: tick0 }
 				&[data-tick="false"] > span.-updated{ animation-name: tick1 }
-				
+
 				/* just the tip color */
 				> :global(.tooltip > .tip){ background: var(--color-theme-mid) }
 				> :global(.tooltip > .tip:after){ border-top-color: var(--color-theme-mid) }
@@ -118,7 +121,7 @@
 
 		> :global(.expanda.-telemetry){
 			width: 100%;
-			
+
 			:global(.trigger){
 				font-size: var(--font-size-xsmall);
 				opacity: 0.5;
@@ -151,6 +154,10 @@
 		}
 		&[data-status='error']{}
 
+	}
+
+	.info {
+		text-align: right;
 	}
 </style>
 
@@ -192,7 +199,7 @@
 				<span class="mdc-typography--caption -updated">
 					Last Updated: <Elapsed anchor={updated}/>
 				</span>
-				
+
 				<!-- <span class="mdc-typography--caption -updated">Last Updated: {updated}</span> -->
 			</div>
 
@@ -214,9 +221,9 @@
 				</Menu>
 			</div>
 		</div>
-		
-		<Expanda 
-			class='-telemetry' 
+
+		<Expanda
+			class='-telemetry'
 			openTrigger={{text: 'Show telemetry', icon: 'expand_more'}}
 			closeTrigger={{text: 'Hide telemetry', icon: 'expand_less'}}
 			>

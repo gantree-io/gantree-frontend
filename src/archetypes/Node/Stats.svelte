@@ -3,8 +3,8 @@
 	import { Icon } from '@smui/common';
 	import Grid, { Row as GridRow } from '@components/Grid'
 	import { MemoryUsage, CPUUsage, BytesPerSecond } from '@components/Graph'
-	import Telemetry from '@util/telemetry' 
-	
+	import Telemetry from '@util/telemetry'
+
 	export let ip;
 
 	let NodeName
@@ -20,7 +20,10 @@
 
 	onMount(async () => {
 		let telemetry = new Telemetry(ip)
-		
+
+		telemetry.listen('AddedChain', ({ ChainLabel }) => {
+			telemetry.subscribe(ChainLabel)
+		})
 		telemetry.listen('AddedNode', console.log)
 
 		telemetry.listen('AddedNode', ({NodeDetails, NodeStats, BlockDetails}) => {
@@ -48,7 +51,7 @@
 				margin: 0.3em 0;
 				font-size: var(--font-size-medium);
 				color: var(--color-theme-xlight);
-				
+
 				>span{
 					display: flex;
 					align-items: center;

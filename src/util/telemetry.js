@@ -40,7 +40,7 @@ const Types = {
 }
 
 export default class Telemetry{
-	
+
 	constructor(_ip){
 		if(!_ip) throw new Error('IP not supplied')
 		this.ip = _ip
@@ -48,11 +48,7 @@ export default class Telemetry{
 		this.listeners = {}
 
 		this.ws.onopen = (e, d) => {
-			// need to find the name of the network, might be something we have to
-			// claw from ansible?
-			let name = 'Local Testnet'
-			//----
-			this.ws.send(`subscribe:${name}`);
+			this.ws.send(`ping:1`)
 		}
 
 		this.ws.onmessage = msg => {
@@ -61,12 +57,12 @@ export default class Telemetry{
 				// reader.result contains the contents of blob as a typed array
 				const str = String.fromCharCode.apply(null, new Uint8Array(reader.result));
 				const msgs = FeedMessage.deserialize(str)
-				
+
 				for (let msg of msgs) {
 					let eventName = _.findKey(Actions, a => a === msg.action)
 					this.fireEvent(eventName, msg.payload)
 				}
-				
+
 			});
 			reader.readAsArrayBuffer(msg.data);
 		}
@@ -77,6 +73,10 @@ export default class Telemetry{
 	listen(name, cb){
 		if(!this.listeners[name]) this.listeners[name] = []
 		this.listeners[name].push(cb)
+	}
+
+	subscribe(name) {
+		this.ws.send(`subscribe:${name}`);
 	}
 
 	close(){
@@ -94,7 +94,7 @@ export default class Telemetry{
 
 	formatPayload(type, payload){
 		let data = {}
-		
+
 		// multiple values
 		if(typeof type.fields === 'object'){
 			type.fields.forEach((field, i) => {
@@ -112,8 +112,8 @@ export default class Telemetry{
 		else{
 			data[type.name] = payload
 		}
-		
-		return data		
+
+		return data
 	}
 
 

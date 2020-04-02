@@ -38,7 +38,7 @@
 			chainspecCount = _count
 
 			// ------ TESTING ------------------<<
-			handleAddNetwork()
+			// handleAddNetwork()
 			// ------ TESTING ------------------<<
 		})
 	})
