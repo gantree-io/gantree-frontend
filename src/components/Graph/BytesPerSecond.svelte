@@ -3,11 +3,11 @@
 	import Telemetry from '@util/telemetry'
 	import FCChart from './FCChart.svelte'
 	import moment from 'moment'
-	
+
 	export let ip;
 
 	let data
-   
+
 	const options = {
 		title: {
 			display: false,
@@ -59,11 +59,14 @@
 		}
 	}
 
-	
+
 	onMount(async () => {
-		
+
 		let telemetry = new Telemetry(ip)
-		
+		telemetry.listen('AddedChain', ({ ChainLabel }) => {
+			telemetry.subscribe(ChainLabel)
+		})
+
 		// initial node data
 		telemetry.listen('AddedNode', ({NodeHardware}) => setMemoryUsage(NodeHardware.BytesPerSecond, NodeHardware.Timestamp))
 		telemetry.listen('NodeHardware', ({NodeHardware}) => setMemoryUsage(NodeHardware.BytesPerSecond, NodeHardware.Timestamp))

@@ -3,11 +3,11 @@
 	import Telemetry from '@util/telemetry'
 	import FCChart from './FCChart.svelte'
 	import moment from 'moment'
-	
+
 	export let ip;
 
 	let data
-   
+
 	const options = {
 		title: {
 			display: false,
@@ -42,6 +42,8 @@
 		// convert to mb
 		let vals = MemoryUse.map(val => Math.floor(val * 0.001))
 
+		console.log({MemoryUse, Timestamp})
+
 		data = {
 			labels: Timestamp.map(t => moment(t).format('HH:mm:ss')),
 			datasets: [{
@@ -59,10 +61,15 @@
 		}
 	}
 
-	
+
 	onMount(async () => {
 		let telemetry = new Telemetry(ip)
-		telemetry.listen('AddedNode', ({NodeHardware}) => setMemoryUsage(NodeHardware.MemoryUse, NodeHardware.Timestamp))
+		telemetry.listen('AddedChain', ({ ChainLabel }) => {
+			telemetry.subscribe(ChainLabel)
+		})
+		telemetry.listen('AddedNode', ({NodeHardware}) => {
+			setMemoryUsage(NodeHardware.MemoryUse, NodeHardware.Timestamp)
+		})
 		telemetry.listen('NodeHardware', ({NodeHardware}) => setMemoryUsage(NodeHardware.MemoryUse, NodeHardware.Timestamp))
 		return () => telemetry.close()
 	})
