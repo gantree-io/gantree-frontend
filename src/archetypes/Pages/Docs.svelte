@@ -11,6 +11,6 @@
 	>
 	<h2 class="mdc-typography--headline6">How To</h2>
 	<p class="mdc-typography--body1 -content">
-		Coming soon!
+		<iframe title="docs" src="https://www.notion.so/flexdapps/Gantree-Dashboard-Docs-0d0fd1d69f9f4270bc2d163586ddb64b"></iframe>
 	</p>
 </PanelLayout>

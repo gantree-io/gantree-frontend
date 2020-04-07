@@ -60,7 +60,8 @@
 		{
 			name: 'Docs',
 			icon: 'menu_book',
-			href: '#/dashboard/docs'
+			href: 'https://www.notion.so/flexdapps/Gantree-Dashboard-Docs-0d0fd1d69f9f4270bc2d163586ddb64b',
+			target: '_blank'
 		}
 	]
 
@@ -153,7 +154,7 @@
 			<Separator nav />
 			<List>
 				{#each tabs as tab}
-					<Item href={tab.href||'#'}>
+					<Item target={tab.target||''} href={tab.href||'#'}>
 						<Graphic class="material-icons">{tab.icon}</Graphic>
 						<Text>{tab.name}</Text>
 						<Graphic class="material-icons chevron">chevron_right</Graphic>
