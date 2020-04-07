@@ -212,7 +212,7 @@
 				{#if _fields.preset_bin === 'custom'}
 					<Field
 						title='Binary Repository URL'
-						help='Paraplant will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory.'
+						help='Gantree will clone and compile this git repo. This repo should compile when cargo build --release is run in the root directory.'
 						validation={{
 							'Must be a valid URL': validate.url
 						}}

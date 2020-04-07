@@ -39,7 +39,7 @@
 	}}
 	>
 	<p class="mdc-typography--body1">
-		Paraplant requires your Google Cloud Credentials with <strong>write access to compute and network resources</strong>.
+		Gantree requires your Google Cloud Credentials with <strong>write access to compute and network resources</strong>.
 	</p>
 	<p class="mdc-typography--body1">
 		<strong>Note that you must create a project named "gantree-dashboard" for these credentials to work.</strong>

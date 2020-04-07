@@ -30,13 +30,13 @@
 	}
 </style>
 
-<PanelLayout 
+<PanelLayout
 	header={{
 		title: 'Add Genesis Config',
 	}}
 	>
-	<p class="mdc-typography--body1">Paraplant requires a genesis block file in order to create nodes on a particular network. This file should be .json fomat. You can <a href='https://google.com' target="_blank" nofollow noreferrer>find out how to generate one of these files here</a>. </p>
-	<Form 
+	<p class="mdc-typography--body1">Gantree requires a genesis block file in order to create nodes on a particular network. This file should be .json fomat. You can <a href='https://google.com' target="_blank" nofollow noreferrer>find out how to generate one of these files here</a>. </p>
+	<Form
 		onSubmit={handleSubmit}
 		onCancel={onCancel}
 		buttons={{
@@ -44,7 +44,7 @@
 			submit: 'Add'
 		}}
 		>
-		
+
 		<Field
 			title='Config Name'
 			validation={{
