@@ -3,6 +3,8 @@ import _ from 'lodash'
 const { Actions } = FeedMessage
 const utf8decoder = new TextDecoder('utf-8');
 
+const BASE_URL = process.env.SOCKETIO_URL || 'wss://api.gantree.io/telem'
+
 const ab2str = buf => String.fromCharCode.apply(null, new Uint8Array(buf));
 
 const BaseTypes = {
@@ -44,7 +46,7 @@ export default class Telemetry{
 	constructor(_ip){
 		if(!_ip) throw new Error('IP not supplied')
 		this.ip = _ip
-		this.ws = new WebSocket(`ws://${this.ip}:8000/feed`)
+		this.ws = new WebSocket(`${BASE_URL}/${this.ip}`)
 		this.listeners = {}
 
 		this.ws.onopen = (e, d) => {
