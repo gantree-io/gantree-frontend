@@ -5,6 +5,7 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public",
+    "start:prod": "sirv public --host 0.0.0.0 --port 80 --cors --single",
     "start:webpack": "webpack-dev-server --port 5000",
     "build:webpack": "npx cross-env webpack"
   },

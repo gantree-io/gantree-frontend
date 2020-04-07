@@ -8,7 +8,6 @@
  	import Button from '@smui/button';
  	import GantreeLogo from '@assets/GantreeLogo.svelte'
 
- 	import TrumpQuote from '@components/TrumpQuote.svelte'
  	import AccountMenu from '@archetypes/Account/Menu.svelte'
 
 	// routes
@@ -162,7 +161,6 @@
 				{/each}
 			</List>
 			<List class='bottom'>
-				<TrumpQuote/>
 				<Separator nav />
 				<AccountMenu/>
 			</List>
