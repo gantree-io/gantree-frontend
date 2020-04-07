@@ -47,7 +47,7 @@
 		}}
 		showBreadcrumbs
 		>
-		<p class="mdc-typography--body1">In order to deploy blockchain nodes on your own infrastructure, Paraplant needs access to your cloud accounts.</p>
+		<p class="mdc-typography--body1">In order to deploy blockchain nodes on your own infrastructure, Gantree needs access to your cloud accounts.</p>
 		{#if !providers}
 			<GraphQLProgress/>
 		{:else}

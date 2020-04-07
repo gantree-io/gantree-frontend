@@ -12,7 +12,7 @@
 	import UserTeaser from '@archetypes/User/Teaser.svelte'
 	import UserAdd from '@archetypes/User/Add.svelte'
 	import EditableText from '@components/EditableText.svelte'
-	
+
 	let team
 	let teamOwnerID
 	let currentUserID
@@ -63,7 +63,7 @@
 		},
 	]}
 	>
-	<PanelLayout 
+	<PanelLayout
 		header={{
 			title: 'Team',
 			//subtitle: _.get(team, 'name'),
@@ -83,9 +83,9 @@
 		}}
 		showBreadcrumbs
 		>
-		
+
 		<span slot='subtitle'>
-			// <EditableText 
+			// <EditableText
 				text={_.get(team, 'name')}
 				on:change={({detail}) => {
 					let {text, setLoading} = detail
@@ -103,7 +103,7 @@
 			<GraphQLProgress/>
 		{:else}
 			<p class="mdc-typography--body1">
-				You can manage members of your team here. Please be aware that everyone in a team has full control over everything in your Paraplant environment. Only invite those whom you fully trust. 
+				You can manage members of your team here. Please be aware that everyone in a team has full control over everything in your Gantree environment. Only invite those whom you fully trust.
 			</p>
 			{#each team.users as user}
 				<UserTeaser {...user} isTeamOwner={teamOwnerID === user._id} bossPrivileges={teamOwnerID === currentUserID}/>
