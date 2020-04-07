@@ -1,5 +1,5 @@
 <script context="module">
-	let _url = "http://localhost:3000"
+	let _url = process.env.SOCKETIO_URL
 	let _prefix
 	let handleDisconnect
 	let handleReconnect
@@ -23,7 +23,7 @@
 		reconnectionDelayMax : 2000,
 		reconnectionAttempts: 5
 	})
-	
+
 	// get the global socket connection
 	const useSocket = () => new Promise((resolve, reject) => {
 		if(!_socket){
@@ -54,10 +54,10 @@
 
 				// join room
 				io.emit('joinroom', event)
-			
+
 				// fire callbacks for all event subscriptions
 				io.on(event, data => Object.values(SUBSCRIPTIONS[event]).map(cb => cb(data)))
-				
+
 				// add event ID to pool
 				idpool.push(id)
 			})
@@ -72,7 +72,7 @@
 				Object.keys(SUBSCRIPTIONS[event]).map(id => {
 					if(ids.includes(id)){
 						delete SUBSCRIPTIONS[event][id]
-						
+
 						// trigger leave room if no longer any listeners
 						if(Object.keys(SUBSCRIPTIONS[event]).length <= 0){
 							io.emit('leaveroom', event)
@@ -90,13 +90,13 @@
 	import socket from 'socket.io-client';
 
 	export let subscriptions
-	
+
 	// on mount we want to establish a connection a particular event, on a
 	// paticular object, for a paticular team, defined by the room...!
-	// 
+	//
 	// ie: 3rd parties cannot subscribe to updates to updates on objects which don't belong
 	// to them - we can make this unique with the team._id and check serverside
-	// before subscribing 
+	// before subscribing
 	onMount( () => {
 		let localIDs = []
 		_subscribe(subscriptions).then(_localIDs => localIDs = _localIDs)
