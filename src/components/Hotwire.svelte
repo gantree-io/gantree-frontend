@@ -1,5 +1,5 @@
 <script context="module">
-	let _url = process.env.SOCKETIO_URL
+	let _url = _env.API_URL
 	let _prefix
 	let handleDisconnect
 	let handleReconnect

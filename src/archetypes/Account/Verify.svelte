@@ -37,7 +37,7 @@
 	icon='account_circle'
 	title='Verify'
 	subtitle='Awaiting account verification',
-	copy='You should receive a email containing your verification code. Enter it below to verify your account.'
+	copy='You should receive an email containing your verification code. Enter it below to verify your account.'
 	>
 	<span slot='header'>
 		<GantreeLogo on:click={() => push('/')}/>
@@ -62,4 +62,5 @@
 			}}
 		/>
 	</Form>
+	<span slot="footer"><div/></span>
 </Centered>

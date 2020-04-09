@@ -13,15 +13,16 @@
 <style lang="scss">
 	.layout.-centered{
 		display: flex;
+		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
 		min-height: 100vh;
 		color: white;
 
 
 		background-image: linear-gradient(
-			var(--color-theme-xdark) 0%, 
-			var(--color-theme-dark) 25%, 
+			var(--color-theme-xdark) 0%,
+			var(--color-theme-dark) 25%,
 			var(--color-theme-light) 100%
 		);
 
@@ -97,16 +98,17 @@
 
 		:global(*[slot="header"]),
 		:global(*[slot="footer"]){
-			position: absolute;
 			left: 0;
 			width: 100%;
 			padding: 1em;
 			justify-content: center;
 			display: flex;
 		}
-		
-		:global(*[slot="header"]){ top: 0 }
-		:global(*[slot="footer"]){ bottom: 0 }
+
+		:global(*[slot="header"]){
+			justify-content: flex-start;
+		}
+		:global(*[slot="footer"]){}
 	}
 </style>
 

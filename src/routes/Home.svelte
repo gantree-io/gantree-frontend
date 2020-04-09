@@ -13,7 +13,7 @@
 		}
 
 		:global(*[slot="header"]){
-			justify-content: flex-end !important;
+			justify-content: flex-start !important;
 			:global(.account-menu){
 				font-size: 0.9em;
 				opacity: 0.7;
@@ -91,7 +91,7 @@
 		Deploying and maintaining  blockchains is difficult. We firmly believe that you shouldn't need to be a DevOps professional in order to develop blockchains Gantree can lighten the load on developers, allowing you to focus on building while we do the heavy lifting of managing your infrastructure.
 	</p>
 	<LoginButtons
-		providers={['Google', 'Twitter']}
+		providers={['Google']}
 		email={{
 			signin: 'LOG IN WITH EMAIL',
 			signup: 'CREATE ACCOUNT'
