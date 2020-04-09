@@ -39,11 +39,8 @@
 	}
 
 	const setMemoryUsage = (CPUUse, Timestamp) => {
-		console.log({CPUUse})
 		// convert to mb
 		let vals = CPUUse.map(val => val.toFixed(2))
-
-		console.log({vals})
 
 		data = {
 			labels: Timestamp.map(t => moment(t).format('HH:mm:ss')),
