@@ -38,7 +38,7 @@
 	>
 	<p class="mdc-typography--body1">
 		Gantree requires your IAM account Access and Secret Keys with <strong>EC2 and VPC write access.</strong>.
-		<a href='https://google.com' target="_blank" nofollow noreferrer>Click here for instructions on how to retrieve this</a>.
+		<a href='https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys' target="_blank" nofollow noreferrer>Click here for instructions on how to retrieve this</a>.
 	</p>
 	<Form
 		onSubmit={onSubmit}

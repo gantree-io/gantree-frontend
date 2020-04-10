@@ -62,6 +62,12 @@
 			icon: 'menu_book',
 			href: 'https://www.notion.so/flexdapps/Gantree-Dashboard-Docs-0d0fd1d69f9f4270bc2d163586ddb64b',
 			target: '_blank'
+		},
+		{
+			name: 'Contact Us',
+			icon: 'send',
+			href: 'https://www.notion.so/flexdapps/Get-In-Touch-a4e8c3461eed4cbe835b3e2f98ea0c69',
+			target: '_blank'
 		}
 	]
 

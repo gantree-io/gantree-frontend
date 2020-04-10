@@ -77,7 +77,6 @@
 			'/dashboard/*': Dashboard,
 			'/account': AccountDetail,
 			'/account/setup': AccountSetup,
-
 		}
 	}
 

@@ -38,7 +38,6 @@
 
 	// handle network deployment
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
-		console.log({fields})
 		if(!hasErrors){
 			setLoading(true)
 			Network.query(addNetwork, fields).then(data => {
