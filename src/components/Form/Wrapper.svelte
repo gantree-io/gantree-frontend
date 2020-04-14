@@ -161,6 +161,12 @@
 		if(steps.ids.length){
 			updateStep()
 		}
+		window.addEventListener('keydown', (e) => {
+			if (e.keyCode === 13) {
+				e.preventDefault()
+				return false
+			}
+		})
 	})
 </script>
 

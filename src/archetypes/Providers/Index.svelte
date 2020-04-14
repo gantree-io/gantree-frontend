@@ -9,7 +9,9 @@
 
 	let providers
 
-	const _fetchAll = () => Providers.query(fetchAll, {withCount: true}).then(_providers => providers = _providers)
+	const _fetchAll = () => {
+		Providers.query(fetchAll, {withCount: true}).then(_providers => providers = _providers)
+	}
 
 	onMount(() => _fetchAll())
 </script>
