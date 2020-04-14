@@ -28,7 +28,9 @@
 	const useSocket = () => new Promise((resolve, reject) => {
 		if(!_socket){
 			_socket = connect()
-				.on('error', () => console.log('todo: error'))
+				.on('error', () => {
+					window.location.reload()
+				})
 				.on('connect', () => resolve(_socket))
 				.on('reconnect', () => handleReconnect())
 				.on('reconnect_failed', () => handleDisconnect())
