@@ -28,7 +28,10 @@
 				cancelButton: `No Thanks`,
 			})
 		}else{
-			openModal(Add, {onSuccess: () => closeModal()})
+			openModal(Add, {onSuccess: () => {
+				closeModal()
+				window.location.reload()
+			}})
 		}
 	}
 

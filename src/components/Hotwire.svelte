@@ -29,7 +29,7 @@
 		if(!_socket){
 			_socket = connect()
 				.on('error', () => {
-					window.location.reload()
+					console.log('todo: error')
 				})
 				.on('connect', () => resolve(_socket))
 				.on('reconnect', () => handleReconnect())

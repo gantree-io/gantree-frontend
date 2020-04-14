@@ -15,7 +15,7 @@
 	import List, {Item, Text, Graphic, PrimaryText, SecondaryText } from '@smui/list';
 	import IconButton, { Icon as IconButtonIcon } from '@smui/icon-button';
 
-	
+
 	export let _id
 	export let provider
 	export let name
@@ -28,7 +28,7 @@
 
 <style lang="scss">
 	:global(.provider-teaser.smui-paper){
-		
+
 		.title{
 			:global(.material-icons.key){
 				margin-left: -0.1em;
@@ -82,7 +82,7 @@
 			.title{
 				:global(.material-icons){
 					color: var(--color-status-error);
-					
+
 				}
 			}
 		}
@@ -98,7 +98,7 @@
 		<Content>{name}</Content>
 	</div>
 	<div class='controls'>
-		
+
 		<div class={`mdc-typography--caption status`} data-used={networkCount > 0}>
 			{#if _id}
 				{#if networkCount > 0}
@@ -115,9 +115,9 @@
 			<IconButton on:click={() => menu.setOpen(true)}>
 				<IconButtonIcon class="material-icons">menu</IconButtonIcon>
 			</IconButton>
-			<Menu 
-				bind:this={menu} 
-				bind:anchorElement={menuAnchor} 
+			<Menu
+				bind:this={menu}
+				bind:anchorElement={menuAnchor}
 				anchorCorner="BOTTOM_LEFT"
 				>
 				<List dense>
@@ -156,7 +156,10 @@
 								}
 
 								OpenModal(modal, {
-									onSuccess: () => CloseModal(),
+									onSuccess: () => {
+										CloseModal()
+										window.location.reload()
+									},
 									onCancel: () => CloseModal()
 								})
 							}}
@@ -165,7 +168,7 @@
 							<Text>Add Credentials</Text>
 						</Item>
 					{/if}
-					
+
 				</List>
 			</Menu>
 		</div>
