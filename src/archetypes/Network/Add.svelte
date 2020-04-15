@@ -68,6 +68,12 @@
 			value: 'edgeware',
 			binary_name: 'edgeware-3.0.1',
 			binary_url: 'https://substrate-node-bins.sgp1.digitaloceanspaces.com/edgeware-3.0.1-CompiledByFlex',
+		},
+		{
+			name: 'Polkadot Westend',
+			value: 'westend',
+			binary_name: 'westend-0.7.28',
+			binary_url: 'https://github.com/paritytech/polkadot/releases/download/v0.7.28/polkadot',
 		}
 	]
 </script>
