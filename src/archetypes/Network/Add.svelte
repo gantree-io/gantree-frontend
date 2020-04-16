@@ -251,7 +251,7 @@
 				{/if}
 
 				<Field
-					title={`Binary optons (${_.get(_fields, 'binary_opts', []).length})`}
+					title={`Binary options (${_.get(_fields, 'binary_opts', []).length})`}
 					help="Binary options will be passed directly to the binary at execution time"
 					input={{
 						id: 'binary_opts',
