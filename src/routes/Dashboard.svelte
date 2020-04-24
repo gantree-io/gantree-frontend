@@ -17,6 +17,7 @@
 	import TeamIndex from '@archetypes/Team/Index.svelte'
 	import BillingPage from '@archetypes/Pages/Billing.svelte'
 	import DocsPage from '@archetypes/Pages/Docs.svelte'
+	import ApiKeysPage from '@archetypes/Pages/ApiKeys.svelte'
 
  	let active = {}
 
@@ -28,6 +29,7 @@
 			'/team': TeamIndex,
 			'/billing': BillingPage,
 			'/docs': DocsPage,
+			'/keys': ApiKeysPage,
 		}
 	}
 
@@ -68,6 +70,11 @@
 			icon: 'send',
 			href: 'https://www.notion.so/flexdapps/Get-In-Touch-a4e8c3461eed4cbe835b3e2f98ea0c69',
 			target: '_blank'
+		},
+		{
+			name: 'API Keys',
+			icon: 'send',
+			href: '/#/dashboard/keys'
 		}
 	]
 

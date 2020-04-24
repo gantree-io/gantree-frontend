@@ -46,6 +46,30 @@ export const fetchUserByToken = `
 				auth
 				refresh
 			}
+			apiKey
+		}
+	}
+`;
+
+export const fetchUserByApiKey = `
+	query authByApiKey($key: String!) {
+		authByApiKey(key: $key) {
+			_id
+			name
+			email
+			uid
+			subscribed
+			team{
+				_id
+				name
+			}
+			verificationCode
+			status
+			tokens{
+				auth
+				refresh
+			}
+			apiKey
 		}
 	}
 `;
