@@ -2,10 +2,11 @@
 
 Spin up a dev environment:
 
-1. Clone repo  
-2. Fetch all module dependencies: `$> yarn`  
-3. Copy `.env.example` to `.env` and update values (see below)  
-4. Make sure there is a [Gantree web backend](https://bitbucket.org/flexdapps/gantree-backend/src/master/) instance running
+1. Clone repo
+2. Ensure `build-essential` is installed on your platform
+3. Fetch all module dependencies: `$> yarn`  
+4. Copy `.env.example` to `.env` and update values (see below)  
+5. Make sure there is a [Gantree web backend](https://bitbucket.org/flexdapps/gantree-backend/src/master/) instance running
 
 ##important
 FirebaseUI is not compatible out of the box with Rollup. You need to make one tweak to the firebaseui code.  
