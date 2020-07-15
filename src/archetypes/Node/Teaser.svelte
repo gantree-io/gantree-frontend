@@ -19,13 +19,15 @@
   import { Status } from "./store";
 
   export let _id;
+  export let instance;
   export let name;
-  export let ip;
-  export let provider;
   export let status;
-  export let validator;
+  // export let provider;
+  // export let validator;
 
-  let updated = moment();
+  let { ip } = instance;
+
+  // let updated = moment();
   let tick = false;
   let menu;
   let menuAnchor;
@@ -37,7 +39,7 @@
 
   const updateNodeProps = props => {
     name = props.name;
-    ip = props.ip;
+    ip = props.instance.ip;
     provider = props.provider;
     status = props.status;
     validator = props.validator;
@@ -53,19 +55,19 @@
   onMount(() => {
     statusProps = Status[status];
 
-    telemetry = new Telemetry(ip);
-    telemetry.listen("AddedChain", ({ ChainLabel }) => {
-      telemetry.subscribe(ChainLabel);
-    });
-    telemetry.listen("FinalizedBlock", data => {
-      BlockNumber = data.BlockNumber;
-      updated = moment();
-      tick = !tick;
-    });
+    // telemetry = new Telemetry(ip);
+    // telemetry.listen("AddedChain", ({ ChainLabel }) => {
+    //   telemetry.subscribe(ChainLabel);
+    // });
+    // telemetry.listen("FinalizedBlock", data => {
+    //   BlockNumber = data.BlockNumber;
+    //   updated = moment();
+    //   tick = !tick;
+    // });
 
-    telemetry.listen("AddedNode", data => (NodeData = data));
+    // telemetry.listen("AddedNode", data => (NodeData = data));
 
-    return () => telemetry.close();
+    // return () => telemetry.close();
   });
 </script>
 
@@ -171,6 +173,8 @@
 
   .info {
     text-align: right;
+    display: flex;
+    align-items: center;
   }
 </style>
 
@@ -190,33 +194,27 @@
       {#if name}
         <Title>{name}</Title>
       {/if}
-      <Content>
-        <Icon class={`material-icons`}>
-          {validator ? 'insert_chart_outlined' : 'insert_chart'}
-        </Icon>
-        <span>{validator ? 'Validator' : 'Full Node'}</span>
-      </Content>
     </div>
 
     <div class="controls">
       <div class="info" data-tick={tick}>
         <Tooltip text={copied ? 'Copied' : 'Click to copy'} position={'top'}>
           <span class="mdc-typography--caption -ip" on:click={copyIp}>
-            IP: {ip} ({provider})
+            IP: {ip}
           </span>
         </Tooltip>
-        <span class="mdc-typography--caption -block">
+        <!-- <span class="mdc-typography--caption -block">
           Current Block:
           {#if BlockNumber}
             {BlockNumber}
           {:else}
             <Icon class={`material-icons -loading`}>autorenew</Icon>
           {/if}
-        </span>
-        <span class="mdc-typography--caption -updated">
-          Last Updated:
+        </span> -->
+        <!-- <span class="mdc-typography--caption -updated">
+          Last Checkin:
           <Elapsed anchor={updated} />
-        </span>
+        </span> -->
 
         <!-- <span class="mdc-typography--caption -updated">Last Updated: {updated}</span> -->
       </div>
@@ -239,11 +237,11 @@
       </div>
     </div>
 
-    <Expanda
+    <!-- <Expanda
       class="-telemetry"
       openTrigger={{ text: 'Show telemetry', icon: 'expand_more' }}
       closeTrigger={{ text: 'Hide telemetry', icon: 'expand_less' }}>
       <NodeStats {ip} />
-    </Expanda>
+    </Expanda> -->
   </Paper>
 </Hotwire>
