@@ -4,54 +4,52 @@ export const fetchAll = `
 	query networks {
 		networks {
 			_id
-			name
-			chainspec
+			project_id
 			nodes{
 				status
 			}
 		}
 	}
-`;
+`
 
 export const fetchOneTeaser = `
 	query network($_id: String!) {
 		network(_id: $_id) {
 			_id
-			name
+			project_id
 			status
-			chainspec
 			nodes{
 				_id
 				status
 			}
 		}
 	}
-`;
+`
 
 export const fetchOne = `
 	query network($_id: String!) {
 		network(_id: $_id) {
 			_id
-			name
-			chainspec
+			project_id
+			dashboard_url
 			status
 			nodes{
 				_id
 				name
-				ip
-				provider
 				status
-				validator
+				instance{
+					ip
+				}
 			}
 		}
 	}
-`;
+`
 
 export const deleteOne = `
 	mutation deleteNetwork($_id: String!) {
 		deleteNetwork(_id: $_id)
 	}
-`;
+`
 
 export const addNetwork = `
 	mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $binary_url: String!, $binary_name: String!, $binary_opts: [String], $chainspec: String! ) {
@@ -62,7 +60,13 @@ export const addNetwork = `
 	}
 `
 
+export const createDashboard = `
+	mutation createDashboard($_id: String!) {
+		createDashboard(_id: $_id)
+	}
+`
+
 export default {
-	query,
-	mutation
+  query,
+  mutation
 }
