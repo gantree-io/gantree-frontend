@@ -16,7 +16,7 @@
   import Elapsed from "@components/Elapsed.svelte";
   import NodeStats from "./Stats.svelte";
   import Telemetry from "@util/telemetry";
-  import { Status } from "./store";
+  import Node, { Status, deleteOne } from "./store";
 
   export let _id;
   export let instance;
@@ -50,6 +50,10 @@
     copy(ip);
     copied = true;
     setTimeout(() => (copied = false), 1500);
+  };
+
+  const deleteNode = async _id => {
+    await Node.query(deleteOne, { _id: _id });
   };
 
   onMount(() => {
@@ -228,7 +232,7 @@
           bind:anchorElement={menuAnchor}
           anchorCorner="BOTTOM_LEFT">
           <List dense>
-            <Item>
+            <Item on:click={() => deleteNode(_id)}>
               <Graphic class="material-icons">delete</Graphic>
               <Text>Delete node</Text>
             </Item>
