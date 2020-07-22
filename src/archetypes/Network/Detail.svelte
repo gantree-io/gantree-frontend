@@ -94,15 +94,15 @@
       <GraphQLProgress />
     {:else}
       <div class="flex justify-start mb3">
-        <!-- {#if provisioningDashboard}
+        {#if provisioningDashboard}
           <Button class="disabled">Provisioning...</Button>
-        {:else if !dashboard_url} -->
-        <Button onClick={provisionDashboard}>
-          + Create Monitoring Dashboard
-        </Button>
-        <!-- {:else}
+        {:else if !dashboard_url}
+          <Button onClick={provisionDashboard}>
+            + Create Monitoring Dashboard
+          </Button>
+        {:else}
           <Button onClick={openDashboard}>View Monitoring Dashboard</Button>
-        {/if} -->
+        {/if}
       </div>
       <Filterable>
         <Filters>
