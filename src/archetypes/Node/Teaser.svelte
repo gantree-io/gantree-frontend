@@ -20,7 +20,7 @@
 
   export let _id;
   export let instance;
-  export let name;
+  export let clientId;
   export let status;
   // export let provider;
   // export let validator;
@@ -38,7 +38,7 @@
   let NodeData;
 
   const updateNodeProps = props => {
-    name = props.clientId;
+    clientId = props.clientId;
     ip = props.instance.ip;
     provider = props.provider;
     status = props.status;
@@ -195,8 +195,8 @@
         style={`color: var(--color-status-${statusProps.color})`}>
         {statusProps.icon}
       </Icon>
-      {#if name}
-        <Title>{name}</Title>
+      {#if clientId}
+        <Title>{clientId}</Title>
       {/if}
     </div>
 
