@@ -95,6 +95,11 @@
     }
   };
 
+  const setMonitoringAuthCookie = token => {
+    document.cookie = `session=${token};domain=${_env.APP_DOMAIN}`;
+    console.log(document.cookie);
+  };
+
   let _t;
   Account.configure({
     onAuthAttempt: () => {
@@ -102,6 +107,7 @@
     },
     onAuthSuccess: user => {
       _t.success(`Logged in!`);
+      setMonitoringAuthCookie(_.get(get(Account), "user.tokens.auth"));
 
       // configure hotwire
       configureHotwire({
