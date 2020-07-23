@@ -32,6 +32,7 @@
       status = data.status;
       nodes = data.nodes;
       dashboard_url = data.dashboard_url;
+      if (dashboard_url) provisioningDashboard = false;
 
       // if (data.chainspec === "new") {
       //   chainspecName = "New Chainspec";
@@ -57,7 +58,7 @@
   };
 
   const openDashboard = () => {
-    window.open(dashboard_url);
+    window.open(dashboard_url)
   };
 
   fetch();

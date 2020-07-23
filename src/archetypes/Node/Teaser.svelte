@@ -38,7 +38,7 @@
   let NodeData;
 
   const updateNodeProps = props => {
-    name = props.name;
+    name = props.clientId;
     ip = props.instance.ip;
     provider = props.provider;
     status = props.status;
