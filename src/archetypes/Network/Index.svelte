@@ -64,7 +64,7 @@
         <NoResults graphic={NotFound} title="No networks available">
           Start by installing
           <a href="https://github.com/gantree-io/gantree-node-watchdog">
-            Gantree Monitor
+            Gantree Node Watchdog
           </a>
           on one or more of your nodes.
         </NoResults>
