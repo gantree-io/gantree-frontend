@@ -36,6 +36,7 @@ export const fetchOne = `
 			nodes{
 				_id
 				name
+				clientId
 				status
 				instance{
 					ip

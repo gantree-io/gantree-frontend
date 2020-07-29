@@ -97,7 +97,6 @@
 
   const setMonitoringAuthCookie = token => {
     document.cookie = `session=${token};domain=${_env.APP_DOMAIN}`;
-    console.log(document.cookie);
   };
 
   let _t;
