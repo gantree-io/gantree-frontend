@@ -14,18 +14,15 @@ RUN apt-get upgrade -y
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 # more packages
 RUN apt-get update
-RUN apt-get install -y curl jq bash ca-certificates git openssl openssh-client wget python3 python3-dev python3-pip nodejs
+RUN apt-get install -y nodejs
 # yarn
 RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update && apt-get install yarn
 
-RUN npm install -g sirv-cli
-
 COPY . /frontend
 RUN rm -f /frontend/.env
 
-# TODO(ryan): all env vars
 # These need to be in file because yarn bakes them in
 RUN touch /frontend/.env
 RUN echo "GRAPHQL_URL=$GRAPHQL_URL" >> /frontend.env
@@ -41,5 +38,3 @@ RUN echo "FIREBASE_APPID=$FIREBASE_APPID" >> /frontend.env
 
 # Run
 CMD ["yarn", "--cwd", "/frontend", "dev"]
-
-# Notes
