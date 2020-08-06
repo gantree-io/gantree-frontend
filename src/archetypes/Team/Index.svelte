@@ -74,7 +74,7 @@
 					icon: 'person_add',
 					callback: () => {
 						openModal(UserAdd, {
-							team_id:  _.get(team, '_id'),
+							teamId:  _.get(team, '_id'),
 							onSuccess: () => closeModal()
 						})
 					}

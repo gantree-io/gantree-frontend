@@ -1,22 +1,22 @@
-import { query, mutation } from '@util/graphql'
+import { query, mutation } from "@util/graphql";
 
 export const fetchAll = `
 	query networks {
 		networks {
 			_id
-			project_id
+			projectId
 			nodes{
 				status
 			}
 		}
 	}
-`
+`;
 
 export const fetchOneTeaser = `
 	query network($_id: String!) {
 		network(_id: $_id) {
 			_id
-			project_id
+			projectId
 			status
 			nodes{
 				_id
@@ -24,13 +24,13 @@ export const fetchOneTeaser = `
 			}
 		}
 	}
-`
+`;
 
 export const fetchOne = `
 	query network($_id: String!) {
 		network(_id: $_id) {
 			_id
-			project_id
+			projectId
 			dashboard_url
 			status
 			nodes{
@@ -44,13 +44,13 @@ export const fetchOne = `
 			}
 		}
 	}
-`
+`;
 
 export const deleteOne = `
 	mutation deleteNetwork($_id: String!) {
 		deleteNetwork(_id: $_id)
 	}
-`
+`;
 
 export const addNetwork = `
 	mutation addNetwork($name: String!, $count: Int!, $validators: Boolean!, $provider: String!, $binary_url: String!, $binary_name: String!, $binary_opts: [String], $chainspec: String! ) {
@@ -59,15 +59,15 @@ export const addNetwork = `
 			name
 		}
 	}
-`
+`;
 
 export const createDashboard = `
 	mutation createDashboard($_id: String!) {
 		createDashboard(_id: $_id)
 	}
-`
+`;
 
 export default {
   query,
-  mutation
-}
+  mutation,
+};

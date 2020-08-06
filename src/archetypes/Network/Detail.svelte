@@ -28,7 +28,7 @@
 
   const fetch = () =>
     Network.query(fetchOne, { _id: _id }).then(data => {
-      title = data.project_id;
+      title = data.projectId;
       status = data.status;
       nodes = data.nodes;
       dashboard_url = data.dashboard_url;

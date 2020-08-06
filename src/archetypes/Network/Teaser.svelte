@@ -32,7 +32,7 @@
   // let chainspecName = "Loading chainspec...";
 
   const handleUpdate = props => {
-    name = props.project_id;
+    name = props.projectId;
     status = props.status;
     nodeCount = props.nodes ? props.nodes.length : 0;
     dashboard_url = props.dashboard_url;

@@ -56,7 +56,7 @@
 				'Must be less than 128 characters': t => t.length > 128
 			}}
 			input={{
-				id: 'aws_access_key_id',
+				id: 'awsAccessKeyId',
 				type: 'textarea',
 				placeholder: `// Paste your AWS Access Key ID here`,
 				rows: 3
@@ -70,7 +70,7 @@
 				'Must be 40 characters': t => t.length !== 40
 			}}
 			input={{
-				id: 'aws_secret_access_key',
+				id: 'awsSecretAccessKey',
 				type: 'textarea',
 				placeholder: `// Paste your AWS Secret Access Key here`,
 				rows: 3

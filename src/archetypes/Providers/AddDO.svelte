@@ -55,7 +55,7 @@
 				'Must be 64 characters': t => t.length !== 64
 			}}
 			input={{
-				id: 'do_api_token',
+				id: 'doApiToken',
 				type: 'textarea',
 				placeholder: `// Paste your 64 character Digital Ocean Token here`,
 				rows: 3

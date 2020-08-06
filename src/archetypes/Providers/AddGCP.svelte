@@ -12,7 +12,7 @@
 		if(!hasErrors){
 			setLoading(true)
 			// remove all non-json data
-			fields.google_application_credentials = JSON.stringify(JSON.parse(fields.google_application_credentials))
+			fields.googleApplicationCredentials = JSON.stringify(JSON.parse(fields.googleApplicationCredentials))
 			Providers.mutation(addGCP, fields)
 				.then(data => {
 					_t.success(`Credentials added successfully`)
@@ -60,7 +60,7 @@
 			subtitle='This must be a json file'
 			required
 			input={{
-				id: 'google_application_credentials',
+				id: 'googleApplicationCredentials',
 				type: 'json',
 				accept: "application/json, application/JSON"
 			}}
