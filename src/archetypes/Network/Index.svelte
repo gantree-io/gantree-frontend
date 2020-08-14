@@ -43,6 +43,10 @@
   };
 
   onMount(() => {
+    // FIXME: for some reason this is being called before the user is authenticated.
+    // Haven't found any user-noticable app issues caused by this yet.
+    // Will likely have security/performance/stability implications.
+    // Prioritising other things for now at Tom's request.
     fetchNetworks();
     Providers.query(count).then(_count => {
       chainspecCount = _count;
