@@ -2,6 +2,7 @@
 	import PanelLayout from '@layouts/Panel.svelte'
 </script>
 
+<!-- FIXME: these docs are not longer relevant to telemetry -->
 <PanelLayout
 	header={{
 		title: 'Docs',
