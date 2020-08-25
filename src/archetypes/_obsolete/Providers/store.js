@@ -13,11 +13,11 @@ export const fetchAll = `
 	}`;
 
 // count of all providers enabled
-export const count = `
-	query providerCount {
-		providerCount
-	}
-`;
+// export const count = `
+// 	query providerCount {
+// 		providerCount
+// 	}
+// `;
 
 // mutations
 export const addDO = `
