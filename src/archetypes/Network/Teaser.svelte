@@ -6,7 +6,7 @@
   import List, { Item, Text, Separator, Graphic } from "@smui/list";
   import IconButton, { Icon as IconButtonIcon } from "@smui/icon-button";
   import Chainspec, {
-    fetchOne as fetchOneChainspec
+    fetchOne as fetchOneChainspec,
   } from "@archetypes/Chainspec/store.js";
   import { open as OpenDrawer } from "@components/Drawer.svelte";
   import Badge from "@components/Badge.svelte";
@@ -22,7 +22,7 @@
   let name;
   let status;
   let nodeCount;
-  let dashboard_url;
+  let dashboardUrl;
   let deployingCount = 0;
   let onlineCount = 0;
   let shutdownCount = 0;
@@ -31,11 +31,11 @@
   let menuAnchor;
   // let chainspecName = "Loading chainspec...";
 
-  const handleUpdate = props => {
+  const handleUpdate = (props) => {
     name = props.projectId;
     status = props.status;
     nodeCount = props.nodes ? props.nodes.length : 0;
-    dashboard_url = props.dashboard_url;
+    dashboardUrl = props.dashboardUrl;
 
     deployingCount =
       _.filter(props.nodes, { status: "DEPLOYING" }).length +
@@ -158,7 +158,7 @@
       <div
         class="menu"
         bind:this={menuAnchor}
-        on:click={e => {
+        on:click={(e) => {
           e.preventDefault();
           e.stopPropagation();
         }}>
@@ -171,7 +171,7 @@
           anchorCorner="BOTTOM_LEFT">
           <List dense>
             <Item
-              on:click={e => {
+              on:click={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 dialog.warning({
@@ -184,7 +184,7 @@
                       toast.success(`Network pending deletion`)
                     ),
                   cancelButton: 'Take me back!',
-                  confirmWord: 'DELETE'
+                  confirmWord: 'DELETE',
                 });
               }}>
               <Graphic class="material-icons">delete</Graphic>

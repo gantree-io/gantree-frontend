@@ -10,10 +10,10 @@
     Filters,
     Option,
     Icon,
-    Text
+    Text,
   } from "@components/Filterable";
   import Chainspec, {
-    fetchOne as fetchOneChainspec
+    fetchOne as fetchOneChainspec,
   } from "@archetypes/Chainspec/store.js";
   import { toast } from "@components/Toaster.svelte";
   import Hotwire from "@components/Hotwire.svelte";
@@ -23,16 +23,16 @@
   let status;
   let chainspecName;
   let nodes;
-  let dashboard_url;
+  let dashboardUrl;
   let provisioningDashboard = false;
 
   const fetch = () =>
-    Network.query(fetchOne, { _id: _id }).then(data => {
+    Network.query(fetchOne, { _id: _id }).then((data) => {
       title = data.projectId;
       status = data.status;
       nodes = data.nodes;
-      dashboard_url = data.dashboard_url;
-      if (dashboard_url) provisioningDashboard = false;
+      dashboardUrl = data.dashboardUrl;
+      if (dashboardUrl) provisioningDashboard = false;
 
       // if (data.chainspec === "new") {
       //   chainspecName = "New Chainspec";
@@ -58,7 +58,7 @@
   };
 
   const openDashboard = () => {
-    window.open(dashboard_url)
+    window.open(dashboardUrl);
   };
 
   fetch();
@@ -89,7 +89,7 @@
 </style>
 
 <Hotwire
-  subscriptions={[{ name: _id, event: 'UPDATE', callback: data => fetch(data) }]}>
+  subscriptions={[{ name: _id, event: 'UPDATE', callback: (data) => fetch(data) }]}>
   <PanelLayout header={{ title: title }}>
     {#if !nodes}
       <GraphQLProgress />
@@ -97,7 +97,7 @@
       <div class="flex justify-start mb3">
         {#if provisioningDashboard}
           <Button class="disabled">Provisioning...</Button>
-        {:else if !dashboard_url}
+        {:else if !dashboardUrl}
           <Button onClick={provisionDashboard}>
             + Create Monitoring Dashboard
           </Button>

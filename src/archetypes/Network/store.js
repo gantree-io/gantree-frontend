@@ -31,7 +31,7 @@ export const fetchOne = `
 		network(_id: $_id) {
 			_id
 			projectId
-			dashboard_url
+			dashboardUrl
 			status
 			nodes{
 				_id
