@@ -52,7 +52,7 @@
 			input={{
 				id: 'email',
 				type: 'email',
-				placeholder: "joe blogs",
+				placeholder: "JoeBloggs@example.com",
 			}}
 		/>
 	</Form>

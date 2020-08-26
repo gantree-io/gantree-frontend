@@ -85,7 +85,7 @@
 			input={{
 				id: 'name',
 				type: 'text',
-				placeholder: "joe blogs",
+				placeholder: "JoeBloggs@example.com",
 				value: name
 			}}
 		/>
