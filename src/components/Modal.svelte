@@ -117,7 +117,7 @@
 				color: var(--color-theme-white);
 				font-size: 2em;
 				padding: 0.2em;
-				cursor: alias;
+				cursor: pointer;
 				z-index: 1;
 				transition: transform 0.1s;
 			}
