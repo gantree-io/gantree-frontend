@@ -29,7 +29,7 @@
   const fetch = () =>
     Network.query(fetchOne, { _id: _id }).then((data) => {
       title = data.projectId;
-      status = data.status;
+      status = data.status; // TODO: make all references to network "status" -> "health"
       nodes = data.nodes;
       dashboardUrl = data.dashboardUrl;
       if (dashboardUrl) provisioningDashboard = false;
