@@ -5,11 +5,11 @@
   import GraphQLProgress from "@components/GraphQLProgress.svelte";
   import {
     open as openModal,
-    close as closeModal
+    close as closeModal,
   } from "@components/Modal.svelte";
   import Hotwire from "@components/Hotwire.svelte";
   import Network, { fetchAll } from "./store.js";
-  import Providers, { count } from "@archetypes/Providers/store.js";
+  // import Providers, { count } from "@archetypes/Providers/store.js";
   import Add from "./Add.svelte";
   import Teaser from "./Teaser.svelte";
   import { dialog } from "@components/Dialog.svelte";
@@ -24,14 +24,14 @@
     Network.query(fetchAll).then(_networks => (networks = _networks));
   const handleAddNetwork = () => {
     if (chainspecCount <= 0) {
-      dialog.notification({
-        title: "No provider credentials",
-        subtitle:
-          "Before adding a new network you'll need to configure some credentials on the providers page.",
-        confirmButton: "Add credentials",
-        onConfirm: () => push("/dashboard/providers"),
-        cancelButton: `No Thanks`
-      });
+      // dialog.notification({
+      //   title: "No provider credentials",
+      //   subtitle:
+      //     "Before adding a new network you'll need to configure some credentials on the providers page.",
+      //   confirmButton: "Add credentials",
+      //   onConfirm: () => push("/dashboard/providers"),
+      //   cancelButton: `No Thanks`
+      // });
     } else {
       openModal(Add, {
         onSuccess: () => {
@@ -48,9 +48,9 @@
     // Will likely have security/performance/stability implications.
     // Prioritising other things for now at Tom's request.
     fetchNetworks();
-    Providers.query(count).then(_count => {
-      chainspecCount = _count;
-    });
+    // Providers.query(count).then((_count) => {
+    //   chainspecCount = _count;
+    // });
   });
 </script>
 

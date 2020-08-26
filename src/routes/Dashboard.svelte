@@ -19,7 +19,7 @@
   // routes
   import NetworkIndex from "@archetypes/Network/Index.svelte";
   import ChainspecIndex from "@archetypes/Chainspec/Index.svelte";
-  import ProviderIndex from "@archetypes/Providers/Index.svelte";
+  // import ProviderIndex from "@archetypes/Providers/Index.svelte";
   import TeamIndex from "@archetypes/Team/Index.svelte";
   import BillingPage from "@archetypes/Pages/Billing.svelte";
   import DocsPage from "@archetypes/Pages/Docs.svelte";
@@ -31,7 +31,7 @@
     private: {
       "/": NetworkIndex,
       "/chainspecs": ChainspecIndex,
-      "/providers": ProviderIndex,
+      // "/providers": ProviderIndex,
       "/team": TeamIndex,
       "/billing": BillingPage,
       "/docs": DocsPage,

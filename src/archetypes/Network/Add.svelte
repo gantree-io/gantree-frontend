@@ -5,7 +5,7 @@
 	import PanelLayout from '@layouts/Panel.svelte'
 	import Form, { Step, Field, Hidden, validate } from '@components/Form'
 	import Chainspec, { fetchAll as fetchAllChainspecs } from '@archetypes/Chainspec/store'
-	import Providers, { fetchAll as fetchAllProviders } from '@archetypes/Providers/store'
+	// import Providers, { fetchAll as fetchAllProviders } from '@archetypes/Providers/store'
 	import { toast } from '@components/Toaster.svelte'
 	import Network, { addNetwork }  from './store.js'
 	import GraphQLProgress from '@components/GraphQLProgress.svelte'
@@ -29,12 +29,12 @@
 	})
 
 	// we want all available providers
-	let providerOptions
-	Providers.query(fetchAllProviders).then(providers => {
-		let options = {}
-		providers.forEach(provider => options[provider._id] = provider.name)
-		providerOptions = options
-	})
+	// let providerOptions
+	// Providers.query(fetchAllProviders).then(providers => {
+	// 	let options = {}
+	// 	providers.forEach(provider => options[provider._id] = provider.name)
+	// 	providerOptions = options
+	// })
 
 	// handle network deployment
 	const handleDeploy = async ({fields, hasErrors, errors, setLoading}) => {
@@ -127,7 +127,7 @@
 					}}
 				/>
 
-				<Field
+				<!-- <Field
 					title='Which Provider?'
 					help='In the future you will be able to select multiple providers'
 					subtitle={providerOptions[_fields.provider] === 'Google Cloud Platform' ? 'Note that you must create a project named "gantree-dashboard" for these credentials to work' : ''}
@@ -140,7 +140,7 @@
 						type: 'select',
 						options: providerOptions
 					}}
-				/>
+				/> -->
 			</Step>
 
 			<Step
