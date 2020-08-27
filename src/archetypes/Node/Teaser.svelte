@@ -37,7 +37,7 @@
   let BlockNumber;
   let NodeData;
 
-  const updateNodeProps = props => {
+  const updateNodeProps = (props) => {
     clientId = props.clientId;
     ip = props.instance.ip;
     provider = props.provider;
@@ -52,7 +52,7 @@
     setTimeout(() => (copied = false), 1500);
   };
 
-  const deleteNode = async _id => {
+  const deleteNode = async (_id) => {
     await Node.query(deleteOne, { _id: _id });
   };
 
@@ -223,6 +223,8 @@
         <!-- <span class="mdc-typography--caption -updated">Last Updated: {updated}</span> -->
       </div>
 
+      <!-- FIXME: add a note to the user to stop GNW on the node or implement a way on back-end to securely
+        tell the GNW server to shut itself down whilst still conforming to the pull model -->
       <div class="menu" bind:this={menuAnchor}>
         <IconButton on:click={() => menu.setOpen(true)}>
           <IconButtonIcon class="material-icons">menu</IconButtonIcon>
