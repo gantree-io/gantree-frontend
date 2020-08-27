@@ -155,6 +155,8 @@
       <Badge value={shutdownCount} warning disabled={!shutdownCount} />
       <Badge value={errorCount} error disabled={!errorCount} />
 
+      <!-- FIXME: fix weird layer precedence of pop-up menu (sometimes behind other items) -->
+      <!-- FIXME: fix menu not disappearing when opening the menu for another -->
       <div
         class="menu"
         bind:this={menuAnchor}
