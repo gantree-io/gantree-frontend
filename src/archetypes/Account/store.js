@@ -217,13 +217,13 @@ export default (() => {
   }
 
   firebase.initializeApp({
-    apiKey: _env.FIREBASE_APIKEY, // eslint-disable-line no-undef
-    authDomain: _env.FIREBASE_AUTHDOMAIN, // eslint-disable-line no-undef
-    databaseURL: _env.FIREBASE_DATABASEURL, // eslint-disable-line no-undef
-    projectId: _env.FIREBASE_PROJECTID, // eslint-disable-line no-undef
-    storageBucket: _env.FIREBASE_STORAGEBUCKET, // eslint-disable-line no-undef
-    messagingSenderId: _env.FIREBASE_MESSAGINGSENDERID, // eslint-disable-line no-undef
-    appId: _env.FIREBASE_APPID, // eslint-disable-line no-undef
+    apiKey: _env.FIREBASE_APIKEY,
+    authDomain: _env.FIREBASE_AUTHDOMAIN,
+    databaseURL: _env.FIREBASE_DATABASEURL,
+    projectId: _env.FIREBASE_PROJECTID,
+    storageBucket: _env.FIREBASE_STORAGEBUCKET,
+    messagingSenderId: _env.FIREBASE_MESSAGINGSENDERID,
+    appId: _env.FIREBASE_APPID,
   })
   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   firebase.auth().onAuthStateChanged((firebaseUser) => {
