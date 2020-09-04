@@ -53,7 +53,7 @@
     toast.success(
       `Provisioning monitoring dashboard. This might take a few minutes`
     )
-    provisioningDashboard = true
+    provisioningDashboard = true // TODO: instead of relying on this flag, poll back-end every n seconds if done or perhaps hotwire
     await Network.query(createDashboard, { _id: _id })
   }
 
@@ -88,6 +88,7 @@
   }
 </style>
 
+<!-- HACK: needs to be rewritten with dashboardStatus in mind -->
 <Hotwire
   subscriptions={[{ name: _id, event: 'UPDATE', callback: (data) => fetch(data) }]}>
   <PanelLayout header={{ title: title }}>
