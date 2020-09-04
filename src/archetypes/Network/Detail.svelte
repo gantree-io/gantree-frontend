@@ -1,9 +1,9 @@
 <script>
-  import GraphQLProgress from "@components/GraphQLProgress.svelte";
-  import PanelLayout from "@layouts/Panel.svelte";
-  import Node from "@archetypes/Node/Teaser.svelte";
-  import Button from "@components/Form/buttons/Submit.svelte";
-  import Network, { fetchOne, createDashboard } from "./store.js";
+  import GraphQLProgress from "@components/GraphQLProgress.svelte"
+  import PanelLayout from "@layouts/Panel.svelte"
+  import Node from "@archetypes/Node/Teaser.svelte"
+  import Button from "@components/Form/buttons/Submit.svelte"
+  import Network, { fetchOne, createDashboard } from "./store.js"
   import {
     Filterable,
     FilterItem,
@@ -11,28 +11,28 @@
     Option,
     Icon,
     Text,
-  } from "@components/Filterable";
+  } from "@components/Filterable"
   import Chainspec, {
     fetchOne as fetchOneChainspec,
-  } from "@archetypes/Chainspec/store.js";
-  import { toast } from "@components/Toaster.svelte";
-  import Hotwire from "@components/Hotwire.svelte";
+  } from "@archetypes/Chainspec/store.js"
+  import { toast } from "@components/Toaster.svelte"
+  import Hotwire from "@components/Hotwire.svelte"
 
-  export let _id;
-  let title;
-  let status;
-  let chainspecName;
-  let nodes;
-  let dashboardUrl;
-  let provisioningDashboard = false;
+  export let _id
+  let title
+  let status
+  let chainspecName
+  let nodes
+  let dashboardUrl
+  let provisioningDashboard = false
 
   const fetch = () =>
     Network.query(fetchOne, { _id: _id }).then((data) => {
-      title = data.projectId;
-      status = data.status; // TODO: make all references to network "status" -> "health"
-      nodes = data.nodes;
-      dashboardUrl = data.dashboardUrl;
-      if (dashboardUrl) provisioningDashboard = false;
+      title = data.projectId
+      status = data.status // TODO: make all references to network "status" -> "health"
+      nodes = data.nodes
+      dashboardUrl = data.dashboardUrl
+      if (dashboardUrl) provisioningDashboard = false
 
       // if (data.chainspec === "new") {
       //   chainspecName = "New Chainspec";
@@ -45,23 +45,23 @@
       //     }
       //   );
       // }
-    });
+    })
 
   const provisionDashboard = async () => {
     // do something where we query the backend and put the dash url into a
     // loading state
     toast.success(
       `Provisioning monitoring dashboard. This might take a few minutes`
-    );
-    provisioningDashboard = true;
-    await Network.query(createDashboard, { _id: _id });
-  };
+    )
+    provisioningDashboard = true
+    await Network.query(createDashboard, { _id: _id })
+  }
 
   const openDashboard = () => {
-    window.open(dashboardUrl);
-  };
+    window.open(dashboardUrl)
+  }
 
-  fetch();
+  fetch()
 </script>
 
 <style lang="scss">
