@@ -24,6 +24,7 @@
   let chainspecName
   let nodes
   let dashboardUrl
+  let dashboardStatus
   let provisioningDashboard = false
 
   const fetch = () =>
@@ -31,8 +32,13 @@
       title = data.projectId
       status = data.status // TODO: make all references to network "status" -> "health"
       nodes = data.nodes
-      dashboardUrl = data.dashboardUrl
-      if (dashboardUrl) provisioningDashboard = false
+      dashboardUrl = data.dashboardUrl // TODO: address redundancy
+      dashboardStatus = data.dashboardStatus // HACK: temporary alternative to relying on URL
+      console.log({ dashboardStatus })
+      if (dashboardStatus === undefined) {
+        console.error("Dashboard status is undefined")
+      }
+      if (dashboardStatus !== "PROVISIONING") provisioningDashboard = false
 
       // if (data.chainspec === "new") {
       //   chainspecName = "New Chainspec";
@@ -96,14 +102,22 @@
       <GraphQLProgress />
     {:else}
       <div class="flex justify-start mb3">
-        {#if provisioningDashboard}
+        {#if provisioningDashboard || dashboardStatus === 'PROVISIONING'}
           <Button class="disabled">Provisioning...</Button>
-        {:else if !dashboardUrl}
+        {:else if dashboardStatus === 'REQUIRES-PROVISIONING'}
           <Button onClick={provisionDashboard}>
             + Create Monitoring Dashboard
           </Button>
-        {:else}
+        {:else if dashboardStatus === 'READY'}
           <Button onClick={openDashboard}>View Monitoring Dashboard</Button>
+        {:else if dashboardStatus === 'ERROR'}
+          <Button onClick={openDashboard}>
+            + Create Monitoring Dashboard (Last Attempt Failed)
+          </Button>
+        {:else}
+          <Button onClick={provisionDashboard}>
+            + Create Monitoring Dashboard (Error Reading Status)
+          </Button>
         {/if}
       </div>
       <Filterable>
