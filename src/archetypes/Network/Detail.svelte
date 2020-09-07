@@ -109,7 +109,10 @@
             + Create Monitoring Dashboard
           </Button>
         {:else if dashboardStatus === 'READY'}
-          <Button onClick={openDashboard}>View Monitoring Dashboard</Button>
+          <div>
+            <Button onClick={openDashboard}>View Monitoring Dashboard</Button>
+            <Button onClick={provisionDashboard}>Force Update Dashboard</Button>
+          </div>
         {:else if dashboardStatus === 'ERROR'}
           <Button onClick={openDashboard}>
             + Create Monitoring Dashboard (Last Attempt Failed)
