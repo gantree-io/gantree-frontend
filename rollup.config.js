@@ -1,6 +1,6 @@
 import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
-import builtins from "rollup-plugin-node-builtins";
+// import builtins from 'rollup-plugin-node-builtins';
 import commonjs from "@rollup/plugin-commonjs";
 import postcss from "rollup-plugin-postcss";
 import livereload from "rollup-plugin-livereload";
@@ -14,7 +14,7 @@ import css from "rollup-plugin-css-only";
 import typescript from "rollup-plugin-typescript2";
 // import json from "rollup-plugin-json"
 // import globals from "rollup-plugin-node-globals"
-//TODO: get https://sveltematerialui.com/demo/ working
+// TODO: get https://sveltematerialui.com/demo/ working
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -44,7 +44,7 @@ export default {
   },
   plugins: [
     // json(),
-    builtins(),
+    // builtins(),
     // globals(),
     replace({
       _env: JSON.stringify(dotenv.config().parsed),
@@ -52,6 +52,7 @@ export default {
 
     svg({ stringify: true }),
 
+    /* eslint-disable no-path-concat */
     alias({
       entries: [
         { find: "@app", replacement: __dirname + "/src" },
@@ -68,6 +69,7 @@ export default {
         },
       ],
     }),
+    /* eslint-enable no-path-concat */
 
     css({ output: "public/build/extra.css" }),
 
