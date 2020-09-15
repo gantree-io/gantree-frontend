@@ -1,5 +1,5 @@
 {
-  "name": "svelte-app",
+  "name": "gantree-frontend-app",
   "version": "1.0.0",
   "scripts": {
     "build": "ROLLUP_ENV=production rollup -c",
