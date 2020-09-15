@@ -11,7 +11,7 @@
   import AuthRouter, {
     configure as configureAuthRouter,
     triggerError,
-    location as _locationAuth,
+    location as _location,
     push,
     querystring
   } from "@components/AuthRouter.svelte";
@@ -45,7 +45,7 @@
     onNetworkError: msg => triggerError(503),
     onGraphQLError: e => {
       if (e.code === "UNAUTHENTICATED") {
-        if ($location === "/authenticate") {
+        if ($_location === "/authenticate") {
           /// hmmm
         } else {
           push(`/authenticate`);
@@ -63,11 +63,11 @@
     onPrivateRoute: ({ location }) => {
       Account.subscribe(({ user, authStatus, accountStatus }) => {
         // if we're already on the authenticate path, do nothing
-        if ($_locationAuth === "/authenticate") {
+        if ($_location === "/authenticate") {
         }
         // not authenticated? push to auth page
         else if (authStatus !== AuthStatus.AUTHENTICATED)
-          push(`/authenticate?redirect=${$_locationAuth}`);
+          push(`/authenticate?redirect=${$_location}`);
         // account unverified
         else if (user.status === AccountStatus.UNVERIFIED)
           push(`/account/verify`);
