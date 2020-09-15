@@ -2,6 +2,9 @@
 /public/build/
 
 .env
+.env.prod
+.env.stag
+
 
 .DS_Store
 yarn-error.log
