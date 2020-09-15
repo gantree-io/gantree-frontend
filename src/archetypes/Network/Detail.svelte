@@ -114,7 +114,7 @@
             <Button onClick={provisionDashboard}>Force Update Dashboard</Button>
           </div>
         {:else if dashboardStatus === 'ERROR'}
-          <Button onClick={openDashboard}>
+          <Button onClick={provisionDashboard}>
             + Create Monitoring Dashboard (Last Attempt Failed)
           </Button>
         {:else}
