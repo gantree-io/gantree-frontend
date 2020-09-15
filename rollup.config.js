@@ -16,7 +16,7 @@ import typescript from "rollup-plugin-typescript2"
 // import globals from "rollup-plugin-node-globals"
 // TODO: get https://sveltematerialui.com/demo/ working
 
-const production = !process.env.ROLLUP_WATCH
+const production = process.env.ROLLUP_ENV === "production"
 
 // needs to be duplicated to /postcss.config.js
 const postcssOptions = () => ({
