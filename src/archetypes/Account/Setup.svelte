@@ -82,7 +82,7 @@
       input={{
         id: 'name',
         type: 'text',
-        placeholder: "JoeBloggs@example.com",
+        placeholder: "Joe Bloggs",
       }}
     />
   </Form>
