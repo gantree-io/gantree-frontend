@@ -100,13 +100,13 @@
     header={{ 
       title: 'Protocol Client Keys', 
       icon: 'mediation', 
-       actions: [
-         { 
-           text: 'Add Collection', 
-           icon: 'add', 
-           callback: handleAddPckCollection 
-         }
-       ] 
+       // actions: [
+       //   { 
+       //     text: 'Add Collection', 
+       //     icon: 'add', 
+       //     callback: handleAddPckCollection 
+       //   }
+       // ] 
     }}
     showBreadcrumbs
     >
