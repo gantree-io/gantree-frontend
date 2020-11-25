@@ -26,14 +26,14 @@
 
 	// get the global socket connection
 	const useSocket = () => new Promise((resolve, reject) => {
+		if(!_url) return
+
 		if(!_socket){
 			_socket = connect()
-				.on('error', () => {
-					console.log('todo: error')
-				})
+				.on('error', () => console.log('todo: error'))
 				.on('connect', () => resolve(_socket))
-				.on('reconnect', () => handleReconnect())
-				.on('reconnect_failed', () => handleDisconnect())
+				.on('reconnect', handleReconnect)
+				.on('reconnect_failed', handleDisconnect)
 		}else{
 			resolve(_socket)
 		}

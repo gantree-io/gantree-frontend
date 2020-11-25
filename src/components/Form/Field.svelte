@@ -11,7 +11,9 @@
 	export let help = null;
 	export let required = false;
 	export let validation = {};
+	export let inline = false;
 	export let input;
+	export let disabled = false;
 
 	// determine the default value
 	let value = input.value
@@ -146,10 +148,30 @@
 			color: red;
 			:global(input){ color: red }
 		}
+
+		&[data-inline='true']{
+			display: flex;
+			margin: 0;
+			.title{
+				margin: 0 0.3em 0 0;
+			}
+
+			:global(input),
+			:global(select),
+			:global(textarea),
+			:global(.pills){
+				margin: 0;
+			}
+		}
+
+		&[data-disabled='true']{
+			cursor: not-allowed;
+			opacity: 0.4;
+		}
 	}
 </style>
 
-<label class='form-field' for={input.id} data-field-type={input.type} data-has-error={!!field.error}>
+<label class='form-field' for={input.id} data-field-type={input.type} data-has-error={!!field.error} data-inline={inline} data-disabled={disabled}>
 	<span class="title">
 		{title}
 		<Tooltip text={help}>

@@ -18,6 +18,7 @@
 
   // routes
   import NetworkIndex from "@archetypes/Network/Index.svelte";
+  import PckIndex from "@archetypes/PCK/Index.svelte";
   import ChainspecIndex from "@archetypes/Chainspec/Index.svelte";
   // import ProviderIndex from "@archetypes/Providers/Index.svelte";
   import TeamIndex from "@archetypes/Team/Index.svelte";
@@ -30,6 +31,7 @@
   const routes = {
     private: {
       "/": NetworkIndex,
+      "/pcks": PckIndex,
       "/chainspecs": ChainspecIndex,
       // "/providers": ProviderIndex,
       "/team": TeamIndex,
@@ -44,6 +46,11 @@
       name: "Networks",
       icon: "blur_on",
       href: "#/dashboard"
+    },
+    {
+      name: "PCKs",
+      icon: "vpn_key",
+      href: "#/dashboard/pcks"
     },
     // {
     // 	name: 'Chainspecs',
@@ -68,15 +75,13 @@
     {
       name: "Docs",
       icon: "menu_book",
-      href:
-        "https://www.notion.so/flexdapps/Gantree-Dashboard-Docs-0d0fd1d69f9f4270bc2d163586ddb64b",
+      href: "https://www.notion.so/flexdapps/Gantree-Dashboard-Docs-0d0fd1d69f9f4270bc2d163586ddb64b",
       target: "_blank"
     },
     {
       name: "Contact Us",
       icon: "send",
-      href:
-        "https://www.notion.so/flexdapps/Get-In-Touch-a4e8c3461eed4cbe835b3e2f98ea0c69",
+      href: "https://www.notion.so/flexdapps/Get-In-Touch-a4e8c3461eed4cbe835b3e2f98ea0c69",
       target: "_blank"
     },
     {
@@ -85,11 +90,6 @@
       href: "/#/dashboard/keys"
     }
   ];
-
-  afterUpdate(() => {
-    // set the active path
-    //active = _.find(tabs, {href: `#${$location}`})
-  });
 </script>
 
 <style lang="scss">

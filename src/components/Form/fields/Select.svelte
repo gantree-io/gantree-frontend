@@ -12,6 +12,7 @@
 		background-repeat: no-repeat, repeat;
 		background-position: right .7em top 50%, 0 0;
 		background-size: .65em auto, 100%;
+		padding-right: 2.2em !important;
 		&::-ms-expand { display: none }
 		option { font-weight:normal }
 	}

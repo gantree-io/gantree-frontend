@@ -104,18 +104,18 @@
       }
 
       .right {
-        padding: 0;
+        padding: 1em 2em 1em 1em;
         display: flex;
         align-items: center;
         justify-content: flex-end;
         align-self: stretch;
 
         :global(.info) {
-          margin-right: 1em;
+          //margin-right: 1em;
         }
 
         .menu {
-          margin-right: 1em;
+          //margin-right: 1em;
           :global(.mdc-icon-button) {
             opacity: 0.4;
             &:hover {

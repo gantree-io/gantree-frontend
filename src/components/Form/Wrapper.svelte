@@ -145,7 +145,6 @@
 	}
 
 	const handleSubmit = (e) => {
-		console.log({ e })
 		e.preventDefault()
 		Object.keys(fields).forEach( id => {
 			touched.push(id)

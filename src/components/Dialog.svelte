@@ -145,8 +145,26 @@
 			}
 
 			article{
-				border-top: 1px solid var(--color-light-grey);
-				border-bottom: 1px solid var(--color-light-grey);
+				position: relative;
+				padding: 1.5em 1.5em;
+
+				&:before,
+				&:after{
+					content: '';
+					position: absolute;
+					left: 1em;
+					width: calc(100% - 2em);
+					height: 0;
+					border-top: 1px solid rgba(0,0,0,0.05);
+				}
+
+				&:before{
+					top: 0;
+				};
+
+				&:after{
+					bottom: 0;
+				};
 
 				input{
 					display: block;

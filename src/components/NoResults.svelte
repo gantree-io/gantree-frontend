@@ -38,6 +38,13 @@
 
 		:global(.mdc-typography--body1){
 			opacity: 0.8;
+
+			:global(a){
+				color: var(--color-purple);
+				font: inherit;
+				cursor: pointer;
+				text-decoration: underline;
+			}
 		}
 	}
 </style>

@@ -39,6 +39,9 @@ export const fetchUserByToken = `
 			team{
 				_id
 				name
+        managedProtocols{
+          uid
+        }
 			}
 			verificationCode
 			status
@@ -62,6 +65,9 @@ export const fetchUserByApiKey = `
 			team{
 				_id
 				name
+        managedProtocols{
+          uid
+        }
 			}
 			verificationCode
 			status
