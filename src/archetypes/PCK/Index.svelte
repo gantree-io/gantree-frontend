@@ -125,13 +125,13 @@
               <Field
                 title='COLLECTION:'
                 inline={true}
-                disabled={Object.keys(collectionOptions)?.length <= 1}
+                disabled={Object.keys(collectionOptions).length <= 1}
                 input={{
                   id: 'collection',
                   type: 'select',
                   options: collectionOptions,
                   value: selectedCollectionId,
-                  disabled: Object.keys(collectionOptions)?.length <= 1 ? 'disabled' : '',
+                  disabled: Object.keys(collectionOptions).length <= 1 ? 'disabled' : '',
                 }}
               />
             </Form>
