@@ -63,8 +63,8 @@ export const addNetwork = `
 `
 
 export const createDashboard = `
-	mutation createDashboard($_id: String!) {
-		createDashboard(_id: $_id)
+	mutation createNetworkTelemetryDashboard($_id: String!) {
+		createNetworkTelemetryDashboard(_id: $_id)
 	}
 `
 
