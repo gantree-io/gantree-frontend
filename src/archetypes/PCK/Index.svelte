@@ -177,7 +177,13 @@
           </NoResults>
         {/if}
       {:else}
-        222
+        <NoResults graphic={NotFound} title="No managed protocol found">
+          Become a protocol management team by
+          <!-- HACK(Denver): use a config/const so consistent with sidebar link -->
+          <a on:click={() => {window.open("https://www.notion.so/flexdapps/Get-In-Touch-a4e8c3461eed4cbe835b3e2f98ea0c69")}}>
+            contacting us
+          </a>
+        </NoResults>
       {/if}
     {/if}
   </PanelLayout>
