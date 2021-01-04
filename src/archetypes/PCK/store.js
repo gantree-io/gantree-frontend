@@ -5,6 +5,7 @@ export const pckCollections = `
 		pckCollections {
 			_id
 			name
+			dashboardUrl
 			pcks{
 				_id
 				name

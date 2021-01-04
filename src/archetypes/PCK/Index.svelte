@@ -23,6 +23,7 @@
   let collections
   let collectionOptions = {};
   let selectedCollectionId
+  let selectedCollectionDashboardUrl
 
   const hydrateCollections = () => PCK.query(pckCollections).then(_collections => {
     collections = _collections
@@ -34,6 +35,11 @@
     selectedCollectionId = !selectedCollectionId
       ? collections[0]._id
       : _.find(collections, {_id: selectedCollectionId})._id
+
+      // set the collection dashboard url
+      selectedCollectionDashboardUrl = !selectedCollectionDashboardUrl
+        ? collections[0].dashboardUrl
+        : _.find(collections, {_id: selectedCollectionId}).dashboardUrl
   });
 
   const handleAddPckCollection = () => {
@@ -58,6 +64,10 @@
       }
     );
   };
+
+  const openPckCollectionDashboard = () => {
+    window.open(selectedCollectionDashboardUrl)
+  }
 
   onMount(() => {
     hydrateCollections()
@@ -116,35 +126,41 @@
     {:else}
       
       {#if selectedCollectionId}
+        <div class="controls">
+          <Form
+            onChange={({fields}) => selectedCollectionId = fields.collection}
+            >
+            <Field
+              title='COLLECTION:'
+              inline={true}
+              disabled={Object.keys(collectionOptions).length <= 1}
+              input={{
+                id: 'collection',
+                type: 'select',
+                options: collectionOptions,
+                value: selectedCollectionId,
+                disabled: Object.keys(collectionOptions).length <= 1 ? 'disabled' : '',
+              }}
+            />
+          </Form>
+
+          <Button
+            on:click={openPckCollectionDashboard}
+            >
+            <Icon class="material-icons">insert_chart</Icon>
+            <Label>View Monitoring Dashboard</Label>
+          </Button>
+
+          <Button
+            on:click={handleAddPck}
+            class='add-button'
+            >
+            <Icon class="material-icons">add</Icon>
+            <Label>Add new PCK</Label>
+          </Button>
+        </div>          
+
         {#if _.get(_.find(collections, {_id: selectedCollectionId}), 'pcks', []).length > 0}
-          
-          <div class="controls">
-            <Form
-              onChange={({fields}) => selectedCollectionId = fields.collection}
-              >
-              <Field
-                title='COLLECTION:'
-                inline={true}
-                disabled={Object.keys(collectionOptions).length <= 1}
-                input={{
-                  id: 'collection',
-                  type: 'select',
-                  options: collectionOptions,
-                  value: selectedCollectionId,
-                  disabled: Object.keys(collectionOptions).length <= 1 ? 'disabled' : '',
-                }}
-              />
-            </Form>
-
-            <Button
-              on:click={handleAddPck}
-              class='add-button'
-              >
-              <Icon class="material-icons">add</Icon>
-              <Label>Add new PCK</Label>
-            </Button>
-          </div>          
-
           {#each _.get(_.find(collections, {_id: selectedCollectionId}), 'pcks', []) as pck}
             <Teaser
               {...pck}
