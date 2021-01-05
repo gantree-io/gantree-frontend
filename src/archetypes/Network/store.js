@@ -48,8 +48,8 @@ export const fetchOne = `
 `
 
 export const deleteOne = `
-	mutation deleteNetwork($_id: String!) {
-		deleteNetwork(_id: $_id)
+	mutation cleanNetwork($_id: String!) {
+		cleanNetwork(_id: $_id)
 	}
 `
 
