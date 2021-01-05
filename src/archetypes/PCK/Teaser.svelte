@@ -19,6 +19,8 @@
   let menu;
   let menuAnchor;
 
+  const PCKRC_TOOLTIP = "Share this code with a team/s using your protocol to collect metrics"
+
 </script>
 
 <style lang="scss">
@@ -60,7 +62,7 @@
         {#if pckrc}
           <textarea
             style="max-width: 100%; height: 100%; display: flex; text-align: center; color: #e9e9f5; resize: none; background: #26264d; white-space: nowrap; overflow-x: auto; overflow-y: hidden; border: none; padding: 0.5em"
-            rows="1" cols="42" readonly
+            rows="1" cols="42" readonly title={PCKRC_TOOLTIP}
           >
             {pckrc}
           </textarea>
