@@ -104,6 +104,8 @@
       <div class="flex justify-start mb3">
         {#if provisioningDashboard || dashboardStatus === 'PROVISIONING'}
           <Button class="disabled">Provisioning...</Button>
+        {:else if dashboardStatus === "DESTROYING"}
+          <Button class="disabled">Destroying...</Button>
         {:else if dashboardStatus === 'REQUIRES-PROVISIONING'}
           <Button onClick={provisionDashboard}>
             + Create Monitoring Dashboard
