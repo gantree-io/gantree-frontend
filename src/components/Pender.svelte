@@ -12,6 +12,6 @@
 	}
 </style>
 
-{#if val} {val}
+{#if val === 0 ? "0" : val} {val}
 {:else} <Icon class="material-icons -animation-spin -autorenew">autorenew</Icon> 
 {/if}
