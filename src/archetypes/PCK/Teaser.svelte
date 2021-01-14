@@ -16,6 +16,7 @@
   export let _id = null;
   export let name;
   export let pckrc;
+  export let associatedNetworkCount;
   let menu;
   let menuAnchor;
 
@@ -57,6 +58,11 @@
   </div>
 
   <div class="controls">
+    <div class={`mdc-typography--caption`} style="padding: 10px;">
+      <Pender val={associatedNetworkCount} />
+      network{associatedNetworkCount > 1 ? 's' : ''}
+    </div>
+
     <div class="info">
       <pre>
         {#if pckrc}

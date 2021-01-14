@@ -10,6 +10,7 @@ export const pckCollections = `
 				_id
 				name
 				pckrc
+				associatedNetworkCount
 			}
 		}
 	}
