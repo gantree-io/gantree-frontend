@@ -13,6 +13,8 @@
   import Add from "./Add.svelte";
   import AddCollection from "./AddCollection.svelte";
   import Teaser from "./Teaser.svelte";
+  import Paper, { Title } from "@smui/paper";
+  import Expanda from "@components/Expanda.svelte";
   import { dialog } from "@components/Dialog.svelte";
   import Link from "@components/Link.svelte";
   import NoResults from "@components/NoResults.svelte";
@@ -160,6 +162,27 @@
           </Button>
         </div>          
 
+        <!-- HACK(Denver): re-using node-teaser class here, also styling directly. -->
+        <Paper class="node-teaser" style={`border-width: 5px !important; border-color: green;`} elevation=0>
+          <div class="title">
+            <Icon class="material-icons">info</Icon>
+            <Title style="margin-right: 1em;">
+              Information
+            </Title>  
+          </div>
+          <Expanda
+            class="-telemetry"
+            openTrigger={{ text: '', icon: 'expand_more' }}
+            closeTrigger={{ text: '', icon: 'expand_less' }}>
+            <p class="mdc-typography--body1 -content">
+              For now, each PCK can only be assigned a single network. In future each PCK will be split into separate datasources in your monitoring dashboard. Please note that once this change occurs only newly ingested metrics will be split into their respective datasources, already ingested data will stay grouped as it is now.
+            </p>
+            <p class="mdc-typography--body1 -content">
+              Once node operators have registered their nodes with your PCKRC and provisioned their network monitoring dashboards, you'll begin seeing metrics in your protocol monitoring dashboard.
+            </p>
+          </Expanda> 
+        </Paper>
+    
         {#if _.get(_.find(collections, {_id: selectedCollectionId}), 'pcks', []).length > 0}
           {#each _.get(_.find(collections, {_id: selectedCollectionId}), 'pcks', []) as pck}
             <Teaser
