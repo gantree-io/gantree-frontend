@@ -16,7 +16,7 @@
   export let _id = null;
   export let name;
   export let pckrc;
-  export let associatedNetworkCount;
+  export let assignedNetworkCount;
   let menu;
   let menuAnchor;
 
@@ -59,8 +59,8 @@
 
   <div class="controls">
     <div class={`mdc-typography--caption`} style="padding: 10px;">
-      <Pender val={associatedNetworkCount} />
-      network{associatedNetworkCount > 1 ? 's' : ''}
+      <Pender val={assignedNetworkCount} />
+      network{assignedNetworkCount > 1 ? 's' : ''}
     </div>
 
     <div class="info">
