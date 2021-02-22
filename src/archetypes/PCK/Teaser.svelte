@@ -89,7 +89,7 @@
             on:click={() => {
               dialog.warning({
                 title: "Confirm deletion",
-                subtitle: `Removing this PCK will no longer allow you to .... [TODO]`,
+                subtitle: `Removing this PCK means you will no longer be able to view metrics from associated networks!`,
                 confirmButton: 'Delete PCK',
                 onConfirm: () => PCK.query(deregisterPck, { _id: _id }).then(() => toast.warning(`PCK deleted`)),
                 cancelButton: 'Take me back!',
