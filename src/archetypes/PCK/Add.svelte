@@ -10,19 +10,32 @@
 	export let onCancel = () => {}
 	export let pckCollectionId
 
+	// HACK(Denver): move this into a file with other static patterns
+	const PATTERN_VALID_PCK_NAME = /^[\w -]{1,128}$/
+	const validatePattern = (text) => {
+		if (PATTERN_VALID_PCK_NAME.test(text) !== true)
+			return new Error("Invalid PCK name")
+	}
+
 	// handle network deployment
 	const handleSubmit = async ({fields, hasErrors, errors, setLoading}) => {
-		if(!hasErrors){
-			setLoading(true)
-			PCK.mutation(createPck, fields).then(data => {
-				toast.success(`PCK ${fields.name} added`)
-				onSuccess(data)
+        let _t = toast.loading(`Creating PCK...`)
+        if(!hasErrors){
+            setLoading(true)
+            PCK.mutation(createPck, fields).then(data => {
+                _t.success(`PCK ${fields.name} added`)
+                onSuccess(data)
+                setLoading(false)
+            })
+            .catch(e => {
+				_t.warning(e)
+				onCancel()
 				setLoading(false)
-			})
-		}else{
-			toast.warning(`Some fields have errors`)
-		}
-	}
+            })
+        }else{
+            _t.warning(`Some fields have errors`)
+        }
+    }
 </script>
 
 <PanelLayout
@@ -47,6 +60,7 @@
 		<Field
 			title='PCK Name'
 			validation={{
+				'Name is invalid': validatePattern,
 				'Name is required': validate.required
 			}}
 			input={{
