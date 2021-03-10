@@ -175,9 +175,6 @@
             openTrigger={{ text: '', icon: 'expand_more' }}
             closeTrigger={{ text: '', icon: 'expand_less' }}>
             <p class="mdc-typography--body1 -content">
-              For now, each PCK can only be assigned a single network. In future each PCK will be split into separate datasources in your monitoring dashboard. Please note that once this change occurs only newly ingested metrics will be split into their respective datasources, already ingested data will stay grouped as it is now.
-            </p>
-            <p class="mdc-typography--body1 -content">
               Once node operators have registered their nodes with your PCKRC and provisioned their network monitoring dashboards, you'll begin seeing metrics in your protocol monitoring dashboard.
             </p>
           </Expanda> 
